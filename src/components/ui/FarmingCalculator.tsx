@@ -35,6 +35,14 @@ const CROP_OPTIONS: CropOption[] = [
   { value: "woad", label: "Woad", level: 25, growthTime: 20 },
   { value: "limpwurt", label: "Limpwurt Root", level: 26, growthTime: 20 },
   { value: "white_lily", label: "White Lily", level: 58, growthTime: 20 },
+  // Hops crops
+  { value: "barley", label: "Barley", level: 3, growthTime: 40 },
+  { value: "hammerstone", label: "Hammerstone", level: 4, growthTime: 40 },
+  { value: "asgarnian", label: "Asgarnian", level: 8, growthTime: 50 },
+  { value: "jute", label: "Jute", level: 13, growthTime: 50 },
+  { value: "yanillian", label: "Yanillian", level: 16, growthTime: 60 },
+  { value: "krandorian", label: "Krandorian", level: 21, growthTime: 70 },
+  { value: "wildblood", label: "Wildblood", level: 28, growthTime: 80 },
 ];
 
 const formatCompostText = (compostType: string): string => {
