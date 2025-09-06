@@ -34,7 +34,7 @@ The script generates the following files in `src/data/`:
 
 Data is fetched from:
 - OSRS Wiki Prices API (real-time seed prices)
-- OSRS Wiki Mapping API (item IDs and names)  
+- OSRS Wiki Mapping API (item IDs and names)
 - OSRS Wiki MediaWiki API (farming mechanics data)
 
 ## Usage in Application

@@ -8,29 +8,29 @@
 export interface Crop {
   id: string;
   name: string;
-  type: 'allotment' | 'flower' | 'tree' | 'herb';
+  type: "allotment" | "flower" | "tree" | "herb";
   seedId: number;
   seedName: string;
-  
+
   // Growth properties
   growthTime?: number; // minutes
   farmingLevel?: number;
-  
+
   // Payment requirements
   protection?: {
-    type: 'crop' | 'item';
+    type: "crop" | "item";
     quantity: number;
     item: string;
   };
-  
+
   // Yield information
   baseYield?: number;
   yieldRange?: [number, number];
-  
+
   // Experience
   plantingXP?: number;
   harvestXP?: number;
-  
+
   // Wiki integration
   wikiUrl: string;
   lastUpdated: string;
@@ -41,15 +41,15 @@ export interface FarmingPatch {
   id: string;
   name: string;
   location: string;
-  type: 'allotment' | 'flower' | 'tree' | 'herb';
+  type: "allotment" | "flower" | "tree" | "herb";
   coordinates: [number, number];
-  
+
   // Accessibility
   requirements?: {
     quest?: string;
     skill?: { name: string; level: number };
   };
-  
+
   // Geographic data for optimization
   region?: string;
   nearbyTeleports: string[];

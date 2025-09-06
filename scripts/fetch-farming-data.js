@@ -1,163 +1,209 @@
 #!/usr/bin/env node
 /**
  * OSRS Farming Data Fetcher
- * 
+ *
  * This script fetches farming data from the OSRS Wiki APIs and generates
  * static data files for use in the farming planner application.
- * 
+ *
  * Usage: node scripts/fetch-farming-data.js
  */
 
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Configuration
 const CONFIG = {
-  userAgent: 'OSRS-Farming-Planner/1.0 (https://github.com/user/osrs-farming-planner)',
-  dataDir: path.join(__dirname, '../src/data'),
+  userAgent:
+    "OSRS-Farming-Planner/1.0 (https://github.com/user/osrs-farming-planner)",
+  dataDir: path.join(__dirname, "../src/data"),
   apiEndpoints: {
-    prices: 'https://prices.runescape.wiki/api/v1/osrs/latest',
-    mapping: 'https://prices.runescape.wiki/api/v1/osrs/mapping',
-    wiki: 'https://oldschool.runescape.wiki/api.php'
-  }
+    prices: "https://prices.runescape.wiki/api/v1/osrs/latest",
+    mapping: "https://prices.runescape.wiki/api/v1/osrs/mapping",
+    wiki: "https://oldschool.runescape.wiki/api.php",
+  },
 };
 
 // Supported crops for Phase 1 (Allotments + Flowers only)
 const SUPPORTED_CROPS = {
   allotments: [
-    { id: 'potato', name: 'Potato', seedName: 'Potato seed', seedId: 5318 },
-    { id: 'onion', name: 'Onion', seedName: 'Onion seed', seedId: 5319 },
-    { id: 'cabbage', name: 'Cabbage', seedName: 'Cabbage seed', seedId: 5324 },
-    { id: 'tomato', name: 'Tomato', seedName: 'Tomato seed', seedId: 5322 },
-    { id: 'sweetcorn', name: 'Sweetcorn', seedName: 'Sweetcorn seed', seedId: 5320 },
-    { id: 'strawberry', name: 'Strawberry', seedName: 'Strawberry seed', seedId: 5323 },
-    { id: 'watermelon', name: 'Watermelon', seedName: 'Watermelon seed', seedId: 5321 },
-    { id: 'snape_grass', name: 'Snape grass', seedName: 'Snape grass seed', seedId: 22879 }
+    { id: "potato", name: "Potato", seedName: "Potato seed", seedId: 5318 },
+    { id: "onion", name: "Onion", seedName: "Onion seed", seedId: 5319 },
+    { id: "cabbage", name: "Cabbage", seedName: "Cabbage seed", seedId: 5324 },
+    { id: "tomato", name: "Tomato", seedName: "Tomato seed", seedId: 5322 },
+    {
+      id: "sweetcorn",
+      name: "Sweetcorn",
+      seedName: "Sweetcorn seed",
+      seedId: 5320,
+    },
+    {
+      id: "strawberry",
+      name: "Strawberry",
+      seedName: "Strawberry seed",
+      seedId: 5323,
+    },
+    {
+      id: "watermelon",
+      name: "Watermelon",
+      seedName: "Watermelon seed",
+      seedId: 5321,
+    },
+    {
+      id: "snape_grass",
+      name: "Snape grass",
+      seedName: "Snape grass seed",
+      seedId: 22879,
+    },
   ],
   flowers: [
-    { id: 'marigold', name: 'Marigold', seedName: 'Marigold seed', seedId: 5096 },
-    { id: 'rosemary', name: 'Rosemary', seedName: 'Rosemary seed', seedId: 5097 },
-    { id: 'nasturtium', name: 'Nasturtium', seedName: 'Nasturtium seed', seedId: 5098 },
-    { id: 'woad', name: 'Woad', seedName: 'Woad seed', seedId: 5099 },
-    { id: 'limpwurt', name: 'Limpwurt root', seedName: 'Limpwurt seed', seedId: 5100 },
-    { id: 'white_lily', name: 'White lily', seedName: 'White lily seed', seedId: 14589 }
-  ]
+    {
+      id: "marigold",
+      name: "Marigold",
+      seedName: "Marigold seed",
+      seedId: 5096,
+    },
+    {
+      id: "rosemary",
+      name: "Rosemary",
+      seedName: "Rosemary seed",
+      seedId: 5097,
+    },
+    {
+      id: "nasturtium",
+      name: "Nasturtium",
+      seedName: "Nasturtium seed",
+      seedId: 5098,
+    },
+    { id: "woad", name: "Woad", seedName: "Woad seed", seedId: 5099 },
+    {
+      id: "limpwurt",
+      name: "Limpwurt root",
+      seedName: "Limpwurt seed",
+      seedId: 5100,
+    },
+    {
+      id: "white_lily",
+      name: "White lily",
+      seedName: "White lily seed",
+      seedId: 14589,
+    },
+  ],
 };
 
 // Farming patch locations (Phase 1)
 const FARMING_PATCHES = [
   {
-    id: 'falador_allotment_north',
-    name: 'Falador Allotment (North)',
-    location: 'Falador',
-    type: 'allotment',
+    id: "falador_allotment_north",
+    name: "Falador Allotment (North)",
+    location: "Falador",
+    type: "allotment",
     coordinates: [3058, 3311],
-    nearbyTeleports: ['Falador teleport'],
-    walkingTime: 30
+    nearbyTeleports: ["Falador teleport"],
+    walkingTime: 30,
   },
   {
-    id: 'falador_allotment_south', 
-    name: 'Falador Allotment (South)',
-    location: 'Falador',
-    type: 'allotment',
+    id: "falador_allotment_south",
+    name: "Falador Allotment (South)",
+    location: "Falador",
+    type: "allotment",
     coordinates: [3058, 3308],
-    nearbyTeleports: ['Falador teleport'],
-    walkingTime: 30
+    nearbyTeleports: ["Falador teleport"],
+    walkingTime: 30,
   },
   {
-    id: 'falador_flower',
-    name: 'Falador Flower Patch',
-    location: 'Falador',
-    type: 'flower',
+    id: "falador_flower",
+    name: "Falador Flower Patch",
+    location: "Falador",
+    type: "flower",
     coordinates: [3054, 3307],
-    nearbyTeleports: ['Falador teleport'],
-    walkingTime: 35
+    nearbyTeleports: ["Falador teleport"],
+    walkingTime: 35,
   },
   {
-    id: 'catherby_allotment_north',
-    name: 'Catherby Allotment (North)',
-    location: 'Catherby',
-    type: 'allotment',
+    id: "catherby_allotment_north",
+    name: "Catherby Allotment (North)",
+    location: "Catherby",
+    type: "allotment",
     coordinates: [2805, 3465],
-    nearbyTeleports: ['Catherby teleport'],
-    walkingTime: 15
+    nearbyTeleports: ["Catherby teleport"],
+    walkingTime: 15,
   },
   {
-    id: 'catherby_allotment_south',
-    name: 'Catherby Allotment (South)', 
-    location: 'Catherby',
-    type: 'allotment',
+    id: "catherby_allotment_south",
+    name: "Catherby Allotment (South)",
+    location: "Catherby",
+    type: "allotment",
     coordinates: [2805, 3462],
-    nearbyTeleports: ['Catherby teleport'],
-    walkingTime: 15
+    nearbyTeleports: ["Catherby teleport"],
+    walkingTime: 15,
   },
   {
-    id: 'catherby_flower',
-    name: 'Catherby Flower Patch',
-    location: 'Catherby',
-    type: 'flower',
+    id: "catherby_flower",
+    name: "Catherby Flower Patch",
+    location: "Catherby",
+    type: "flower",
     coordinates: [2809, 3463],
-    nearbyTeleports: ['Catherby teleport'],
-    walkingTime: 20
+    nearbyTeleports: ["Catherby teleport"],
+    walkingTime: 20,
   },
   {
-    id: 'ardougne_allotment_north',
-    name: 'Ardougne Allotment (North)',
-    location: 'Ardougne',
-    type: 'allotment',
+    id: "ardougne_allotment_north",
+    name: "Ardougne Allotment (North)",
+    location: "Ardougne",
+    type: "allotment",
     coordinates: [2670, 3374],
-    nearbyTeleports: ['Ardougne teleport'],
-    walkingTime: 45
+    nearbyTeleports: ["Ardougne teleport"],
+    walkingTime: 45,
   },
   {
-    id: 'ardougne_allotment_south',
-    name: 'Ardougne Allotment (South)',
-    location: 'Ardougne', 
-    type: 'allotment',
+    id: "ardougne_allotment_south",
+    name: "Ardougne Allotment (South)",
+    location: "Ardougne",
+    type: "allotment",
     coordinates: [2670, 3371],
-    nearbyTeleports: ['Ardougne teleport'],
-    walkingTime: 45
+    nearbyTeleports: ["Ardougne teleport"],
+    walkingTime: 45,
   },
   {
-    id: 'ardougne_flower',
-    name: 'Ardougne Flower Patch',
-    location: 'Ardougne',
-    type: 'flower',
+    id: "ardougne_flower",
+    name: "Ardougne Flower Patch",
+    location: "Ardougne",
+    type: "flower",
     coordinates: [2666, 3372],
-    nearbyTeleports: ['Ardougne teleport'],
-    walkingTime: 50
+    nearbyTeleports: ["Ardougne teleport"],
+    walkingTime: 50,
   },
   {
-    id: 'hosidius_allotment_north',
-    name: 'Hosidius Allotment (North)',
-    location: 'Hosidius',
-    type: 'allotment', 
+    id: "hosidius_allotment_north",
+    name: "Hosidius Allotment (North)",
+    location: "Hosidius",
+    type: "allotment",
     coordinates: [1739, 3550],
-    nearbyTeleports: ['Xeric\'s glade', 'Skills necklace'],
-    walkingTime: 60
+    nearbyTeleports: ["Xeric's glade", "Skills necklace"],
+    walkingTime: 60,
   },
   {
-    id: 'hosidius_allotment_south',
-    name: 'Hosidius Allotment (South)',
-    location: 'Hosidius',
-    type: 'allotment',
+    id: "hosidius_allotment_south",
+    name: "Hosidius Allotment (South)",
+    location: "Hosidius",
+    type: "allotment",
     coordinates: [1739, 3547],
-    nearbyTeleports: ['Xeric\'s glade', 'Skills necklace'],
-    walkingTime: 60
+    nearbyTeleports: ["Xeric's glade", "Skills necklace"],
+    walkingTime: 60,
   },
   {
-    id: 'hosidius_flower',
-    name: 'Hosidius Flower Patch',
-    location: 'Hosidius',
-    type: 'flower',
+    id: "hosidius_flower",
+    name: "Hosidius Flower Patch",
+    location: "Hosidius",
+    type: "flower",
     coordinates: [1735, 3548],
-    nearbyTeleports: ['Xeric\'s glade', 'Skills necklace'],
-    walkingTime: 65
-  }
+    nearbyTeleports: ["Xeric's glade", "Skills necklace"],
+    walkingTime: 65,
+  },
 ];
 
 /**
@@ -171,13 +217,15 @@ async function fetchWikiAPI(endpoint, params = {}) {
 
   const response = await fetch(url.toString(), {
     headers: {
-      'User-Agent': CONFIG.userAgent,
-      'Accept': 'application/json'
-    }
+      "User-Agent": CONFIG.userAgent,
+      Accept: "application/json",
+    },
   });
 
   if (!response.ok) {
-    throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+    throw new Error(
+      `API request failed: ${response.status} ${response.statusText}`,
+    );
   }
 
   return response.json();
@@ -187,12 +235,12 @@ async function fetchWikiAPI(endpoint, params = {}) {
  * Fetch item mappings from OSRS Wiki
  */
 async function fetchItemMappings() {
-  console.log('📊 Fetching item mappings...');
+  console.log("📊 Fetching item mappings...");
   const data = await fetchWikiAPI(CONFIG.apiEndpoints.mapping);
-  
+
   // Create lookup map for our supported crops
   const itemMap = new Map();
-  data.forEach(item => {
+  data.forEach((item) => {
     itemMap.set(item.id, item);
   });
 
@@ -203,7 +251,7 @@ async function fetchItemMappings() {
  * Fetch current seed prices
  */
 async function fetchSeedPrices() {
-  console.log('💰 Fetching seed prices...');
+  console.log("💰 Fetching seed prices...");
   const data = await fetchWikiAPI(CONFIG.apiEndpoints.prices);
   return data;
 }
@@ -217,17 +265,17 @@ function parseFarmingInfo(wikitext, cropInfo) {
     growthTime: /(\d+)\s*minutes?\s*\((\d+x\d+)\s*minutes?\)/i,
     farmingLevel: /Farming\s+(\d+)/i,
     protection: /protection.*?(\d+)\s*(.*?)(?:sack|bag|basket)/i,
-    baseYield: /(\d+)\+\s*\(varies\)/i
+    baseYield: /(\d+)\+\s*\(varies\)/i,
   };
 
   const result = {
     id: cropInfo.id,
     name: cropInfo.name,
-    type: cropInfo.type || 'allotment',
+    type: cropInfo.type || "allotment",
     seedId: cropInfo.seedId,
     seedName: cropInfo.seedName,
-    wikiUrl: `https://oldschool.runescape.wiki/w/${cropInfo.seedName.replace(/ /g, '_')}`,
-    lastUpdated: new Date().toISOString()
+    wikiUrl: `https://oldschool.runescape.wiki/w/${cropInfo.seedName.replace(/ /g, "_")}`,
+    lastUpdated: new Date().toISOString(),
   };
 
   // Parse growth time
@@ -246,9 +294,9 @@ function parseFarmingInfo(wikitext, cropInfo) {
   const protectionMatch = wikitext.match(farmingPatterns.protection);
   if (protectionMatch) {
     result.protection = {
-      type: 'crop',
+      type: "crop",
       quantity: parseInt(protectionMatch[1]),
-      item: protectionMatch[2].trim()
+      item: protectionMatch[2].trim(),
     };
   }
 
@@ -259,40 +307,40 @@ function parseFarmingInfo(wikitext, cropInfo) {
  * Fetch detailed crop information from wiki pages
  */
 async function fetchCropDetails(crops) {
-  console.log('🌱 Fetching detailed crop information...');
+  console.log("🌱 Fetching detailed crop information...");
   const cropData = [];
 
   for (const crop of crops) {
     try {
       console.log(`  - Fetching ${crop.name}...`);
-      
+
       const pageData = await fetchWikiAPI(CONFIG.apiEndpoints.wiki, {
-        action: 'query',
+        action: "query",
         titles: crop.seedName,
-        prop: 'wikitext',
-        format: 'json'
+        prop: "wikitext",
+        format: "json",
       });
 
       const pages = pageData.query?.pages || {};
       const pageId = Object.keys(pages)[0];
-      const wikitext = pages[pageId]?.wikitext?.['*'] || '';
+      const wikitext = pages[pageId]?.wikitext?.["*"] || "";
 
       const cropInfo = parseFarmingInfo(wikitext, crop);
       cropData.push(cropInfo);
 
       // Add delay to be respectful to the API
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
     } catch (error) {
       console.error(`❌ Failed to fetch ${crop.name}:`, error.message);
       // Add basic fallback data
       cropData.push({
         id: crop.id,
         name: crop.name,
-        type: crop.type || 'allotment',
+        type: crop.type || "allotment",
         seedId: crop.seedId,
         seedName: crop.seedName,
         error: error.message,
-        lastUpdated: new Date().toISOString()
+        lastUpdated: new Date().toISOString(),
       });
     }
   }
@@ -304,84 +352,84 @@ async function fetchCropDetails(crops) {
  * Generate dependency relationships based on crop data
  */
 function generateDependencies() {
-  console.log('🔗 Generating dependency relationships...');
-  
+  console.log("🔗 Generating dependency relationships...");
+
   const dependencies = {
     // Potato supports onions
     potato: {
       directDependencies: [],
-      supports: ['onion'],
-      alternativePayments: []
+      supports: ["onion"],
+      alternativePayments: [],
     },
     // Onions support cabbages and asgarnian hops
     onion: {
-      directDependencies: ['potato'],
-      supports: ['cabbage'],
-      alternativePayments: []
+      directDependencies: ["potato"],
+      supports: ["cabbage"],
+      alternativePayments: [],
     },
     // Cabbages support tomatoes
     cabbage: {
-      directDependencies: ['onion'],
-      supports: ['tomato'],
-      alternativePayments: []
+      directDependencies: ["onion"],
+      supports: ["tomato"],
+      alternativePayments: [],
     },
     // Other crops without dependencies yet
     tomato: {
-      directDependencies: ['cabbage'],
+      directDependencies: ["cabbage"],
       supports: [],
-      alternativePayments: []
+      alternativePayments: [],
     },
     sweetcorn: {
       directDependencies: [],
       supports: [],
-      alternativePayments: []
+      alternativePayments: [],
     },
     strawberry: {
       directDependencies: [],
       supports: [],
-      alternativePayments: []
+      alternativePayments: [],
     },
     watermelon: {
       directDependencies: [],
       supports: [],
-      alternativePayments: []
+      alternativePayments: [],
     },
     snape_grass: {
       directDependencies: [],
       supports: [],
-      alternativePayments: []
+      alternativePayments: [],
     },
     // Flowers provide protection
     marigold: {
       directDependencies: [],
-      supports: ['allotment_protection'],
-      alternativePayments: []
+      supports: ["allotment_protection"],
+      alternativePayments: [],
     },
     rosemary: {
       directDependencies: [],
       supports: [],
-      alternativePayments: []
+      alternativePayments: [],
     },
     nasturtium: {
       directDependencies: [],
       supports: [],
-      alternativePayments: []
+      alternativePayments: [],
     },
     woad: {
       directDependencies: [],
       supports: [],
-      alternativePayments: []
+      alternativePayments: [],
     },
     limpwurt: {
       directDependencies: [],
       supports: [],
-      alternativePayments: []
+      alternativePayments: [],
     },
     white_lily: {
       directDependencies: [],
-      supports: ['allotment_protection'],
-      alternativePayments: []
-    }
+      supports: ["allotment_protection"],
+      alternativePayments: [],
+    },
   };
 
   return dependencies;
@@ -391,24 +439,25 @@ function generateDependencies() {
  * Generate yield tables based on farming levels
  */
 function generateYieldTables() {
-  console.log('📈 Generating yield tables...');
-  
+  console.log("📈 Generating yield tables...");
+
   return {
     metadata: {
-      description: 'Farming yield calculations based on level and compost',
-      lastUpdated: new Date().toISOString()
+      description: "Farming yield calculations based on level and compost",
+      lastUpdated: new Date().toISOString(),
     },
     calculations: {
-      baseFormula: 'Base yield + level bonus + compost bonus',
+      baseFormula: "Base yield + level bonus + compost bonus",
       compostBonuses: {
         none: 0,
         compost: 1,
         supercompost: 2,
-        ultracompost: 3
+        ultracompost: 3,
       },
       levelBonuses: {
-        description: 'Chance to not consume harvest life scales from 41.4% at level 1 to 70.7% at level 99'
-      }
+        description:
+          "Chance to not consume harvest life scales from 41.4% at level 1 to 70.7% at level 99",
+      },
     },
     crops: {
       // These will be filled with actual data from wiki parsing
@@ -419,8 +468,8 @@ function generateYieldTables() {
       sweetcorn: { baseYield: 3, maxYield: 6 },
       strawberry: { baseYield: 3, maxYield: 6 },
       watermelon: { baseYield: 3, maxYield: 6 },
-      snape_grass: { baseYield: 3, maxYield: 6 }
-    }
+      snape_grass: { baseYield: 3, maxYield: 6 },
+    },
   };
 }
 
@@ -428,17 +477,17 @@ function generateYieldTables() {
  * Save data to JSON files
  */
 async function saveDataFiles(data) {
-  console.log('💾 Saving data files...');
-  
+  console.log("💾 Saving data files...");
+
   // Ensure data directory exists
   await fs.mkdir(CONFIG.dataDir, { recursive: true });
 
   const files = [
-    { name: 'crops.json', data: data.crops },
-    { name: 'dependencies.json', data: data.dependencies },
-    { name: 'patches.json', data: data.patches },
-    { name: 'yield-tables.json', data: data.yieldTables },
-    { name: 'wiki-cache.json', data: data.cache }
+    { name: "crops.json", data: data.crops },
+    { name: "dependencies.json", data: data.dependencies },
+    { name: "patches.json", data: data.patches },
+    { name: "yield-tables.json", data: data.yieldTables },
+    { name: "wiki-cache.json", data: data.cache },
   ];
 
   for (const file of files) {
@@ -452,20 +501,23 @@ async function saveDataFiles(data) {
  * Main execution function
  */
 async function main() {
-  console.log('🚀 Starting OSRS Farming Data Fetch...\n');
-  console.log('📂 Data directory:', CONFIG.dataDir);
+  console.log("🚀 Starting OSRS Farming Data Fetch...\n");
+  console.log("📂 Data directory:", CONFIG.dataDir);
 
   try {
     // Combine all supported crops
     const allCrops = [
-      ...SUPPORTED_CROPS.allotments.map(crop => ({ ...crop, type: 'allotment' })),
-      ...SUPPORTED_CROPS.flowers.map(crop => ({ ...crop, type: 'flower' }))
+      ...SUPPORTED_CROPS.allotments.map((crop) => ({
+        ...crop,
+        type: "allotment",
+      })),
+      ...SUPPORTED_CROPS.flowers.map((crop) => ({ ...crop, type: "flower" })),
     ];
 
     // Fetch data from APIs
     const [itemMappings, seedPrices] = await Promise.all([
       fetchItemMappings(),
-      fetchSeedPrices()
+      fetchSeedPrices(),
     ]);
 
     // Fetch detailed crop information
@@ -480,54 +532,57 @@ async function main() {
       crops: {
         metadata: {
           lastUpdated: new Date().toISOString(),
-          version: '1.0.0',
-          source: 'OSRS Wiki API'
+          version: "1.0.0",
+          source: "OSRS Wiki API",
         },
-        allotments: cropDetails.filter(crop => crop.type === 'allotment'),
-        flowers: cropDetails.filter(crop => crop.type === 'flower')
+        allotments: cropDetails.filter((crop) => crop.type === "allotment"),
+        flowers: cropDetails.filter((crop) => crop.type === "flower"),
       },
       dependencies: {
         metadata: {
           lastUpdated: new Date().toISOString(),
-          description: 'Crop payment relationships for farming protection'
+          description: "Crop payment relationships for farming protection",
         },
-        relationships: dependencies
+        relationships: dependencies,
       },
       patches: {
         metadata: {
           lastUpdated: new Date().toISOString(),
-          description: 'Farming patch locations and accessibility'
+          description: "Farming patch locations and accessibility",
         },
-        locations: FARMING_PATCHES
+        locations: FARMING_PATCHES,
       },
       yieldTables,
       cache: {
         itemMappings: Array.from(itemMappings.entries()).slice(0, 100), // Store sample for reference
         seedPrices: Object.fromEntries(
-          Object.entries(seedPrices).filter(([itemId]) => 
-            allCrops.some(crop => crop.seedId.toString() === itemId)
-          )
+          Object.entries(seedPrices).filter(([itemId]) =>
+            allCrops.some((crop) => crop.seedId.toString() === itemId),
+          ),
         ),
-        lastFetch: new Date().toISOString()
-      }
+        lastFetch: new Date().toISOString(),
+      },
     };
 
     // Save all data files
     await saveDataFiles(compiledData);
 
-    console.log('\n✅ Data fetch completed successfully!');
+    console.log("\n✅ Data fetch completed successfully!");
     console.log(`📁 Data saved to: ${CONFIG.dataDir}`);
     console.log(`🌱 Processed ${cropDetails.length} crops`);
     console.log(`🗺️ Saved ${FARMING_PATCHES.length} patch locations`);
-
   } catch (error) {
-    console.error('❌ Data fetch failed:', error.message);
+    console.error("❌ Data fetch failed:", error.message);
     process.exit(1);
   }
 }
 
 // Execute if run directly
-if (import.meta.url.startsWith('file:') && process.argv[1] && import.meta.url.includes(process.argv[1].replace(/\\/g, '/'))) {
+if (
+  import.meta.url.startsWith("file:") &&
+  process.argv[1] &&
+  import.meta.url.includes(process.argv[1].replace(/\\/g, "/"))
+) {
   main().catch(console.error);
 }
 
