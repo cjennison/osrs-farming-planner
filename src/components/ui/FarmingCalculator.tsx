@@ -8,6 +8,7 @@ import {
   calculateDependencies,
   type YieldStrategy,
 } from "@/lib/calculators/dependency-calculator";
+import { getCropById } from "@/lib/farming-data-simple";
 import { CalculatorInputs } from "./CalculatorInputs";
 import { CalculatorResults } from "./CalculatorResults";
 
@@ -143,20 +144,29 @@ export function FarmingCalculator() {
 
   const getDependencyChain = (crop: string): string[] => {
     const chain: string[] = [];
+    const visited = new Set<string>();
     let current = crop;
 
-    // Build the dependency chain (excluding the target crop itself)
-    while (current) {
-      const cropData = {
-        tomato: "cabbage",
-        cabbage: "onion",
-        onion: "potato",
-      }[current];
+    // Build the dependency chain using actual crop data
+    while (current && !visited.has(current)) {
+      visited.add(current);
 
-      if (cropData) {
-        chain.unshift(cropData);
-        current = cropData;
-      } else {
+      try {
+        const cropData = getCropById(current);
+        if (cropData?.protection?.type === "crop") {
+          const dependencyCrop = cropData.protection.item;
+          if (dependencyCrop && !visited.has(dependencyCrop)) {
+            chain.unshift(dependencyCrop);
+            current = dependencyCrop;
+          } else {
+            break;
+          }
+        } else {
+          // No crop dependency (might be item dependency or no protection)
+          break;
+        }
+      } catch (error) {
+        // If we can't get crop data, break the chain
         break;
       }
     }
