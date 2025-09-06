@@ -2,6 +2,7 @@
 // Based on official OSRS Wiki protection payment requirements
 
 import { getAllCrops, getCropById } from "../farming-data-simple";
+import { mapItemToCrop } from "../purchasable-items";
 
 export interface CropPayment {
   crop: string;
@@ -81,29 +82,6 @@ export type YieldStrategy = "min" | "average" | "max";
 
 // biome-ignore lint/suspicious/noExplicitAny: this is coming from a json
 function convertToCropData(crop: any): CropData {
-  // Helper function to map items to crop IDs
-  function mapItemToCrop(itemName: string): string {
-    const itemToCropMap: Record<string, string> = {
-      // Jute products
-      "jute fibre": "jute",
-      "jute fibres": "jute",
-
-      // Barley products
-      barley_malt: "barley",
-
-      // Container mappings for payments
-      "sack of potatoes": "potato",
-      "sack of onions": "onion",
-      "sack of cabbages": "cabbage",
-      "basket of tomatoes": "tomato",
-      "basket of apples": "apple",
-
-      // Add more mappings as needed
-    };
-
-    return itemToCropMap[itemName] || itemName;
-  }
-
   return {
     id: crop.id,
     name: crop.name,
@@ -116,11 +94,11 @@ function convertToCropData(crop: any): CropData {
     isFixedYield: crop.isFixedYield || false,
     protection: crop.protection
       ? {
-          crop: mapItemToCrop(crop.protection.item), // Map item to crop ID
+          crop: crop.protection.item, // Use the original item name, not mapped to crop ID
           quantity: crop.protection.quantity, // Now represents actual items needed
           note:
             crop.protection.type === "item"
-              ? "Compost payment"
+              ? "Item payment"
               : "Crop payment",
         }
       : undefined,

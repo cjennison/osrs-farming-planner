@@ -1,0 +1,308 @@
+{
+  "metadata": {
+    "lastUpdated": "2025-09-06T12:42:59.079Z",
+    "version": "1.0.0",
+    "source": "OSRS Wiki API"
+  },
+  "items": {
+    "compost": {
+      "id": "compost",
+      "name": "Compost",
+      "itemId": 6032,
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Compost",
+      "category": "farming_supplies",
+      "type": "purchasable",
+      "images": {
+        "item": "https://oldschool.runescape.wiki/images/Compost.png"
+      },
+      "shopInfo": {
+        "available": true,
+        "locations": [
+          {
+            "shop": "Farming shops",
+            "price": 35,
+            "stock": "unlimited"
+          }
+        ]
+      },
+      "uses": [
+        "Allotment patch protection",
+        "Hops patch protection"
+      ]
+    },
+    "supercompost": {
+      "id": "supercompost",
+      "name": "Supercompost",
+      "itemId": 6034,
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Supercompost",
+      "category": "farming_supplies",
+      "type": "purchasable",
+      "images": {
+        "item": "https://oldschool.runescape.wiki/images/d/d4/Supercompost.png"
+      },
+      "shopInfo": {
+        "available": true,
+        "locations": [
+          {
+            "shop": "Farming shops",
+            "price": 70,
+            "stock": "unlimited"
+          }
+        ]
+      },
+      "uses": [
+        "Enhanced allotment patch protection"
+      ]
+    },
+    "ultracompost": {
+      "id": "ultracompost",
+      "name": "Ultracompost",
+      "itemId": 21483,
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Ultracompost",
+      "category": "farming_supplies",
+      "type": "purchasable",
+      "images": {
+        "item": "https://oldschool.runescape.wiki/images/5/53/Ultracompost.png"
+      },
+      "shopInfo": {
+        "available": false,
+        "locations": []
+      },
+      "uses": [
+        "Premium allotment patch protection"
+      ]
+    },
+    "jute_fibre": {
+      "id": "jute_fibre",
+      "name": "Jute fibre",
+      "itemId": 5931,
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Jute_fibre",
+      "category": "farming_supplies",
+      "type": "purchasable",
+      "images": {
+        "item": "https://oldschool.runescape.wiki/images/c/c1/Jute_fibre.png"
+      },
+      "shopInfo": {
+        "available": true,
+        "locations": [
+          {
+            "shop": "Farming shops",
+            "price": 12,
+            "stock": "unlimited"
+          }
+        ]
+      },
+      "uses": [
+        "Sweetcorn protection payment"
+      ]
+    },
+    "apple": {
+      "id": "apple",
+      "name": "Cooking apple",
+      "itemId": 1955,
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Cooking_apple",
+      "category": "food",
+      "type": "purchasable",
+      "aliases": ["apple", "cooking apple"],
+      "images": {
+        "item": "https://oldschool.runescape.wiki/images/4/43/Cooking_apple.png"
+      },
+      "shopInfo": {
+        "available": true,
+        "locations": [
+          {
+            "shop": "Food shops",
+            "price": 1,
+            "stock": "10"
+          },
+          {
+            "shop": "Grand Exchange",
+            "price": "varies",
+            "stock": "unlimited"
+          }
+        ]
+      },
+      "containerInfo": {
+        "isContainer": true,
+        "containerName": "basket of apples",
+        "containerSize": 5,
+        "containerItemId": 5386
+      },
+      "uses": [
+        "Strawberry protection payment"
+      ]
+    },
+    "curry_leaf": {
+      "id": "curry_leaf",
+      "name": "Curry leaf",
+      "itemId": 5970,
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Curry_leaf",
+      "category": "herbs",
+      "type": "purchasable",
+      "images": {
+        "item": "https://oldschool.runescape.wiki/images/c/cd/Curry_leaf.png"
+      },
+      "shopInfo": {
+        "available": true,
+        "locations": [
+          {
+            "shop": "Spice shops",
+            "price": 20,
+            "stock": "10"
+          },
+          {
+            "shop": "Grand Exchange",
+            "price": "varies",
+            "stock": "unlimited"
+          }
+        ]
+      },
+      "uses": [
+        "Watermelon protection payment"
+      ]
+    },
+    "jangerberry": {
+      "id": "jangerberry",
+      "name": "Jangerberry",
+      "itemId": 247,
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Jangerberry",
+      "category": "berries",
+      "type": "purchasable",
+      "images": {
+        "item": "https://oldschool.runescape.wiki/images/4/41/Jangerberry.png"
+      },
+      "shopInfo": {
+        "available": true,
+        "locations": [
+          {
+            "shop": "Grand Exchange",
+            "price": "varies",
+            "stock": "unlimited"
+          }
+        ]
+      },
+      "uses": [
+        "Snape grass protection payment"
+      ]
+    },
+    "barley_malt": {
+      "id": "barley_malt",
+      "name": "Barley malt",
+      "itemId": 6006,
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Barley_malt",
+      "category": "brewing",
+      "type": "purchasable",
+      "images": {
+        "item": "https://oldschool.runescape.wiki/images/8/89/Barley_malt.png"
+      },
+      "shopInfo": {
+        "available": true,
+        "locations": [
+          {
+            "shop": "Farming shops",
+            "price": 30,
+            "stock": "unlimited"
+          }
+        ]
+      },
+      "uses": [
+        "Jute protection payment"
+      ]
+    },
+    "sack_of_potatoes": {
+      "id": "sack_of_potatoes",
+      "name": "Sack of Potatoes",
+      "itemId": 5438,
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Sack_of_potatoes",
+      "category": "containers",
+      "type": "container",
+      "images": {
+        "item": "https://oldschool.runescape.wiki/images/Sack_of_potatoes_detail.png"
+      },
+      "containerInfo": {
+        "contains": "potato",
+        "quantity": 10,
+        "emptyContainer": "empty_sack"
+      },
+      "uses": [
+        "Crop protection payments"
+      ]
+    },
+    "sack_of_onions": {
+      "id": "sack_of_onions",
+      "name": "Sack of Onions",
+      "itemId": 5458,
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Sack_of_onions",
+      "category": "containers",
+      "type": "container",
+      "images": {
+        "item": "https://oldschool.runescape.wiki/images/Sack_of_onions_detail.png"
+      },
+      "containerInfo": {
+        "contains": "onion",
+        "quantity": 10,
+        "emptyContainer": "empty_sack"
+      },
+      "uses": [
+        "Crop protection payments"
+      ]
+    },
+    "sack_of_cabbages": {
+      "id": "sack_of_cabbages",
+      "name": "Sack of Cabbages",
+      "itemId": 5478,
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Sack_of_cabbages",
+      "category": "containers",
+      "type": "container",
+      "images": {
+        "item": "https://oldschool.runescape.wiki/images/Sack_of_cabbages_detail.png"
+      },
+      "containerInfo": {
+        "contains": "cabbage",
+        "quantity": 10,
+        "emptyContainer": "empty_sack"
+      },
+      "uses": [
+        "Crop protection payments"
+      ]
+    },
+    "basket_of_tomatoes": {
+      "id": "basket_of_tomatoes",
+      "name": "Basket of Tomatoes",
+      "itemId": 5968,
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Basket_of_tomatoes",
+      "category": "containers",
+      "type": "container",
+      "images": {
+        "item": "https://oldschool.runescape.wiki/images/Basket_of_tomatoes_detail.png"
+      },
+      "containerInfo": {
+        "contains": "tomato",
+        "quantity": 5,
+        "emptyContainer": "empty_basket"
+      },
+      "uses": [
+        "Crop protection payments"
+      ]
+    },
+    "basket_of_apples": {
+      "id": "basket_of_apples",
+      "name": "Basket of Apples",
+      "itemId": 1955,
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Basket_of_apples",
+      "category": "containers",
+      "type": "container",
+      "images": {
+        "item": "https://oldschool.runescape.wiki/images/Basket_of_apples_detail.png"
+      },
+      "containerInfo": {
+        "contains": "apple",
+        "quantity": 5,
+        "emptyContainer": "empty_basket"
+      },
+      "uses": [
+        "Crop protection payments"
+      ]
+    }
+  }
+}

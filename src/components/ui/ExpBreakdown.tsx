@@ -38,7 +38,7 @@ interface CropExpData {
 }
 
 export function ExpBreakdown({ result, yieldStrategy }: ExpBreakdownProps) {
-  const [opened, setOpened] = useState(false);
+  const [opened, setOpened] = useState(true);
 
   // Calculate experience for each crop
   const cropExpData: CropExpData[] = [];

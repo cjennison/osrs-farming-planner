@@ -14,6 +14,7 @@ import {
 import {
   IconChevronDown,
   IconChevronRight,
+  IconExternalLink,
   IconSeeding,
   IconShoppingCart,
 } from "@tabler/icons-react";
@@ -23,6 +24,7 @@ import type {
   YieldStrategy,
 } from "@/lib/calculators/dependency-calculator";
 import { getCropById } from "@/lib/farming-data-simple";
+import { getPurchasableItemById, getPurchasableItemByName } from "@/lib/purchasable-items";
 
 interface InputItem {
   type: 'seed' | 'purchase';
@@ -31,6 +33,7 @@ interface InputItem {
   image: string;
   crop?: string;
   purpose?: string;
+  link?: string;
 }
 
 interface InputsBreakdownProps {
@@ -42,7 +45,7 @@ export function InputsBreakdown({
   result,
   yieldStrategy,
 }: InputsBreakdownProps) {
-  const [opened, setOpened] = useState(false);
+  const [opened, setOpened] = useState(true);
     // Calculate required inputs based on calculation result
   const requiredInputs: InputItem[] = [];
 
@@ -58,6 +61,7 @@ export function InputsBreakdown({
           quantity: seedsNeeded,
           image: cropData.images?.seed || "https://oldschool.runescape.wiki/images/0/0a/Seed_placeholder.png",
           crop: cropData.name,
+          link: cropData.wikiUrl,
         });
       }
     }
@@ -66,13 +70,46 @@ export function InputsBreakdown({
   // Add purchasable items from breakdown
   result.breakdown.forEach((step) => {
     if (step.purchaseQuantity !== undefined) {
-      // This is a purchasable item
+      // Clean the crop name by removing " (purchasable)" suffix
+      const cleanCropName = step.crop.replace(" (purchasable)", "").trim();
+
+      // Try to find purchasable item by name or common mappings
+      let purchasableItem = getPurchasableItemByName(cleanCropName);
+
+      // If not found, try common item mappings
+      if (!purchasableItem) {
+        const commonMappings: Record<string, string> = {
+          "compost": "compost",
+          "supercompost": "supercompost",
+          "ultracompost": "ultracompost",
+          "jute fibre": "jute_fibre",
+          "jute fibres": "jute_fibre",
+          "curry leaf": "curry_leaf",
+          "curry leaves": "curry_leaf",
+          "jangerberry": "jangerberry",
+          "jangerberries": "jangerberry",
+          "apple": "apple",
+          "cooking apple": "apple",
+          "barley malt": "barley_malt",
+        };
+
+        const mappedId = commonMappings[cleanCropName.toLowerCase()];
+        if (mappedId) {
+          purchasableItem = getPurchasableItemById(mappedId);
+        }
+      }
+
+      const itemName = purchasableItem?.name || (cleanCropName.charAt(0).toUpperCase() + cleanCropName.slice(1));
+      const itemImage = purchasableItem?.images?.item || "https://oldschool.runescape.wiki/images/0/0a/Placeholder_item.png";
+      const itemLink = purchasableItem?.wikiUrl;
+
       requiredInputs.push({
         type: 'purchase',
-        name: step.crop.charAt(0).toUpperCase() + step.crop.slice(1),
+        name: itemName,
         quantity: step.purchaseQuantity,
-        image: getItemImage(step.crop),
+        image: itemImage,
         purpose: step.purpose,
+        link: itemLink,
       });
     }
   });
@@ -80,9 +117,14 @@ export function InputsBreakdown({
   return (
     <Stack gap="xs">
       <Group gap="xs" justify="space-between">
-        <Text fw={500} c="sage.7">
-          Required Inputs
-        </Text>
+        <Stack gap={2}>
+          <Text fw={500} c="sage.7">
+            Required Inputs
+          </Text>
+          <Text size="xs" c="dimmed" style={{ fontStyle: 'italic' }}>
+            Click items with <IconExternalLink size={10} style={{ display: 'inline', verticalAlign: 'middle' }} /> to view on OSRS Wiki
+          </Text>
+        </Stack>
         <ActionIcon variant="subtle" onClick={() => setOpened(!opened)}>
           {opened ? (
             <IconChevronDown size={16} />
@@ -94,19 +136,19 @@ export function InputsBreakdown({
 
       <Collapse in={opened}>
         <Stack gap="xs">
-          {requiredInputs.map((input, index) => (
-            <Paper
-              key={`${input.name}-${index}`}
-              p="md"
-              bg={input.type === 'seed' ? 'green.0' : 'blue.0'}
-              style={{ borderRadius: 6 }}
-            >
+          {requiredInputs.map((input, index) => {
+            const isPurchasableWithLink = input.type === 'purchase' && input.link;
+            const isSeedWithLink = input.type === 'seed' && input.link;
+            const hasLink = isPurchasableWithLink || isSeedWithLink;
+
+            const content = (
               <Group gap="md" align="center">
                 <Image
                   src={input.image}
                   alt={input.name}
                   w={32}
                   h={32}
+                  fit="contain"
                   fallbackSrc="https://oldschool.runescape.wiki/images/0/0a/Placeholder_item.png"
                 />
                 <Stack gap={2} flex={1}>
@@ -119,6 +161,9 @@ export function InputsBreakdown({
                     <Text fw={500} size="sm">
                       {input.name}
                     </Text>
+                    {(isPurchasableWithLink || isSeedWithLink) && (
+                      <IconExternalLink size={12} style={{ color: input.type === 'seed' ? "var(--mantine-color-green-6)" : "var(--mantine-color-blue-6)" }} />
+                    )}
                     <Badge
                       variant="filled"
                       color={input.type === 'seed' ? 'green' : 'blue'}
@@ -139,8 +184,30 @@ export function InputsBreakdown({
                   )}
                 </Stack>
               </Group>
-            </Paper>
-          ))}
+            );
+
+            return (
+              <Paper
+                key={`${input.name}-${index}`}
+                p="md"
+                bg={input.type === 'seed' ? 'green.0' : 'blue.0'}
+                style={{
+                  borderRadius: 6,
+                  cursor: hasLink ? 'pointer' : 'default',
+                  transition: 'transform 0.1s ease',
+                }}
+                onClick={hasLink ? () => window.open(input.link, '_blank') : undefined}
+                onMouseEnter={hasLink ? (e) => {
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                } : undefined}
+                onMouseLeave={hasLink ? (e) => {
+                  e.currentTarget.style.transform = 'translateY(0px)';
+                } : undefined}
+              >
+                {content}
+              </Paper>
+            );
+          })}
 
           {requiredInputs.length === 0 && (
             <Text size="sm" c="dimmed" ta="center" py="md">
@@ -151,16 +218,4 @@ export function InputsBreakdown({
       </Collapse>
     </Stack>
   );
-}
-
-// Helper function to get item images - we'll fill these in later
-function getItemImage(itemName: string): string {
-  const imageMap: Record<string, string> = {
-    compost: "https://oldschool.runescape.wiki/images/8/8c/Compost.png",
-    supercompost: "https://oldschool.runescape.wiki/images/f/fc/Supercompost.png",
-    ultracompost: "https://oldschool.runescape.wiki/images/6/69/Ultracompost.png",
-    // Add more as needed
-  };
-
-  return imageMap[itemName.toLowerCase()] || "https://oldschool.runescape.wiki/images/0/0a/Placeholder_item.png";
 }

@@ -144,19 +144,6 @@ export function CalculatorResults({
             toggleSection={toggleSection}
           />
 
-          {/* Yield Information */}
-          <Divider />
-
-          <ExpectedYields
-            result={result}
-            yieldStrategy={yieldStrategy}
-            farmingLevel={farmingLevel}
-            compostType={compostType}
-            expandedSections={expandedSections}
-            toggleSection={toggleSection}
-            formatCompostText={formatCompostText}
-          />
-
           {/* Inputs Breakdown */}
           <Divider />
 
@@ -171,6 +158,19 @@ export function CalculatorResults({
           <ExpBreakdown
             result={result}
             yieldStrategy={yieldStrategy}
+          />
+
+          {/* Yield Information */}
+          <Divider />
+
+          <ExpectedYields
+            result={result}
+            yieldStrategy={yieldStrategy}
+            farmingLevel={farmingLevel}
+            compostType={compostType}
+            expandedSections={expandedSections}
+            toggleSection={toggleSection}
+            formatCompostText={formatCompostText}
           />
         </Stack>
       </Card>

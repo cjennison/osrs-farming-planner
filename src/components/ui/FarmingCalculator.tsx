@@ -65,7 +65,11 @@ export function FarmingCalculator() {
   const [error, setError] = useState<string>("");
   const [expandedSections, setExpandedSections] = useState<
     Record<string, boolean>
-  >({});
+  >({
+    breakdown: true,  // CropRequirements section
+    growth: true,     // GrowthBreakdown section
+    yields: false,    // ExpectedYields section - keep collapsed by default as requested
+  });
 
   const selectedCrop = CROP_OPTIONS.find((crop) => crop.value === targetCrop);
   const canCalculate =
