@@ -12,6 +12,7 @@ These are the core instructions for the agent. They supercede any other instruct
 - When encountering a file corruption, file deletion and recreation is forbidden. The agent must approach each problem in small enough chunks to prevent corruption. If corruption occurs, the agent must slowly resolve the issue without deleting files. File deletion and recreation is forbidden.
 - The agent must never ask to build or run the application.
 - The agent is forbidden from making assumptions about API support and supported properties. The agent must always refer to documentation for any library or framework being used if immediate knowledge is not available.
+- Writing temporary test files is forbidden.
 
 ## Development
 

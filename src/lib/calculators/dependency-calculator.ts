@@ -1,7 +1,7 @@
 // OSRS Farming Dependency Calculator
 // Based on official OSRS Wiki protection payment requirements
 
-import { getAllCrops, getCropById } from '../farming-data-simple';
+import { getAllCrops, getCropById } from "../farming-data-simple";
 
 export interface CropPayment {
   crop: string;
@@ -12,7 +12,7 @@ export interface CropPayment {
 export interface CropData {
   id: string;
   name: string;
-  type: 'allotment' | 'flower';
+  type: "allotment" | "flower";
   farmingLevel: number;
   protection?: CropPayment;
   baseYield: number;
@@ -72,7 +72,7 @@ export interface StartingResources {
   [cropId: string]: number;
 }
 
-export type YieldStrategy = 'min' | 'average' | 'max';
+export type YieldStrategy = "min" | "average" | "max";
 
 /**
  * Convert JSON crop data to CropData format for calculations
@@ -81,18 +81,23 @@ function convertToCropData(crop: any): CropData {
   return {
     id: crop.id,
     name: crop.name,
-    type: crop.type as 'allotment' | 'flower',
+    type: crop.type as "allotment" | "flower",
     farmingLevel: crop.farmingLevel || 1,
     baseYield: crop.baseYield || 3,
     seedsPerPatch: crop.seedsPerPatch || 3,
     expPerHarvest: crop.expPerHarvest || 0,
     growthTime: crop.growthTime || 80, // Default to 80 minutes if not specified
     isFixedYield: crop.isFixedYield || false,
-    protection: crop.protection ? {
-      crop: crop.protection.item, // Use the crop ID directly
-      quantity: crop.protection.quantity, // Now represents actual items needed
-      note: crop.protection.type === 'item' ? 'Compost payment' : 'Crop payment'
-    } : undefined,
+    protection: crop.protection
+      ? {
+          crop: crop.protection.item, // Use the crop ID directly
+          quantity: crop.protection.quantity, // Now represents actual items needed
+          note:
+            crop.protection.type === "item"
+              ? "Compost payment"
+              : "Crop payment",
+        }
+      : undefined,
   };
 }
 
@@ -125,7 +130,7 @@ function getAllCropData(): { [key: string]: CropData } {
 export function calculateYield(
   crop: string,
   farmingLevel: number,
-  compostType: 'none' | 'compost' | 'supercompost' | 'ultracompost' = 'none'
+  compostType: "none" | "compost" | "supercompost" | "ultracompost" = "none",
 ): { min: number; max: number; average: number } {
   const cropData = getCropData(crop);
   if (!cropData) throw new Error(`Unknown crop: ${crop}`);
@@ -136,11 +141,14 @@ export function calculateYield(
     return {
       min: fixedYield,
       max: fixedYield,
-      average: fixedYield
+      average: fixedYield,
     };
   }
 
-  // Harvest lives system: 3 base + compost bonus
+  // Harvest lives system: 3 base lives
+  const baseLives = 3;
+
+  // Compost bonus lives
   const compostLives = {
     none: 0,
     compost: 1,
@@ -148,64 +156,54 @@ export function calculateYield(
     ultracompost: 3,
   }[compostType];
 
-  const harvestLives = 3 + compostLives;
+  const totalLives = baseLives + compostLives;
 
-  // Chance to save harvest life constants (from OSRS Wiki)
-  // These are approximations based on known values
+  // Chance to save harvest life constants (CTS values from OSRS Wiki Talk page)
+  // These are official values from Mod Easty via Twitter DMs
   const cropConstants: Record<string, { low: number; high: number }> = {
-    potato: { low: 40, high: 80 },    // Level 1 crop
-    onion: { low: 42, high: 80 },     // Level 5 crop
-    cabbage: { low: 44, high: 80 },   // Level 7 crop
-    tomato: { low: 48, high: 80 },    // Level 12 crop
-    sweetcorn: { low: 52, high: 80 }, // Level 20 crop
-    strawberry: { low: 58, high: 80 }, // Level 31 crop
-    watermelon: { low: 65, high: 80 }, // Level 47 crop
-    snape_grass: { low: 70, high: 80 }, // Level 61 crop
+    potato: { low: 101, high: 180 }, // Level 1 crop
+    onion: { low: 105, high: 180 }, // Level 5 crop
+    cabbage: { low: 107, high: 180 }, // Level 7 crop
+    tomato: { low: 112, high: 180 }, // Level 12 crop
+    sweetcorn: { low: 88, high: 180 }, // Level 20 crop
+    strawberry: { low: 103, high: 180 }, // Level 31 crop
+    watermelon: { low: 126, high: 180 }, // Level 47 crop
+    snape_grass: { low: 148, high: 195 }, // Level 61 crop
   };
 
-  const constants = cropConstants[crop] || { low: 50, high: 80 };
+  const constants = cropConstants[crop] || { low: 100, high: 180 };
 
-  // Calculate unboosted chance to save using OSRS formula
+  // Calculate chance to save using OSRS formula (without magic secateurs for base calculation)
   // Chance = (1 + floor(CTSlow * (99-F)/98 + CTShigh * (F-1)/98 + 0.5)) / 256
   const farmingLevelClamped = Math.max(1, Math.min(99, farmingLevel));
-  const chanceNumerator = 1 + Math.floor(
-    constants.low * (99 - farmingLevelClamped) / 98 +
-    constants.high * (farmingLevelClamped - 1) / 98 +
-    0.5
-  );
+  const chanceNumerator =
+    1 +
+    Math.floor(
+      (constants.low * (99 - farmingLevelClamped)) / 98 +
+        (constants.high * (farmingLevelClamped - 1)) / 98 +
+        0.5,
+    );
 
-  const unboostedChanceToSave = chanceNumerator / 256;
-
-  // Apply boosts (assuming magic secateurs for conservative estimate)
-  // ItemBoost = floor(CTS * 1.1) for magic secateurs
-  const boostedLow = Math.floor(constants.low * 1.1);
-  const boostedHigh = Math.floor(constants.high * 1.1);
-
-  const boostedChanceNumerator = 1 + Math.floor(
-    boostedLow * (99 - farmingLevelClamped) / 98 +
-    boostedHigh * (farmingLevelClamped - 1) / 98 +
-    0.5
-  );
-
-  const boostedChanceToSave = boostedChanceNumerator / 256;
-
-  // Use boosted chance for calculations (conservative assumption)
-  const chanceToSave = boostedChanceToSave;
+  const chanceToSave = chanceNumerator / 256;
 
   // Expected yield formula: Lives / (1 - chanceToSave)
-  const expectedYield = harvestLives / (1 - chanceToSave);
+  const expectedYield = totalLives / (1 - chanceToSave);
 
-  // Minimum is always the number of lives you start with
-  const min = harvestLives;
+  // Minimum yield is the total number of harvest lives (base + compost bonus)
+  const min = totalLives;
 
-  // Maximum is theoretically infinite, but practically calculate 99th percentile
-  // Using negative binomial distribution properties
-  const max = Math.ceil(expectedYield * 2); // Conservative upper bound
+  // Maximum yield calculation:
+  // Based on empirical observations (potatoes 8-12 at level 30 with compost)
+  // Practical maximum is typically 1.5-1.6x the expected yield
+  const practicalMax = Math.max(
+    Math.ceil(expectedYield * 1.6), // 1.6x expected as realistic maximum
+    totalLives + 3, // Ensure minimum reasonable range (reduced from +6)
+  );
 
   return {
     min,
-    max,
-    average: Math.round(expectedYield * 10) / 10 // Round to 1 decimal place
+    max: practicalMax,
+    average: Math.round(expectedYield * 10) / 10, // Round to 1 decimal place
   };
 }
 
@@ -216,24 +214,28 @@ export function calculateDependencies(
   targetCrop: string,
   targetQuantity: number,
   farmingLevel: number = 99,
-  compostType: 'none' | 'compost' | 'supercompost' | 'ultracompost' = 'supercompost',
+  compostType:
+    | "none"
+    | "compost"
+    | "supercompost"
+    | "ultracompost" = "supercompost",
   startingResources: StartingResources = {},
-  yieldStrategy: YieldStrategy = 'average'
+  yieldStrategy: YieldStrategy = "average",
 ): CalculationResult {
   const cropData = getCropData(targetCrop);
   if (!cropData) {
     throw new Error(`Unknown target crop: ${targetCrop}`);
   }
 
-  const requirements: CalculationResult['requirements'] = {};
-  const breakdown: CalculationResult['breakdown'] = [];
+  const requirements: CalculationResult["requirements"] = {};
+  const breakdown: CalculationResult["breakdown"] = [];
 
   // Build dependency chain
   function calculateRequirement(
     crop: string,
     neededQuantity: number,
     level: number,
-    purpose: string
+    purpose: string,
   ): number {
     const data = getCropData(crop);
     if (!data) throw new Error(`Unknown crop: ${crop}`);
@@ -251,14 +253,14 @@ export function calculateDependencies(
           patchesNeeded: {
             min: 0,
             average: 0,
-            max: 0
+            max: 0,
           },
           totalYield: {
             min: available,
             average: available,
-            max: available
+            max: available,
           },
-          purpose: `${purpose} (using ${Math.min(available, neededQuantity)} from starting resources)`
+          purpose: `${purpose} (using ${Math.min(available, neededQuantity)} from starting resources)`,
         });
       }
       return 0;
@@ -273,9 +275,12 @@ export function calculateDependencies(
     const patchesNeededMax = Math.ceil(stillNeeded / cropYield.max);
 
     // Use the selected strategy for actual planning
-    const patchesNeeded = yieldStrategy === 'min' ? patchesNeededMin
-                        : yieldStrategy === 'max' ? patchesNeededMax
-                        : patchesNeededAverage;
+    const patchesNeeded =
+      yieldStrategy === "min"
+        ? patchesNeededMin
+        : yieldStrategy === "max"
+          ? patchesNeededMax
+          : patchesNeededAverage;
 
     // Store requirement
     requirements[crop] = {
@@ -299,26 +304,27 @@ export function calculateDependencies(
       patchesNeeded: {
         min: patchesNeededMin,
         average: patchesNeededAverage,
-        max: patchesNeededMax
+        max: patchesNeededMax,
       },
       totalYield: {
         min: patchesNeededMin * cropYield.min,
         average: patchesNeededAverage * cropYield.average,
-        max: patchesNeededMax * cropYield.max
+        max: patchesNeededMax * cropYield.max,
       },
-      purpose: available > 0
-        ? `${purpose} (${stillNeeded} needed, ${available} from starting resources)`
-        : purpose
+      purpose:
+        available > 0
+          ? `${purpose} (${stillNeeded} needed, ${available} from starting resources)`
+          : purpose,
     });
 
     // Recursively calculate dependencies
     if (data.protection) {
       const paymentNeeded = patchesNeeded * data.protection.quantity;
-      const paymentCropPatches = calculateRequirement(
+      calculateRequirement(
         data.protection.crop,
         paymentNeeded,
         level + 1,
-        `Payment for ${data.name} (${data.protection.quantity} per patch)`
+        `Payment for ${data.name} (${data.protection.quantity} per patch)`,
       );
 
       // Add payment information to the payment crop's requirement
@@ -327,20 +333,25 @@ export function calculateDependencies(
         if (originalCrop?.protection?.itemDescription) {
           const totalItemsNeeded = patchesNeeded * data.protection.quantity;
 
-          if (originalCrop.protection.isContainer && originalCrop.protection.containerSize) {
+          if (
+            originalCrop.protection.isContainer &&
+            originalCrop.protection.containerSize
+          ) {
             // Calculate containers needed
-            const containersNeeded = Math.ceil(totalItemsNeeded / originalCrop.protection.containerSize);
+            const containersNeeded = Math.ceil(
+              totalItemsNeeded / originalCrop.protection.containerSize,
+            );
             requirements[data.protection.crop].paymentInfo = {
               containerDescription: originalCrop.protection.itemDescription,
               containerQuantity: containersNeeded,
-              totalCropsNeeded: totalItemsNeeded
+              totalCropsNeeded: totalItemsNeeded,
             };
           } else {
             // Individual items (no containers)
             requirements[data.protection.crop].paymentInfo = {
               containerDescription: originalCrop.protection.itemDescription,
               containerQuantity: totalItemsNeeded,
-              totalCropsNeeded: totalItemsNeeded
+              totalCropsNeeded: totalItemsNeeded,
             };
           }
         }
@@ -351,15 +362,18 @@ export function calculateDependencies(
   }
 
   // Start calculation
-  const totalPatches = calculateRequirement(
+  calculateRequirement(
     targetCrop,
     targetQuantity,
     0,
-    `Target harvest: ${targetQuantity} ${cropData.name}${targetQuantity === 1 ? '' : 's'}`
+    `Target harvest: ${targetQuantity} ${cropData.name}${targetQuantity === 1 ? "" : "s"}`,
   );
 
   // Calculate summary
-  const allPatches = Object.values(requirements).reduce((sum, req) => sum + req.patches, 0);
+  const allPatches = Object.values(requirements).reduce(
+    (sum, req) => sum + req.patches,
+    0,
+  );
 
   // Calculate estimated time - sum of all crop growing times (no concurrency)
   // Each patch takes the full growth time, so total time = sum of (patches * growth_time) for each crop
@@ -410,7 +424,7 @@ export function getDependencyChain(cropId: string): string[] {
   while (current) {
     chain.push(current);
     const crop = getCropData(current);
-    current = crop?.protection?.crop || '';
+    current = crop?.protection?.crop || "";
   }
 
   return chain;
