@@ -9,13 +9,8 @@
       "name": "Falador Allotment (North)",
       "location": "Falador",
       "type": "allotment",
-      "coordinates": [
-        3058,
-        3311
-      ],
-      "nearbyTeleports": [
-        "Falador teleport"
-      ],
+      "coordinates": [3058, 3311],
+      "nearbyTeleports": ["Falador teleport"],
       "walkingTime": 30
     },
     {
@@ -23,13 +18,8 @@
       "name": "Falador Allotment (South)",
       "location": "Falador",
       "type": "allotment",
-      "coordinates": [
-        3058,
-        3308
-      ],
-      "nearbyTeleports": [
-        "Falador teleport"
-      ],
+      "coordinates": [3058, 3308],
+      "nearbyTeleports": ["Falador teleport"],
       "walkingTime": 30
     },
     {
@@ -37,13 +27,8 @@
       "name": "Falador Flower Patch",
       "location": "Falador",
       "type": "flower",
-      "coordinates": [
-        3054,
-        3307
-      ],
-      "nearbyTeleports": [
-        "Falador teleport"
-      ],
+      "coordinates": [3054, 3307],
+      "nearbyTeleports": ["Falador teleport"],
       "walkingTime": 35
     },
     {
@@ -51,13 +36,8 @@
       "name": "Catherby Allotment (North)",
       "location": "Catherby",
       "type": "allotment",
-      "coordinates": [
-        2805,
-        3465
-      ],
-      "nearbyTeleports": [
-        "Catherby teleport"
-      ],
+      "coordinates": [2805, 3465],
+      "nearbyTeleports": ["Catherby teleport"],
       "walkingTime": 15
     },
     {
@@ -65,13 +45,8 @@
       "name": "Catherby Allotment (South)",
       "location": "Catherby",
       "type": "allotment",
-      "coordinates": [
-        2805,
-        3462
-      ],
-      "nearbyTeleports": [
-        "Catherby teleport"
-      ],
+      "coordinates": [2805, 3462],
+      "nearbyTeleports": ["Catherby teleport"],
       "walkingTime": 15
     },
     {
@@ -79,13 +54,8 @@
       "name": "Catherby Flower Patch",
       "location": "Catherby",
       "type": "flower",
-      "coordinates": [
-        2809,
-        3463
-      ],
-      "nearbyTeleports": [
-        "Catherby teleport"
-      ],
+      "coordinates": [2809, 3463],
+      "nearbyTeleports": ["Catherby teleport"],
       "walkingTime": 20
     },
     {
@@ -93,13 +63,8 @@
       "name": "Ardougne Allotment (North)",
       "location": "Ardougne",
       "type": "allotment",
-      "coordinates": [
-        2670,
-        3374
-      ],
-      "nearbyTeleports": [
-        "Ardougne teleport"
-      ],
+      "coordinates": [2670, 3374],
+      "nearbyTeleports": ["Ardougne teleport"],
       "walkingTime": 45
     },
     {
@@ -107,13 +72,8 @@
       "name": "Ardougne Allotment (South)",
       "location": "Ardougne",
       "type": "allotment",
-      "coordinates": [
-        2670,
-        3371
-      ],
-      "nearbyTeleports": [
-        "Ardougne teleport"
-      ],
+      "coordinates": [2670, 3371],
+      "nearbyTeleports": ["Ardougne teleport"],
       "walkingTime": 45
     },
     {
@@ -121,13 +81,8 @@
       "name": "Ardougne Flower Patch",
       "location": "Ardougne",
       "type": "flower",
-      "coordinates": [
-        2666,
-        3372
-      ],
-      "nearbyTeleports": [
-        "Ardougne teleport"
-      ],
+      "coordinates": [2666, 3372],
+      "nearbyTeleports": ["Ardougne teleport"],
       "walkingTime": 50
     },
     {
@@ -135,14 +90,8 @@
       "name": "Hosidius Allotment (North)",
       "location": "Hosidius",
       "type": "allotment",
-      "coordinates": [
-        1739,
-        3550
-      ],
-      "nearbyTeleports": [
-        "Xeric's glade",
-        "Skills necklace"
-      ],
+      "coordinates": [1739, 3550],
+      "nearbyTeleports": ["Xeric's glade", "Skills necklace"],
       "walkingTime": 60
     },
     {
@@ -150,14 +99,8 @@
       "name": "Hosidius Allotment (South)",
       "location": "Hosidius",
       "type": "allotment",
-      "coordinates": [
-        1739,
-        3547
-      ],
-      "nearbyTeleports": [
-        "Xeric's glade",
-        "Skills necklace"
-      ],
+      "coordinates": [1739, 3547],
+      "nearbyTeleports": ["Xeric's glade", "Skills necklace"],
       "walkingTime": 60
     },
     {
@@ -165,15 +108,76 @@
       "name": "Hosidius Flower Patch",
       "location": "Hosidius",
       "type": "flower",
-      "coordinates": [
-        1735,
-        3548
-      ],
-      "nearbyTeleports": [
-        "Xeric's glade",
-        "Skills necklace"
-      ],
+      "coordinates": [1735, 3548],
+      "nearbyTeleports": ["Xeric's glade", "Skills necklace"],
       "walkingTime": 65
+    },
+    {
+      "id": "lumbridge_hops",
+      "name": "Lumbridge Hops Patch",
+      "location": "North of Lumbridge",
+      "type": "hops",
+      "coordinates": [3228, 3312],
+      "nearbyTeleports": [
+        "Lumbridge teleport",
+        "Canoe to Champions' Guild",
+        "Combat bracelet to Champions' Guild"
+      ],
+      "walkingTime": 45
+    },
+    {
+      "id": "mcgrubor_hops",
+      "name": "McGrubor's Wood Hops Patch",
+      "location": "North of McGrubor's Wood",
+      "type": "hops",
+      "coordinates": [2669, 3375],
+      "nearbyTeleports": [
+        "Camelot teleport",
+        "Combat bracelet to Ranging Guild",
+        "Fairy ring ALS to McGrubor's Wood"
+      ],
+      "walkingTime": 60
+    },
+    {
+      "id": "yanille_hops",
+      "name": "Yanille Hops Patch",
+      "location": "Yanille",
+      "type": "hops",
+      "coordinates": [2574, 3103],
+      "nearbyTeleports": [
+        "Watchtower teleport",
+        "House portal (Yanille)",
+        "Nightmare Zone minigame teleport",
+        "Fairy ring CIQ"
+      ],
+      "walkingTime": 30
+    },
+    {
+      "id": "entrana_hops",
+      "name": "Entrana Hops Patch",
+      "location": "Entrana",
+      "type": "hops",
+      "coordinates": [2809, 3335],
+      "nearbyTeleports": [
+        "Balloon transport",
+        "Rat Pits minigame teleport",
+        "Explorer's ring to Port Sarim",
+        "Amulet of glory to Draynor"
+      ],
+      "walkingTime": 90
+    },
+    {
+      "id": "aldarin_hops",
+      "name": "Aldarin Hops Patch",
+      "location": "Aldarin",
+      "type": "hops",
+      "coordinates": [1373, 3050],
+      "nearbyTeleports": [
+        "Fairy ring CKQ",
+        "Quetzal Transport to Aldarin",
+        "House portal (Aldarin)"
+      ],
+      "walkingTime": 25
     }
   ]
 }

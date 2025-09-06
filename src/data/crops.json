@@ -329,5 +329,191 @@
       "baseYield": 1,
       "isFixedYield": true
     }
+  ],
+  "hops": [
+    {
+      "id": "barley",
+      "name": "Barley",
+      "type": "hops",
+      "seedId": 5305,
+      "seedName": "Barley seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Barley_seed",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 3,
+      "growthTime": 40,
+      "seedsPerPatch": 4,
+      "expPerHarvest": 18.0,
+      "expBreakdown": {
+        "planting": 8.5,
+        "checkHealth": 0,
+        "harvest": 9.5
+      },
+      "baseYield": 3,
+      "protection": {
+        "type": "item",
+        "quantity": 3,
+        "item": "compost",
+        "itemDescription": "compost"
+      }
+    },
+    {
+      "id": "hammerstone",
+      "name": "Hammerstone",
+      "type": "hops",
+      "seedId": 5307,
+      "seedName": "Hammerstone seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Hammerstone_seed",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 4,
+      "growthTime": 40,
+      "seedsPerPatch": 4,
+      "expPerHarvest": 19.0,
+      "expBreakdown": {
+        "planting": 9.0,
+        "checkHealth": 0,
+        "harvest": 10.0
+      },
+      "baseYield": 3,
+      "protection": {
+        "type": "crop",
+        "quantity": 1,
+        "item": "marigold",
+        "itemDescription": "marigold"
+      }
+    },
+    {
+      "id": "asgarnian",
+      "name": "Asgarnian",
+      "type": "hops",
+      "seedId": 5308,
+      "seedName": "Asgarnian seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Asgarnian_seed",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 8,
+      "growthTime": 50,
+      "seedsPerPatch": 4,
+      "expPerHarvest": 22.9,
+      "expBreakdown": {
+        "planting": 10.9,
+        "checkHealth": 0,
+        "harvest": 12.0
+      },
+      "baseYield": 3,
+      "protection": {
+        "type": "crop",
+        "quantity": 10,
+        "item": "onion",
+        "itemDescription": "sack of onions",
+        "isContainer": true,
+        "containerSize": 10,
+        "containerCount": 1
+      }
+    },
+    {
+      "id": "jute",
+      "name": "Jute",
+      "type": "hops",
+      "seedId": 5306,
+      "seedName": "Jute seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Jute_seed",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 13,
+      "growthTime": 50,
+      "seedsPerPatch": 3,
+      "expPerHarvest": 27.5,
+      "expBreakdown": {
+        "planting": 13.0,
+        "checkHealth": 0,
+        "harvest": 14.5
+      },
+      "baseYield": 3,
+      "protection": {
+        "type": "item",
+        "quantity": 6,
+        "item": "barley_malt",
+        "itemDescription": "barley malt"
+      }
+    },
+    {
+      "id": "yanillian",
+      "name": "Yanillian",
+      "type": "hops",
+      "seedId": 5309,
+      "seedName": "Yanillian seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Yanillian_seed",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 16,
+      "growthTime": 60,
+      "seedsPerPatch": 4,
+      "expPerHarvest": 30.5,
+      "expBreakdown": {
+        "planting": 14.5,
+        "checkHealth": 0,
+        "harvest": 16.0
+      },
+      "baseYield": 3,
+      "protection": {
+        "type": "crop",
+        "quantity": 5,
+        "item": "tomato",
+        "itemDescription": "basket of tomatoes",
+        "isContainer": true,
+        "containerSize": 5,
+        "containerCount": 1
+      }
+    },
+    {
+      "id": "krandorian",
+      "name": "Krandorian",
+      "type": "hops",
+      "seedId": 5310,
+      "seedName": "Krandorian seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Krandorian_seed",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 21,
+      "growthTime": 70,
+      "seedsPerPatch": 4,
+      "expPerHarvest": 37.0,
+      "expBreakdown": {
+        "planting": 17.5,
+        "checkHealth": 0,
+        "harvest": 19.5
+      },
+      "baseYield": 3,
+      "protection": {
+        "type": "crop",
+        "quantity": 30,
+        "item": "cabbage",
+        "itemDescription": "3 sacks of cabbages",
+        "isContainer": true,
+        "containerSize": 10,
+        "containerCount": 3
+      }
+    },
+    {
+      "id": "wildblood",
+      "name": "Wildblood",
+      "type": "hops",
+      "seedId": 5311,
+      "seedName": "Wildblood seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Wildblood_seed",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 28,
+      "growthTime": 80,
+      "seedsPerPatch": 4,
+      "expPerHarvest": 49.0,
+      "expBreakdown": {
+        "planting": 23.0,
+        "checkHealth": 0,
+        "harvest": 26.0
+      },
+      "baseYield": 3,
+      "protection": {
+        "type": "crop",
+        "quantity": 1,
+        "item": "nasturtium",
+        "itemDescription": "nasturtium"
+      }
+    }
   ]
 }

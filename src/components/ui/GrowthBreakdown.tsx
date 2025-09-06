@@ -47,8 +47,10 @@ export function GrowthBreakdown({
             const starting = startingResources[step.crop] || 0;
             const patchesNeeded = step.patchesNeeded[yieldStrategy];
             const totalYield = step.totalYield[yieldStrategy];
+            const isPurchasable = step.purchaseQuantity !== undefined;
 
-            if (patchesNeeded === 0) return null;
+            // Show purchasable items even if patches needed is 0
+            if (patchesNeeded === 0 && !isPurchasable) return null;
 
             return (
               <Group
@@ -69,12 +71,20 @@ export function GrowthBreakdown({
                     <Text fw={500} tt="capitalize">
                       {step.crop}
                     </Text>
-                    <Badge size="xs" variant="light">
-                      {patchesNeeded} patches
-                    </Badge>
-                    <Badge size="xs" variant="outline" c="dimmed">
-                      {totalYield.toFixed(1)} total expected yield
-                    </Badge>
+                    {isPurchasable ? (
+                      <Badge size="xs" variant="light" color="blue">
+                        {step.purchaseQuantity} needed
+                      </Badge>
+                    ) : (
+                      <>
+                        <Badge size="xs" variant="light">
+                          {patchesNeeded} patches
+                        </Badge>
+                        <Badge size="xs" variant="outline" c="dimmed">
+                          {totalYield.toFixed(1)} total expected yield
+                        </Badge>
+                      </>
+                    )}
                     {starting > 0 && (
                       <Badge size="xs" variant="outline" c="blue">
                         +{starting} units

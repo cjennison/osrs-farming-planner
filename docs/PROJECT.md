@@ -399,13 +399,13 @@ interface YieldCalculator {
 
 ### Phase 1: Foundation & Core Functionality (Weeks 1-3)
 
-#### Week 1: Project Setup & Data Model
+#### Week 1: Project Setup & Data Model ✅ COMPLETED
 - **Project initialization** with Next.js 15 and Mantine setup
 - **Core data structures** for crops and patches
-- **Initial crop database** with allotment and flower data
+- **Initial crop database** with allotment, flower, and hops data
 - **Basic TypeScript types** and interfaces
 
-#### Week 2: Dependency Calculator
+#### Week 2: Dependency Calculator ✅ COMPLETED
 - **Dependency calculation engine** implementation
 - **Basic crop requirement algorithms**
 - **Simple yield calculations** based on farming level

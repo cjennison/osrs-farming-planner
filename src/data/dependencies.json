@@ -6,38 +6,26 @@
   "relationships": {
     "potato": {
       "directDependencies": [],
-      "supports": [
-        "onion"
-      ],
+      "supports": ["onion"],
       "alternativePayments": []
     },
     "onion": {
-      "directDependencies": [
-        "potato"
-      ],
-      "supports": [
-        "cabbage"
-      ],
+      "directDependencies": ["potato"],
+      "supports": ["cabbage"],
       "alternativePayments": []
     },
     "cabbage": {
-      "directDependencies": [
-        "onion"
-      ],
-      "supports": [
-        "tomato"
-      ],
+      "directDependencies": ["onion"],
+      "supports": ["tomato"],
       "alternativePayments": []
     },
     "tomato": {
-      "directDependencies": [
-        "cabbage"
-      ],
-      "supports": [],
+      "directDependencies": ["cabbage"],
+      "supports": ["yanillian"],
       "alternativePayments": []
     },
     "sweetcorn": {
-      "directDependencies": [],
+      "directDependencies": ["jute"],
       "supports": [],
       "alternativePayments": []
     },
@@ -58,9 +46,7 @@
     },
     "marigold": {
       "directDependencies": [],
-      "supports": [
-        "allotment_protection"
-      ],
+      "supports": ["allotment_protection"],
       "alternativePayments": []
     },
     "rosemary": {
@@ -70,7 +56,7 @@
     },
     "nasturtium": {
       "directDependencies": [],
-      "supports": [],
+      "supports": ["wildblood"],
       "alternativePayments": []
     },
     "woad": {
@@ -85,9 +71,42 @@
     },
     "white_lily": {
       "directDependencies": [],
-      "supports": [
-        "allotment_protection"
-      ],
+      "supports": ["allotment_protection"],
+      "alternativePayments": []
+    },
+    "barley": {
+      "directDependencies": [],
+      "supports": ["jute"],
+      "alternativePayments": []
+    },
+    "hammerstone": {
+      "directDependencies": ["marigold"],
+      "supports": [],
+      "alternativePayments": []
+    },
+    "asgarnian": {
+      "directDependencies": ["onion"],
+      "supports": [],
+      "alternativePayments": []
+    },
+    "jute": {
+      "directDependencies": ["barley"],
+      "supports": ["sweetcorn"],
+      "alternativePayments": []
+    },
+    "yanillian": {
+      "directDependencies": ["tomato"],
+      "supports": [],
+      "alternativePayments": []
+    },
+    "krandorian": {
+      "directDependencies": ["cabbage"],
+      "supports": [],
+      "alternativePayments": []
+    },
+    "wildblood": {
+      "directDependencies": ["nasturtium"],
+      "supports": [],
       "alternativePayments": []
     }
   }

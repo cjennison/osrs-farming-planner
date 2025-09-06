@@ -12,7 +12,7 @@ export interface CropPayment {
 export interface CropData {
   id: string;
   name: string;
-  type: "allotment" | "flower";
+  type: "allotment" | "flower" | "hops";
   farmingLevel: number;
   protection?: CropPayment;
   baseYield: number;
@@ -60,6 +60,7 @@ export interface CalculationResult {
       max: number;
     };
     purpose: string;
+    purchaseQuantity?: number; // For purchasable items like compost
   }[];
   summary: {
     totalPatches: number;
@@ -77,11 +78,36 @@ export type YieldStrategy = "min" | "average" | "max";
 /**
  * Convert JSON crop data to CropData format for calculations
  */
+
+// biome-ignore lint/suspicious/noExplicitAny: this is coming from a json
 function convertToCropData(crop: any): CropData {
+  // Helper function to map items to crop IDs
+  function mapItemToCrop(itemName: string): string {
+    const itemToCropMap: Record<string, string> = {
+      // Jute products
+      "jute fibre": "jute",
+      "jute fibres": "jute",
+
+      // Barley products
+      barley_malt: "barley",
+
+      // Container mappings for payments
+      "sack of potatoes": "potato",
+      "sack of onions": "onion",
+      "sack of cabbages": "cabbage",
+      "basket of tomatoes": "tomato",
+      "basket of apples": "apple",
+
+      // Add more mappings as needed
+    };
+
+    return itemToCropMap[itemName] || itemName;
+  }
+
   return {
     id: crop.id,
     name: crop.name,
-    type: crop.type as "allotment" | "flower",
+    type: crop.type as "allotment" | "flower" | "hops",
     farmingLevel: crop.farmingLevel || 1,
     baseYield: crop.baseYield || 3,
     seedsPerPatch: crop.seedsPerPatch || 3,
@@ -90,7 +116,7 @@ function convertToCropData(crop: any): CropData {
     isFixedYield: crop.isFixedYield || false,
     protection: crop.protection
       ? {
-          crop: crop.protection.item, // Use the crop ID directly
+          crop: mapItemToCrop(crop.protection.item), // Map item to crop ID
           quantity: crop.protection.quantity, // Now represents actual items needed
           note:
             crop.protection.type === "item"
@@ -103,9 +129,38 @@ function convertToCropData(crop: any): CropData {
 
 /**
  * Get crop data by ID from the loaded farming data
+ * Also handles item-to-crop mappings for harvested products
  */
 function getCropData(cropId: string): CropData | undefined {
-  const crop = getCropById(cropId);
+  // First try direct crop lookup
+  let crop = getCropById(cropId);
+
+  // If not found, check item-to-crop mappings
+  if (!crop) {
+    const itemToCropMap: Record<string, string> = {
+      // Jute products
+      "jute fibre": "jute",
+      "jute fibres": "jute",
+
+      // Barley products
+      barley_malt: "barley",
+
+      // Container mappings for payments
+      "sack of potatoes": "potato",
+      "sack of onions": "onion",
+      "sack of cabbages": "cabbage",
+      "basket of tomatoes": "tomato",
+      "basket of apples": "apple",
+
+      // Add more mappings as needed
+    };
+
+    const mappedCropId = itemToCropMap[cropId];
+    if (mappedCropId) {
+      crop = getCropById(mappedCropId);
+    }
+  }
+
   return crop ? convertToCropData(crop) : undefined;
 }
 
@@ -161,6 +216,7 @@ export function calculateYield(
   // Chance to save harvest life constants (CTS values from OSRS Wiki Talk page)
   // These are official values from Mod Easty via Twitter DMs
   const cropConstants: Record<string, { low: number; high: number }> = {
+    // Allotments
     potato: { low: 101, high: 180 }, // Level 1 crop
     onion: { low: 105, high: 180 }, // Level 5 crop
     cabbage: { low: 107, high: 180 }, // Level 7 crop
@@ -169,6 +225,15 @@ export function calculateYield(
     strawberry: { low: 103, high: 180 }, // Level 31 crop
     watermelon: { low: 126, high: 180 }, // Level 47 crop
     snape_grass: { low: 148, high: 195 }, // Level 61 crop
+
+    // Hops - Using similar CTS values as allotments (estimated based on average yields)
+    barley: { low: 105, high: 180 }, // Level 3 crop
+    hammerstone: { low: 104, high: 180 }, // Level 4 crop
+    asgarnian: { low: 110, high: 180 }, // Level 8 crop
+    jute: { low: 115, high: 180 }, // Level 13 crop
+    yanillian: { low: 118, high: 180 }, // Level 16 crop
+    krandorian: { low: 125, high: 180 }, // Level 21 crop
+    wildblood: { low: 135, high: 180 }, // Level 28 crop
   };
 
   const constants = cropConstants[crop] || { low: 100, high: 180 };
@@ -320,15 +385,48 @@ export function calculateDependencies(
     // Recursively calculate dependencies
     if (data.protection) {
       const paymentNeeded = patchesNeeded * data.protection.quantity;
-      calculateRequirement(
-        data.protection.crop,
-        paymentNeeded,
-        level + 1,
-        `Payment for ${data.name} (${data.protection.quantity} per patch)`,
-      );
+      
+      // Check if the protection item is a purchasable item (not a crop)
+      const purchasableItems = new Set([
+        "compost",
+        "supercompost", 
+        "ultracompost",
+        "apple", // for strawberry
+        "curry leaf", // for watermelon
+        "jangerberry", // for snape grass
+        // Add other purchasable items as needed
+      ]);
+      
+      if (!purchasableItems.has(data.protection.crop)) {
+        // Only recurse if it's actually a crop, not a purchasable item
+        calculateRequirement(
+          data.protection.crop,
+          paymentNeeded,
+          level + 1,
+          `Payment for ${data.name} (${data.protection.quantity} per patch)`,
+        );
+      } else {
+        // For purchasable items, just add a note about the payment needed
+        breakdown.push({
+          level: level + 1,
+          crop: `${data.protection.crop} (purchasable)`,
+          patchesNeeded: {
+            min: 0,
+            average: 0,
+            max: 0,
+          },
+          totalYield: {
+            min: 0,
+            average: 0,
+            max: 0,
+          },
+          purpose: `Purchase ${paymentNeeded} ${data.protection.crop} for ${data.name} protection`,
+          purchaseQuantity: paymentNeeded,
+        });
+      }
 
-      // Add payment information to the payment crop's requirement
-      if (requirements[data.protection.crop]) {
+      // Add payment information to the payment crop's requirement (only for actual crops)
+      if (!purchasableItems.has(data.protection.crop) && requirements[data.protection.crop]) {
         const originalCrop = getCropById(crop);
         if (originalCrop?.protection?.itemDescription) {
           const totalItemsNeeded = patchesNeeded * data.protection.quantity;

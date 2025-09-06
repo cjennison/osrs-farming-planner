@@ -6,8 +6,8 @@
  */
 
 // Import the JSON data directly for synchronous access
-import cropsData from '../data/crops.json';
-import patchesData from '../data/patches.json';
+import cropsData from "../data/crops.json";
+import patchesData from "../data/patches.json";
 
 /**
  * Get all supported allotment crops
@@ -24,10 +24,17 @@ export function getFlowerCrops(): any[] {
 }
 
 /**
- * Get all crops (allotments + flowers)
+ * Get all supported hops crops
+ */
+export function getHopsCrops(): any[] {
+  return cropsData.hops;
+}
+
+/**
+ * Get all crops (allotments + flowers + hops)
  */
 export function getAllCrops(): any[] {
-  return [...getAllotmentCrops(), ...getFlowerCrops()];
+  return [...getAllotmentCrops(), ...getFlowerCrops(), ...getHopsCrops()];
 }
 
 /**
@@ -40,8 +47,11 @@ export function getCropById(id: string): any | undefined {
 /**
  * Get crops by type
  */
-export function getCropsByType(type: "allotment" | "flower"): any[] {
-  return type === "allotment" ? getAllotmentCrops() : getFlowerCrops();
+export function getCropsByType(type: "allotment" | "flower" | "hops"): any[] {
+  if (type === "allotment") return getAllotmentCrops();
+  if (type === "flower") return getFlowerCrops();
+  if (type === "hops") return getHopsCrops();
+  return [];
 }
 
 /**

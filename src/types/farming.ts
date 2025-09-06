@@ -8,7 +8,7 @@
 export interface Crop {
   id: string;
   name: string;
-  type: "allotment" | "flower" | "tree" | "herb";
+  type: "allotment" | "flower" | "tree" | "herb" | "hops";
   seedId: number;
   seedName: string;
 
@@ -46,7 +46,7 @@ export interface FarmingPatch {
   id: string;
   name: string;
   location: string;
-  type: "allotment" | "flower" | "tree" | "herb";
+  type: "allotment" | "flower" | "tree" | "herb" | "hops";
   coordinates: [number, number];
 
   // Accessibility
