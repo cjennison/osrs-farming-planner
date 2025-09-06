@@ -385,18 +385,18 @@ export function calculateDependencies(
     // Recursively calculate dependencies
     if (data.protection) {
       const paymentNeeded = patchesNeeded * data.protection.quantity;
-      
+
       // Check if the protection item is a purchasable item (not a crop)
       const purchasableItems = new Set([
         "compost",
-        "supercompost", 
+        "supercompost",
         "ultracompost",
         "apple", // for strawberry
         "curry leaf", // for watermelon
         "jangerberry", // for snape grass
         // Add other purchasable items as needed
       ]);
-      
+
       if (!purchasableItems.has(data.protection.crop)) {
         // Only recurse if it's actually a crop, not a purchasable item
         calculateRequirement(
@@ -426,7 +426,10 @@ export function calculateDependencies(
       }
 
       // Add payment information to the payment crop's requirement (only for actual crops)
-      if (!purchasableItems.has(data.protection.crop) && requirements[data.protection.crop]) {
+      if (
+        !purchasableItems.has(data.protection.crop) &&
+        requirements[data.protection.crop]
+      ) {
         const originalCrop = getCropById(crop);
         if (originalCrop?.protection?.itemDescription) {
           const totalItemsNeeded = patchesNeeded * data.protection.quantity;
