@@ -16,7 +16,6 @@ import {
   Alert,
   Grid,
   Paper,
-  Progress,
   ActionIcon,
   Tooltip,
   Collapse,
@@ -73,6 +72,21 @@ const YIELD_STRATEGY_OPTIONS = [
   { value: 'average' as YieldStrategy, label: 'Realistic (Average Yield)', description: 'Plan using expected yields' },
   { value: 'max' as YieldStrategy, label: 'Optimistic (Max Yield)', description: 'Plan for best-case yields' }
 ];
+
+const formatCompostText = (compostType: string): string => {
+  switch (compostType) {
+    case 'none':
+      return 'with no compost';
+    case 'compost':
+      return 'with compost';
+    case 'supercompost':
+      return 'with supercompost';
+    case 'ultracompost':
+      return 'with ultracompost';
+    default:
+      return `with ${compostType}`;
+  }
+};
 
 export function FarmingCalculator() {
   const [targetCrop, setTargetCrop] = useState<string>('');
@@ -449,22 +463,48 @@ export function FarmingCalculator() {
                       <Collapse in={expandedSections.yields}>
                         <Stack gap="xs">
                           {Object.entries(result.requirements).map(([crop, requirement]) => (
-                            <Paper key={crop} p="sm" bg="gold.0" style={{ borderRadius: 6 }}>
-                              <Group justify="space-between">
+                            <Paper key={crop} p="md" bg="gold.0" style={{ borderRadius: 6 }}>
+                              <Group justify="space-between" align="flex-start">
                                 <Text size="sm" tt="capitalize" fw={500}>{crop}</Text>
-                                <Text size="sm" c="dimmed">
-                                  {requirement.perPatchYield.min}-{requirement.perPatchYield.max} per patch
-                                </Text>
+                                <Group gap="md" align="center">
+                                  <Stack gap={2} align="center">
+                                    <Text size="xs" c="dimmed" fw={500}>Min</Text>
+                                    <Badge
+                                      variant={yieldStrategy === 'min' ? 'filled' : 'outline'}
+                                      color={yieldStrategy === 'min' ? 'red.8' : 'red.8'}
+                                      size="sm"
+                                      c={yieldStrategy === 'min' ? 'white' : 'red.8'}
+                                    >
+                                      {requirement.perPatchYield.min}
+                                    </Badge>
+                                  </Stack>
+                                  <Stack gap={2} align="center">
+                                    <Text size="xs" c="dimmed" fw={500}>Avg</Text>
+                                    <Badge
+                                      variant={yieldStrategy === 'average' ? 'filled' : 'outline'}
+                                      color={yieldStrategy === 'average' ? 'yellow.8' : 'yellow.8'}
+                                      size="sm"
+                                      c={yieldStrategy === 'average' ? 'white' : 'yellow.8'}
+                                    >
+                                      {requirement.perPatchYield.average.toFixed(1)}
+                                    </Badge>
+                                  </Stack>
+                                  <Stack gap={2} align="center">
+                                    <Text size="xs" c="dimmed" fw={500}>Max</Text>
+                                    <Badge
+                                      variant={yieldStrategy === 'max' ? 'filled' : 'outline'}
+                                      color={yieldStrategy === 'max' ? 'green.8' : 'green.8'}
+                                      size="sm"
+                                      c={yieldStrategy === 'max' ? 'white' : 'green.8'}
+                                    >
+                                      {requirement.perPatchYield.max}
+                                    </Badge>
+                                  </Stack>
+                                </Group>
                               </Group>
                               <Text size="xs" c="dimmed" mt="xs">
-                                Average: {requirement.perPatchYield.average.toFixed(1)} per patch
+                                Per patch yield at level {farmingLevel} {formatCompostText(compostType)}
                               </Text>
-                              <Progress
-                                value={(requirement.perPatchYield.average / requirement.perPatchYield.max) * 100}
-                                size="xs"
-                                color="gold"
-                                mt="xs"
-                              />
                             </Paper>
                           ))}
                         </Stack>

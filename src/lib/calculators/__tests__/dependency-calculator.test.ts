@@ -307,5 +307,26 @@ describe('OSRS Farming Dependency Calculator', () => {
       const potatoResult = calculateDependencies('potato', 1, 10, 'none', {}, 'average');
       expect(potatoResult.summary.estimatedTime).toBe(80); // Just potato's 80 minute growth time
     });
+
+    test('should calculate correct total time for complex dependency chains', () => {
+      // Test the scenario mentioned: need 14 cabbage = complex chain with many patches
+      const cabbageResult = calculateDependencies('cabbage', 14, 26, 'ultracompost', {}, 'average');
+
+      // Should calculate time as sum of all patches × their growth times
+      // We need to check the actual requirements to verify the math
+      const requirements = cabbageResult.requirements;
+      let expectedTime = 0;
+
+      for (const [cropId, requirement] of Object.entries(requirements)) {
+        if (cropId === 'potato' || cropId === 'onion' || cropId === 'cabbage') {
+          expectedTime += 80 * requirement.patches; // All allotments are 80 minutes
+        }
+      }
+
+      expect(cabbageResult.summary.estimatedTime).toBe(expectedTime);
+
+      // Verify it's a substantial amount of time (should be several hours)
+      expect(cabbageResult.summary.estimatedTime).toBeGreaterThan(600); // More than 10 hours
+    });
   });
 });
