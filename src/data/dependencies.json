@@ -1,0 +1,94 @@
+{
+  "metadata": {
+    "lastUpdated": "2025-09-06T10:48:53.889Z",
+    "description": "Crop payment relationships for farming protection"
+  },
+  "relationships": {
+    "potato": {
+      "directDependencies": [],
+      "supports": [
+        "onion"
+      ],
+      "alternativePayments": []
+    },
+    "onion": {
+      "directDependencies": [
+        "potato"
+      ],
+      "supports": [
+        "cabbage"
+      ],
+      "alternativePayments": []
+    },
+    "cabbage": {
+      "directDependencies": [
+        "onion"
+      ],
+      "supports": [
+        "tomato"
+      ],
+      "alternativePayments": []
+    },
+    "tomato": {
+      "directDependencies": [
+        "cabbage"
+      ],
+      "supports": [],
+      "alternativePayments": []
+    },
+    "sweetcorn": {
+      "directDependencies": [],
+      "supports": [],
+      "alternativePayments": []
+    },
+    "strawberry": {
+      "directDependencies": [],
+      "supports": [],
+      "alternativePayments": []
+    },
+    "watermelon": {
+      "directDependencies": [],
+      "supports": [],
+      "alternativePayments": []
+    },
+    "snape_grass": {
+      "directDependencies": [],
+      "supports": [],
+      "alternativePayments": []
+    },
+    "marigold": {
+      "directDependencies": [],
+      "supports": [
+        "allotment_protection"
+      ],
+      "alternativePayments": []
+    },
+    "rosemary": {
+      "directDependencies": [],
+      "supports": [],
+      "alternativePayments": []
+    },
+    "nasturtium": {
+      "directDependencies": [],
+      "supports": [],
+      "alternativePayments": []
+    },
+    "woad": {
+      "directDependencies": [],
+      "supports": [],
+      "alternativePayments": []
+    },
+    "limpwurt": {
+      "directDependencies": [],
+      "supports": [],
+      "alternativePayments": []
+    },
+    "white_lily": {
+      "directDependencies": [],
+      "supports": [
+        "allotment_protection"
+      ],
+      "alternativePayments": []
+    }
+  }
+}

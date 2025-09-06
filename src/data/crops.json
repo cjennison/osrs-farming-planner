@@ -1,0 +1,137 @@
+{
+  "metadata": {
+    "lastUpdated": "2025-09-06T10:48:53.889Z",
+    "version": "1.0.0",
+    "source": "OSRS Wiki API"
+  },
+  "allotments": [
+    {
+      "id": "potato",
+      "name": "Potato",
+      "type": "allotment",
+      "seedId": 5318,
+      "seedName": "Potato seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Potato_seed",
+      "lastUpdated": "2025-09-06T10:48:49.907Z"
+    },
+    {
+      "id": "onion",
+      "name": "Onion",
+      "type": "allotment",
+      "seedId": 5319,
+      "seedName": "Onion seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Onion_seed",
+      "lastUpdated": "2025-09-06T10:48:50.174Z"
+    },
+    {
+      "id": "cabbage",
+      "name": "Cabbage",
+      "type": "allotment",
+      "seedId": 5324,
+      "seedName": "Cabbage seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Cabbage_seed",
+      "lastUpdated": "2025-09-06T10:48:50.676Z"
+    },
+    {
+      "id": "tomato",
+      "name": "Tomato",
+      "type": "allotment",
+      "seedId": 5322,
+      "seedName": "Tomato seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Tomato_seed",
+      "lastUpdated": "2025-09-06T10:48:50.933Z"
+    },
+    {
+      "id": "sweetcorn",
+      "name": "Sweetcorn",
+      "type": "allotment",
+      "seedId": 5320,
+      "seedName": "Sweetcorn seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Sweetcorn_seed",
+      "lastUpdated": "2025-09-06T10:48:51.194Z"
+    },
+    {
+      "id": "strawberry",
+      "name": "Strawberry",
+      "type": "allotment",
+      "seedId": 5323,
+      "seedName": "Strawberry seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Strawberry_seed",
+      "lastUpdated": "2025-09-06T10:48:51.465Z"
+    },
+    {
+      "id": "watermelon",
+      "name": "Watermelon",
+      "type": "allotment",
+      "seedId": 5321,
+      "seedName": "Watermelon seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Watermelon_seed",
+      "lastUpdated": "2025-09-06T10:48:51.716Z"
+    },
+    {
+      "id": "snape_grass",
+      "name": "Snape grass",
+      "type": "allotment",
+      "seedId": 22879,
+      "seedName": "Snape grass seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Snape_grass_seed",
+      "lastUpdated": "2025-09-06T10:48:51.968Z"
+    }
+  ],
+  "flowers": [
+    {
+      "id": "marigold",
+      "name": "Marigold",
+      "type": "flower",
+      "seedId": 5096,
+      "seedName": "Marigold seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Marigold_seed",
+      "lastUpdated": "2025-09-06T10:48:52.410Z"
+    },
+    {
+      "id": "rosemary",
+      "name": "Rosemary",
+      "type": "flower",
+      "seedId": 5097,
+      "seedName": "Rosemary seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Rosemary_seed",
+      "lastUpdated": "2025-09-06T10:48:52.679Z"
+    },
+    {
+      "id": "nasturtium",
+      "name": "Nasturtium",
+      "type": "flower",
+      "seedId": 5098,
+      "seedName": "Nasturtium seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Nasturtium_seed",
+      "lastUpdated": "2025-09-06T10:48:52.957Z"
+    },
+    {
+      "id": "woad",
+      "name": "Woad",
+      "type": "flower",
+      "seedId": 5099,
+      "seedName": "Woad seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Woad_seed",
+      "lastUpdated": "2025-09-06T10:48:53.249Z"
+    },
+    {
+      "id": "limpwurt",
+      "name": "Limpwurt root",
+      "type": "flower",
+      "seedId": 5100,
+      "seedName": "Limpwurt seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Limpwurt_seed",
+      "lastUpdated": "2025-09-06T10:48:53.507Z"
+    },
+    {
+      "id": "white_lily",
+      "name": "White lily",
+      "type": "flower",
+      "seedId": 14589,
+      "seedName": "White lily seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/White_lily_seed",
+      "lastUpdated": "2025-09-06T10:48:53.772Z"
+    }
+  ]
+}

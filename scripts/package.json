@@ -1,0 +1,12 @@
+{
+  "name": "osrs-farming-planner-scripts",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Data fetching scripts for OSRS Farming Planner",
+  "scripts": {
+    "fetch-data": "node fetch-farming-data.js"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}

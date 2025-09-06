@@ -1,0 +1,1402 @@
+{
+  "itemMappings": [
+    [
+      10344,
+      {
+        "examine": "Fabulously ancient mage protection enchanted in the 3rd Age.",
+        "id": 10344,
+        "members": true,
+        "lowalch": 20200,
+        "limit": 8,
+        "value": 50500,
+        "highalch": 30300,
+        "icon": "3rd age amulet.png",
+        "name": "3rd age amulet"
+      }
+    ],
+    [
+      20011,
+      {
+        "examine": "A beautifully crafted axe, shaped by ancient smiths.",
+        "id": 20011,
+        "members": true,
+        "lowalch": 22000,
+        "limit": 40,
+        "value": 55000,
+        "highalch": 33000,
+        "icon": "3rd age axe.png",
+        "name": "3rd age axe"
+      }
+    ],
+    [
+      12424,
+      {
+        "examine": "A beautifully crafted bow carved by ancient archers.",
+        "id": 12424,
+        "members": true,
+        "lowalch": 60000,
+        "limit": 8,
+        "value": 150000,
+        "highalch": 90000,
+        "icon": "3rd age bow.png",
+        "name": "3rd age bow"
+      }
+    ],
+    [
+      12437,
+      {
+        "examine": "A beautiful cloak woven by ancient tailors.",
+        "id": 12437,
+        "members": true,
+        "lowalch": 34000,
+        "limit": 8,
+        "value": 85000,
+        "highalch": 51000,
+        "icon": "3rd age cloak.png",
+        "name": "3rd age cloak"
+      }
+    ],
+    [
+      23345,
+      {
+        "examine": "A fabulously ancient vine cloak as worn by the druids of old.",
+        "id": 23345,
+        "members": true,
+        "lowalch": 80000,
+        "limit": 8,
+        "value": 200000,
+        "highalch": 120000,
+        "icon": "3rd age druidic cloak.png",
+        "name": "3rd age druidic cloak"
+      }
+    ],
+    [
+      23339,
+      {
+        "examine": "A fabulously ancient woven robe as worn by the druids of old.",
+        "id": 23339,
+        "members": true,
+        "lowalch": 80000,
+        "limit": 4,
+        "value": 200000,
+        "highalch": 120000,
+        "icon": "3rd age druidic robe bottoms.png",
+        "name": "3rd age druidic robe bottoms"
+      }
+    ],
+    [
+      23336,
+      {
+        "examine": "A fabulously ancient woven robe top as worn by the druids of old.",
+        "id": 23336,
+        "members": true,
+        "lowalch": 80000,
+        "limit": 4,
+        "value": 200000,
+        "highalch": 120000,
+        "icon": "3rd age druidic robe top.png",
+        "name": "3rd age druidic robe top"
+      }
+    ],
+    [
+      23342,
+      {
+        "examine": "A fabulously ancient gnarled staff as used by the druids of old.",
+        "id": 23342,
+        "members": true,
+        "lowalch": 80000,
+        "limit": 8,
+        "value": 200000,
+        "highalch": 120000,
+        "icon": "3rd age druidic staff.png",
+        "name": "3rd age druidic staff"
+      }
+    ],
+    [
+      28226,
+      {
+        "highalch": 33000,
+        "members": true,
+        "name": "3rd age felling axe",
+        "examine": "A beautifully crafted axe, shaped by ancient smiths.",
+        "id": 28226,
+        "value": 55000,
+        "icon": "3rd age felling axe.png",
+        "lowalch": 22000
+      }
+    ],
+    [
+      10350,
+      {
+        "examine": "Fabulously ancient armour beaten from magical silver.",
+        "id": 10350,
+        "members": true,
+        "lowalch": 36000,
+        "limit": 8,
+        "value": 90000,
+        "highalch": 54000,
+        "icon": "3rd age full helmet.png",
+        "name": "3rd age full helmet"
+      }
+    ],
+    [
+      10352,
+      {
+        "examine": "Fabulously ancient armour beaten from magical silver.",
+        "id": 10352,
+        "members": true,
+        "lowalch": 72000,
+        "limit": 8,
+        "value": 180000,
+        "highalch": 108000,
+        "icon": "3rd age kiteshield.png",
+        "name": "3rd age kiteshield"
+      }
+    ],
+    [
+      12426,
+      {
+        "examine": "A beautifully crafted sword forged by ancient blacksmiths.",
+        "id": 12426,
+        "members": true,
+        "lowalch": 60000,
+        "limit": 8,
+        "value": 150000,
+        "highalch": 90000,
+        "icon": "3rd age longsword.png",
+        "name": "3rd age longsword"
+      }
+    ],
+    [
+      10342,
+      {
+        "examine": "Fabulously ancient mage protection enchanted in the 3rd Age.",
+        "id": 10342,
+        "members": true,
+        "lowalch": 20160,
+        "limit": 8,
+        "value": 50400,
+        "highalch": 30240,
+        "icon": "3rd age mage hat.png",
+        "name": "3rd age mage hat"
+      }
+    ],
+    [
+      20014,
+      {
+        "examine": "A beautifully crafted pickaxe, shaped by ancient smiths.",
+        "id": 20014,
+        "members": true,
+        "lowalch": 39180,
+        "limit": 40,
+        "value": 97950,
+        "highalch": 58770,
+        "icon": "3rd age pickaxe.png",
+        "name": "3rd age pickaxe"
+      }
+    ],
+    [
+      10348,
+      {
+        "examine": "Fabulously ancient armour beaten from magical silver.",
+        "id": 10348,
+        "members": true,
+        "lowalch": 80000,
+        "limit": 8,
+        "value": 200000,
+        "highalch": 120000,
+        "icon": "3rd age platebody.png",
+        "name": "3rd age platebody"
+      }
+    ],
+    [
+      10346,
+      {
+        "examine": "Fabulously ancient armour beaten from magical silver.",
+        "id": 10346,
+        "members": true,
+        "lowalch": 80000,
+        "limit": 8,
+        "value": 200000,
+        "highalch": 120000,
+        "icon": "3rd age platelegs.png",
+        "name": "3rd age platelegs"
+      }
+    ],
+    [
+      23242,
+      {
+        "examine": "Fabulously ancient armour beaten from magical silver.",
+        "id": 23242,
+        "members": true,
+        "lowalch": 80000,
+        "limit": 8,
+        "value": 200000,
+        "highalch": 120000,
+        "icon": "3rd age plateskirt.png",
+        "name": "3rd age plateskirt"
+      }
+    ],
+    [
+      10334,
+      {
+        "examine": "Fabulously ancient range protection crafted from white dragonhide.",
+        "id": 10334,
+        "members": true,
+        "lowalch": 20160,
+        "limit": 8,
+        "value": 50400,
+        "highalch": 30240,
+        "icon": "3rd age range coif.png",
+        "name": "3rd age range coif"
+      }
+    ],
+    [
+      10332,
+      {
+        "examine": "Fabulously ancient range protection crafted from white dragonhide.",
+        "id": 10332,
+        "members": true,
+        "lowalch": 20240,
+        "limit": 8,
+        "value": 50600,
+        "highalch": 30360,
+        "icon": "3rd age range legs.png",
+        "name": "3rd age range legs"
+      }
+    ],
+    [
+      10330,
+      {
+        "examine": "Fabulously ancient range protection crafted from white dragonhide.",
+        "id": 10330,
+        "members": true,
+        "lowalch": 20320,
+        "limit": 8,
+        "value": 50800,
+        "highalch": 30480,
+        "icon": "3rd age range top.png",
+        "name": "3rd age range top"
+      }
+    ],
+    [
+      10340,
+      {
+        "examine": "Fabulously ancient mage protection enchanted in the 3rd Age.",
+        "id": 10340,
+        "members": true,
+        "lowalch": 20240,
+        "limit": 8,
+        "value": 50600,
+        "highalch": 30360,
+        "icon": "3rd age robe.png",
+        "name": "3rd age robe"
+      }
+    ],
+    [
+      10338,
+      {
+        "examine": "Fabulously ancient mage protection enchanted in the 3rd Age.",
+        "id": 10338,
+        "members": true,
+        "lowalch": 20320,
+        "limit": 8,
+        "value": 50800,
+        "highalch": 30480,
+        "icon": "3rd age robe top.png",
+        "name": "3rd age robe top"
+      }
+    ],
+    [
+      10336,
+      {
+        "examine": "Fabulously ancient range protection crafted from white dragonhide.",
+        "id": 10336,
+        "members": true,
+        "lowalch": 20200,
+        "limit": 8,
+        "value": 50500,
+        "highalch": 30300,
+        "icon": "3rd age vambraces.png",
+        "name": "3rd age vambraces"
+      }
+    ],
+    [
+      12422,
+      {
+        "examine": "A beautifully crafted wand infused by ancient wizards.",
+        "id": 12422,
+        "members": true,
+        "lowalch": 60000,
+        "limit": 8,
+        "value": 150000,
+        "highalch": 90000,
+        "icon": "3rd age wand.png",
+        "name": "3rd age wand"
+      }
+    ],
+    [
+      10392,
+      {
+        "examine": "A big do about nothing.",
+        "id": 10392,
+        "members": true,
+        "lowalch": 800,
+        "limit": 4,
+        "value": 2000,
+        "highalch": 1200,
+        "icon": "A powdered wig.png",
+        "name": "A powdered wig"
+      }
+    ],
+    [
+      25775,
+      {
+        "examine": "A heap of ashes.",
+        "id": 25775,
+        "members": true,
+        "lowalch": 1,
+        "limit": 7500,
+        "value": 1,
+        "highalch": 1,
+        "icon": "Abyssal ashes.png",
+        "name": "Abyssal ashes"
+      }
+    ],
+    [
+      13263,
+      {
+        "examine": "Elements of deceased Abyssal Sires have been fused together.",
+        "id": 13263,
+        "members": true,
+        "lowalch": 104000,
+        "limit": 8,
+        "value": 260000,
+        "highalch": 156000,
+        "icon": "Abyssal bludgeon.png",
+        "name": "Abyssal bludgeon"
+      }
+    ],
+    [
+      11095,
+      {
+        "examine": "Makes using the Abyss just slightly safer.",
+        "id": 11095,
+        "members": true,
+        "lowalch": 1680,
+        "limit": 10000,
+        "value": 4200,
+        "highalch": 2520,
+        "icon": "Abyssal bracelet.png",
+        "name": "Abyssal bracelet(5)"
+      }
+    ],
+    [
+      13265,
+      {
+        "examine": "Something sharp from the body of a defeated Abyssal Sire.",
+        "id": 13265,
+        "members": true,
+        "lowalch": 46000,
+        "limit": 8,
+        "value": 115001,
+        "highalch": 69000,
+        "icon": "Abyssal dagger.png",
+        "name": "Abyssal dagger"
+      }
+    ],
+    [
+      13267,
+      {
+        "examine": "Something sharp and poisonous from the body of a defeated Abyssal Sire.",
+        "id": 13267,
+        "members": true,
+        "lowalch": 46000,
+        "limit": 8,
+        "value": 115002,
+        "highalch": 69001,
+        "icon": "Abyssal dagger (p).png",
+        "name": "Abyssal dagger (p)"
+      }
+    ],
+    [
+      13269,
+      {
+        "examine": "Something sharp and very poisonous from the body of a defeated Abyssal Sire.",
+        "id": 13269,
+        "members": true,
+        "lowalch": 46001,
+        "limit": 8,
+        "value": 115003,
+        "highalch": 69001,
+        "icon": "Abyssal dagger (p+).png",
+        "name": "Abyssal dagger (p+)"
+      }
+    ],
+    [
+      13271,
+      {
+        "examine": "Something sharp and extremely poisonous from the body of a defeated Abyssal Sire.",
+        "id": 13271,
+        "members": true,
+        "lowalch": 46001,
+        "limit": 8,
+        "value": 115004,
+        "highalch": 69002,
+        "icon": "Abyssal dagger (p++).png",
+        "name": "Abyssal dagger (p++)"
+      }
+    ],
+    [
+      4151,
+      {
+        "examine": "A weapon from the Abyss.",
+        "id": 4151,
+        "members": true,
+        "lowalch": 48000,
+        "limit": 70,
+        "value": 120001,
+        "highalch": 72000,
+        "icon": "Abyssal whip.png",
+        "name": "Abyssal whip"
+      }
+    ],
+    [
+      30682,
+      {
+        "highalch": 6000,
+        "members": true,
+        "name": "Accumulation charm",
+        "examine": "A magical, helpful charm.",
+        "id": 30682,
+        "value": 10000,
+        "icon": "Accumulation charm.png",
+        "lowalch": 4000
+      }
+    ],
+    [
+      27676,
+      {
+        "examine": "A mighty sceptre used in long forgotten battles.",
+        "id": 27676,
+        "members": true,
+        "lowalch": 1,
+        "limit": 8,
+        "value": 1,
+        "highalch": 1,
+        "icon": "Accursed sceptre (au).png",
+        "name": "Accursed sceptre (au)"
+      }
+    ],
+    [
+      27662,
+      {
+        "highalch": 1,
+        "members": true,
+        "name": "Accursed sceptre (u)",
+        "examine": "A mighty sceptre from long forgotten battles, corrupted by the power of Vet'ion.",
+        "id": 27662,
+        "value": 1,
+        "icon": "Accursed sceptre (u).png",
+        "lowalch": 1
+      }
+    ],
+    [
+      2862,
+      {
+        "examine": "These logs are longer than normal.",
+        "id": 2862,
+        "members": true,
+        "lowalch": 1,
+        "limit": 13000,
+        "value": 4,
+        "highalch": 2,
+        "icon": "Achey tree logs.png",
+        "name": "Achey tree logs"
+      }
+    ],
+    [
+      5312,
+      {
+        "examine": "Plant this in a plantpot of soil to grow a sapling.",
+        "id": 5312,
+        "members": true,
+        "lowalch": 2,
+        "limit": 200,
+        "value": 6,
+        "highalch": 3,
+        "icon": "Acorn 5.png",
+        "name": "Acorn"
+      }
+    ],
+    [
+      1317,
+      {
+        "examine": "A two handed sword.",
+        "id": 1317,
+        "members": false,
+        "lowalch": 2560,
+        "limit": 125,
+        "value": 6400,
+        "highalch": 3840,
+        "icon": "Adamant 2h sword.png",
+        "name": "Adamant 2h sword"
+      }
+    ],
+    [
+      890,
+      {
+        "examine": "Arrows with adamant heads.",
+        "id": 890,
+        "members": false,
+        "lowalch": 32,
+        "limit": 11000,
+        "value": 80,
+        "highalch": 48,
+        "icon": "Adamant arrow 5.png",
+        "name": "Adamant arrow"
+      }
+    ],
+    [
+      891,
+      {
+        "examine": "Venomous-looking arrows.",
+        "id": 891,
+        "members": true,
+        "lowalch": 32,
+        "limit": 11000,
+        "value": 80,
+        "highalch": 48,
+        "icon": "Adamant arrow(p) 5.png",
+        "name": "Adamant arrow(p)"
+      }
+    ],
+    [
+      5620,
+      {
+        "examine": "Venomous-looking arrows.",
+        "id": 5620,
+        "members": true,
+        "lowalch": 32,
+        "limit": 11000,
+        "value": 80,
+        "highalch": 48,
+        "icon": "Adamant arrow(p+) 5.png",
+        "name": "Adamant arrow(p+)"
+      }
+    ],
+    [
+      5626,
+      {
+        "examine": "Venomous-looking arrows.",
+        "id": 5626,
+        "members": true,
+        "lowalch": 32,
+        "limit": 11000,
+        "value": 80,
+        "highalch": 48,
+        "icon": "Adamant arrow(p++) 5.png",
+        "name": "Adamant arrow(p++)"
+      }
+    ],
+    [
+      43,
+      {
+        "examine": "I can make some arrows with these.",
+        "id": 43,
+        "members": true,
+        "lowalch": 16,
+        "limit": 10000,
+        "value": 40,
+        "highalch": 24,
+        "icon": "Adamant arrowtips.png",
+        "name": "Adamant arrowtips"
+      }
+    ],
+    [
+      1357,
+      {
+        "examine": "A powerful axe.",
+        "id": 1357,
+        "members": false,
+        "lowalch": 512,
+        "limit": 40,
+        "value": 1280,
+        "highalch": 768,
+        "icon": "Adamant axe.png",
+        "name": "Adamant axe"
+      }
+    ],
+    [
+      1371,
+      {
+        "examine": "A vicious looking axe.",
+        "id": 1371,
+        "members": false,
+        "lowalch": 1664,
+        "limit": 125,
+        "value": 4160,
+        "highalch": 2496,
+        "icon": "Adamant battleaxe.png",
+        "name": "Adamant battleaxe"
+      }
+    ],
+    [
+      9143,
+      {
+        "examine": "Adamantite crossbow bolts.",
+        "id": 9143,
+        "members": true,
+        "lowalch": 23,
+        "limit": 11000,
+        "value": 58,
+        "highalch": 34,
+        "icon": "Adamant bolts 5.png",
+        "name": "Adamant bolts"
+      }
+    ],
+    [
+      9290,
+      {
+        "examine": "Some poisoned adamantite bolts.",
+        "id": 9290,
+        "members": true,
+        "lowalch": 23,
+        "limit": 11000,
+        "value": 58,
+        "highalch": 34,
+        "icon": "Adamant bolts (p) 5.png",
+        "name": "Adamant bolts (p)"
+      }
+    ],
+    [
+      9297,
+      {
+        "examine": "Some poisoned adamantite bolts.",
+        "id": 9297,
+        "members": true,
+        "lowalch": 23,
+        "limit": 11000,
+        "value": 58,
+        "highalch": 34,
+        "icon": "Adamant bolts (p+) 5.png",
+        "name": "Adamant bolts (p+)"
+      }
+    ],
+    [
+      9304,
+      {
+        "examine": "Super poisoned adamantite bolts.",
+        "id": 9304,
+        "members": true,
+        "lowalch": 23,
+        "limit": 11000,
+        "value": 58,
+        "highalch": 34,
+        "icon": "Adamant bolts (p++) 5.png",
+        "name": "Adamant bolts (p++)"
+      }
+    ],
+    [
+      9380,
+      {
+        "examine": "Unfeathered adamantite crossbow bolts.",
+        "id": 9380,
+        "members": true,
+        "lowalch": 1,
+        "limit": 13000,
+        "value": 1,
+        "highalch": 1,
+        "icon": "Adamant bolts(unf) 5.png",
+        "name": "Adamant bolts(unf)"
+      }
+    ],
+    [
+      4129,
+      {
+        "examine": "These will protect my feet.",
+        "id": 4129,
+        "members": true,
+        "lowalch": 768,
+        "limit": 125,
+        "value": 1920,
+        "highalch": 1152,
+        "icon": "Adamant boots.png",
+        "name": "Adamant boots"
+      }
+    ],
+    [
+      4798,
+      {
+        "examine": "Blunt adamantite arrow... ouch.",
+        "id": 4798,
+        "members": true,
+        "lowalch": 38,
+        "limit": 11000,
+        "value": 95,
+        "highalch": 57,
+        "icon": "Adamant brutal 5.png",
+        "name": "Adamant brutal"
+      }
+    ],
+    [
+      12377,
+      {
+        "examine": "A diamond topped cane.",
+        "id": 12377,
+        "members": true,
+        "lowalch": 576,
+        "limit": 4,
+        "value": 1440,
+        "highalch": 864,
+        "icon": "Adamant cane.png",
+        "name": "Adamant cane"
+      }
+    ],
+    [
+      1111,
+      {
+        "examine": "A series of connected metal rings.",
+        "id": 1111,
+        "members": false,
+        "lowalch": 1920,
+        "limit": 125,
+        "value": 4800,
+        "highalch": 2880,
+        "icon": "Adamant chainbody.png",
+        "name": "Adamant chainbody"
+      }
+    ],
+    [
+      3100,
+      {
+        "examine": "A set of fighting claws.",
+        "id": 3100,
+        "members": true,
+        "lowalch": 480,
+        "limit": 125,
+        "value": 1200,
+        "highalch": 720,
+        "icon": "Adamant claws.png",
+        "name": "Adamant claws"
+      }
+    ],
+    [
+      9183,
+      {
+        "examine": "An adamantite crossbow.",
+        "id": 9183,
+        "members": true,
+        "lowalch": 706,
+        "limit": 70,
+        "value": 1767,
+        "highalch": 1060,
+        "icon": "Adamant crossbow.png",
+        "name": "Adamant crossbow"
+      }
+    ],
+    [
+      9463,
+      {
+        "examine": "An unstrung adamantite crossbow.",
+        "id": 9463,
+        "members": true,
+        "lowalch": 693,
+        "limit": 10000,
+        "value": 1733,
+        "highalch": 1039,
+        "icon": "Adamant crossbow (u).png",
+        "name": "Adamant crossbow (u)"
+      }
+    ],
+    [
+      1211,
+      {
+        "examine": "Short and deadly.",
+        "id": 1211,
+        "members": false,
+        "lowalch": 320,
+        "limit": 125,
+        "value": 800,
+        "highalch": 480,
+        "icon": "Adamant dagger.png",
+        "name": "Adamant dagger"
+      }
+    ],
+    [
+      1227,
+      {
+        "examine": "A very dangerous poisoned dagger.",
+        "id": 1227,
+        "members": true,
+        "lowalch": 320,
+        "limit": 125,
+        "value": 800,
+        "highalch": 480,
+        "icon": "Adamant dagger(p).png",
+        "name": "Adamant dagger(p)"
+      }
+    ],
+    [
+      5676,
+      {
+        "examine": "A very dangerous poisoned dagger.",
+        "id": 5676,
+        "members": true,
+        "lowalch": 320,
+        "limit": 125,
+        "value": 800,
+        "highalch": 480,
+        "icon": "Adamant dagger(p+).png",
+        "name": "Adamant dagger(p+)"
+      }
+    ],
+    [
+      5694,
+      {
+        "examine": "A very dangerous poisoned dagger.",
+        "id": 5694,
+        "members": true,
+        "lowalch": 320,
+        "limit": 125,
+        "value": 800,
+        "highalch": 480,
+        "icon": "Adamant dagger(p++).png",
+        "name": "Adamant dagger(p++)"
+      }
+    ],
+    [
+      810,
+      {
+        "examine": "A deadly throwing dart with an adamant tip.",
+        "id": 810,
+        "members": true,
+        "lowalch": 26,
+        "limit": 11000,
+        "value": 65,
+        "highalch": 39,
+        "icon": "Adamant dart.png",
+        "name": "Adamant dart"
+      }
+    ],
+    [
+      823,
+      {
+        "examine": "A deadly-looking dart tip made of adamant - needs feathers for flight.",
+        "id": 823,
+        "members": true,
+        "lowalch": 14,
+        "limit": 20000,
+        "value": 36,
+        "highalch": 21,
+        "icon": "Adamant dart tip.png",
+        "name": "Adamant dart tip"
+      }
+    ],
+    [
+      816,
+      {
+        "examine": "A deadly poisoned dart with an adamant tip.",
+        "id": 816,
+        "members": true,
+        "lowalch": 26,
+        "limit": 11000,
+        "value": 65,
+        "highalch": 39,
+        "icon": "Adamant dart(p).png",
+        "name": "Adamant dart(p)"
+      }
+    ],
+    [
+      5633,
+      {
+        "examine": "A deadly poisoned dart with an adamant tip.",
+        "id": 5633,
+        "members": true,
+        "lowalch": 26,
+        "limit": 11000,
+        "value": 65,
+        "highalch": 39,
+        "icon": "Adamant dart(p+).png",
+        "name": "Adamant dart(p+)"
+      }
+    ],
+    [
+      5640,
+      {
+        "examine": "A deadly poisoned dart with an adamant tip.",
+        "id": 5640,
+        "members": true,
+        "lowalch": 26,
+        "limit": 11000,
+        "value": 65,
+        "highalch": 39,
+        "icon": "Adamant dart(p++).png",
+        "name": "Adamant dart(p++)"
+      }
+    ],
+    [
+      23270,
+      {
+        "examine": "Do I look scary?",
+        "id": 23270,
+        "members": true,
+        "lowalch": 4000,
+        "limit": 4,
+        "value": 10000,
+        "highalch": 6000,
+        "icon": "Adamant dragon mask.png",
+        "name": "Adamant dragon mask"
+      }
+    ],
+    [
+      28211,
+      {
+        "highalch": 768,
+        "members": true,
+        "name": "Adamant felling axe",
+        "examine": "A woodcutter's axe.",
+        "id": 28211,
+        "value": 1280,
+        "icon": "Adamant felling axe.png",
+        "lowalch": 512
+      }
+    ],
+    [
+      1161,
+      {
+        "examine": "A full face helmet.",
+        "id": 1161,
+        "members": false,
+        "lowalch": 1408,
+        "limit": 125,
+        "value": 3520,
+        "highalch": 2112,
+        "icon": "Adamant full helm.png",
+        "name": "Adamant full helm"
+      }
+    ],
+    [
+      2613,
+      {
+        "examine": "Adamant full helmet with gold trim.",
+        "id": 2613,
+        "members": false,
+        "lowalch": 1408,
+        "limit": 8,
+        "value": 3520,
+        "highalch": 2112,
+        "icon": "Adamant full helm (g).png",
+        "name": "Adamant full helm (g)"
+      }
+    ],
+    [
+      2605,
+      {
+        "examine": "Adamant full helmet with trim.",
+        "id": 2605,
+        "members": false,
+        "lowalch": 1408,
+        "limit": 8,
+        "value": 3520,
+        "highalch": 2112,
+        "icon": "Adamant full helm (t).png",
+        "name": "Adamant full helm (t)"
+      }
+    ],
+    [
+      13020,
+      {
+        "examine": "A set containing a full helm, platebody, legs and kiteshield.",
+        "id": 13020,
+        "members": false,
+        "lowalch": 3200,
+        "limit": 8,
+        "value": 8000,
+        "highalch": 4800,
+        "icon": "Adamant gold-trimmed set (lg).png",
+        "name": "Adamant gold-trimmed set (lg)"
+      }
+    ],
+    [
+      13022,
+      {
+        "examine": "A set containing a full helm, platebody, skirt and kiteshield.",
+        "id": 13022,
+        "members": false,
+        "lowalch": 3200,
+        "limit": 8,
+        "value": 8000,
+        "highalch": 4800,
+        "icon": "Adamant gold-trimmed set (sk).png",
+        "name": "Adamant gold-trimmed set (sk)"
+      }
+    ],
+    [
+      3200,
+      {
+        "examine": "An adamant halberd.",
+        "id": 3200,
+        "members": true,
+        "lowalch": 2560,
+        "limit": 125,
+        "value": 6400,
+        "highalch": 3840,
+        "icon": "Adamant halberd.png",
+        "name": "Adamant halberd"
+      }
+    ],
+    [
+      11375,
+      {
+        "examine": "An adamant-tipped, one-handed hasta.",
+        "id": 11375,
+        "members": true,
+        "lowalch": 832,
+        "limit": 125,
+        "value": 2080,
+        "highalch": 1248,
+        "icon": "Adamant hasta.png",
+        "name": "Adamant hasta"
+      }
+    ],
+    [
+      11407,
+      {
+        "examine": "A poison-tipped, one-handed adamantite hasta.",
+        "id": 11407,
+        "members": true,
+        "lowalch": 832,
+        "limit": 125,
+        "value": 2080,
+        "highalch": 1248,
+        "icon": "Adamant hasta(p).png",
+        "name": "Adamant hasta(p)"
+      }
+    ],
+    [
+      11410,
+      {
+        "examine": "A poison-tipped, one-handed adamantite hasta.",
+        "id": 11410,
+        "members": true,
+        "lowalch": 832,
+        "limit": 125,
+        "value": 2080,
+        "highalch": 1248,
+        "icon": "Adamant hasta(p+).png",
+        "name": "Adamant hasta(p+)"
+      }
+    ],
+    [
+      11412,
+      {
+        "examine": "A poison-tipped, one-handed adamantite hasta.",
+        "id": 11412,
+        "members": true,
+        "lowalch": 832,
+        "limit": 125,
+        "value": 2080,
+        "highalch": 1248,
+        "icon": "Adamant hasta(p++).png",
+        "name": "Adamant hasta(p++)"
+      }
+    ],
+    [
+      10296,
+      {
+        "examine": "An adamant helmet with a heraldic design.",
+        "id": 10296,
+        "members": false,
+        "lowalch": 1408,
+        "limit": 70,
+        "value": 3520,
+        "highalch": 2112,
+        "icon": "Adamant helm (h1).png",
+        "name": "Adamant helm (h1)"
+      }
+    ],
+    [
+      10298,
+      {
+        "examine": "An adamant helmet with a heraldic design.",
+        "id": 10298,
+        "members": false,
+        "lowalch": 1408,
+        "limit": 70,
+        "value": 3520,
+        "highalch": 2112,
+        "icon": "Adamant helm (h2).png",
+        "name": "Adamant helm (h2)"
+      }
+    ],
+    [
+      10300,
+      {
+        "examine": "An adamant helmet with a heraldic design.",
+        "id": 10300,
+        "members": false,
+        "lowalch": 1408,
+        "limit": 70,
+        "value": 3520,
+        "highalch": 2112,
+        "icon": "Adamant helm (h3).png",
+        "name": "Adamant helm (h3)"
+      }
+    ],
+    [
+      10302,
+      {
+        "examine": "An adamant helmet with a heraldic design.",
+        "id": 10302,
+        "members": false,
+        "lowalch": 1408,
+        "limit": 70,
+        "value": 3520,
+        "highalch": 2112,
+        "icon": "Adamant helm (h4).png",
+        "name": "Adamant helm (h4)"
+      }
+    ],
+    [
+      10304,
+      {
+        "examine": "An adamant helmet with a heraldic design.",
+        "id": 10304,
+        "members": false,
+        "lowalch": 1408,
+        "limit": 70,
+        "value": 3520,
+        "highalch": 2112,
+        "icon": "Adamant helm (h5).png",
+        "name": "Adamant helm (h5)"
+      }
+    ],
+    [
+      829,
+      {
+        "examine": "An adamant tipped javelin.",
+        "id": 829,
+        "members": true,
+        "lowalch": 64,
+        "limit": 11000,
+        "value": 160,
+        "highalch": 96,
+        "icon": "Adamant javelin.png",
+        "name": "Adamant javelin"
+      }
+    ],
+    [
+      19578,
+      {
+        "examine": "Needs a shaft.",
+        "id": 19578,
+        "members": true,
+        "lowalch": 176,
+        "limit": 10000,
+        "value": 440,
+        "highalch": 264,
+        "icon": "Adamant javelin heads 5.png",
+        "name": "Adamant javelin heads"
+      }
+    ],
+    [
+      835,
+      {
+        "examine": "An adamant tipped javelin.",
+        "id": 835,
+        "members": true,
+        "lowalch": 64,
+        "limit": 11000,
+        "value": 160,
+        "highalch": 96,
+        "icon": "Adamant javelin(p).png",
+        "name": "Adamant javelin(p)"
+      }
+    ],
+    [
+      5646,
+      {
+        "examine": "An adamant tipped javelin.",
+        "id": 5646,
+        "members": true,
+        "lowalch": 64,
+        "limit": 11000,
+        "value": 160,
+        "highalch": 96,
+        "icon": "Adamant javelin(p+).png",
+        "name": "Adamant javelin(p+)"
+      }
+    ],
+    [
+      5652,
+      {
+        "examine": "An adamant tipped javelin.",
+        "id": 5652,
+        "members": true,
+        "lowalch": 64,
+        "limit": 11000,
+        "value": 160,
+        "highalch": 96,
+        "icon": "Adamant javelin(p++).png",
+        "name": "Adamant javelin(p++)"
+      }
+    ],
+    [
+      1199,
+      {
+        "examine": "A large metal shield.",
+        "id": 1199,
+        "members": false,
+        "lowalch": 2176,
+        "limit": 125,
+        "value": 5440,
+        "highalch": 3264,
+        "icon": "Adamant kiteshield.png",
+        "name": "Adamant kiteshield"
+      }
+    ],
+    [
+      2611,
+      {
+        "examine": "Adamant kiteshield with gold trim.",
+        "id": 2611,
+        "members": false,
+        "lowalch": 2176,
+        "limit": 8,
+        "value": 5440,
+        "highalch": 3264,
+        "icon": "Adamant kiteshield (g).png",
+        "name": "Adamant kiteshield (g)"
+      }
+    ],
+    [
+      2603,
+      {
+        "examine": "Adamant kiteshield with trim.",
+        "id": 2603,
+        "members": false,
+        "lowalch": 2176,
+        "limit": 8,
+        "value": 5440,
+        "highalch": 3264,
+        "icon": "Adamant kiteshield (t).png",
+        "name": "Adamant kiteshield (t)"
+      }
+    ],
+    [
+      867,
+      {
+        "examine": "A finely balanced throwing knife.",
+        "id": 867,
+        "members": true,
+        "lowalch": 26,
+        "limit": 11000,
+        "value": 66,
+        "highalch": 39,
+        "icon": "Adamant knife.png",
+        "name": "Adamant knife"
+      }
+    ],
+    [
+      875,
+      {
+        "examine": "A finely balanced throwing knife.",
+        "id": 875,
+        "members": true,
+        "lowalch": 26,
+        "limit": 11000,
+        "value": 66,
+        "highalch": 39,
+        "icon": "Adamant knife(p).png",
+        "name": "Adamant knife(p)"
+      }
+    ],
+    [
+      5659,
+      {
+        "examine": "A finely balanced throwing knife.",
+        "id": 5659,
+        "members": true,
+        "lowalch": 26,
+        "limit": 7000,
+        "value": 66,
+        "highalch": 39,
+        "icon": "Adamant knife(p+).png",
+        "name": "Adamant knife(p+)"
+      }
+    ],
+    [
+      5666,
+      {
+        "examine": "A finely balanced throwing knife.",
+        "id": 5666,
+        "members": true,
+        "lowalch": 26,
+        "limit": 7000,
+        "value": 66,
+        "highalch": 39,
+        "icon": "Adamant knife(p++).png",
+        "name": "Adamant knife(p++)"
+      }
+    ],
+    [
+      1301,
+      {
+        "examine": "A razor sharp longsword.",
+        "id": 1301,
+        "members": false,
+        "lowalch": 1280,
+        "limit": 125,
+        "value": 3200,
+        "highalch": 1920,
+        "icon": "Adamant longsword.png",
+        "name": "Adamant longsword"
+      }
+    ],
+    [
+      1430,
+      {
+        "examine": "A spiky mace.",
+        "id": 1430,
+        "members": false,
+        "lowalch": 576,
+        "limit": 125,
+        "value": 1440,
+        "highalch": 864,
+        "icon": "Adamant mace.png",
+        "name": "Adamant mace"
+      }
+    ],
+    [
+      1145,
+      {
+        "examine": "A medium sized helmet.",
+        "id": 1145,
+        "members": false,
+        "lowalch": 768,
+        "limit": 125,
+        "value": 1920,
+        "highalch": 1152,
+        "icon": "Adamant med helm.png",
+        "name": "Adamant med helm"
+      }
+    ],
+    [
+      1271,
+      {
+        "examine": "Used for mining.",
+        "id": 1271,
+        "members": false,
+        "lowalch": 1280,
+        "limit": 40,
+        "value": 3200,
+        "highalch": 1920,
+        "icon": "Adamant pickaxe.png",
+        "name": "Adamant pickaxe"
+      }
+    ]
+  ],
+  "seedPrices": {},
+  "lastFetch": "2025-09-06T10:48:53.889Z"
+}

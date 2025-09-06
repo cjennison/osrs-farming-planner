@@ -1,0 +1,179 @@
+{
+  "metadata": {
+    "lastUpdated": "2025-09-06T10:48:53.889Z",
+    "description": "Farming patch locations and accessibility"
+  },
+  "locations": [
+    {
+      "id": "falador_allotment_north",
+      "name": "Falador Allotment (North)",
+      "location": "Falador",
+      "type": "allotment",
+      "coordinates": [
+        3058,
+        3311
+      ],
+      "nearbyTeleports": [
+        "Falador teleport"
+      ],
+      "walkingTime": 30
+    },
+    {
+      "id": "falador_allotment_south",
+      "name": "Falador Allotment (South)",
+      "location": "Falador",
+      "type": "allotment",
+      "coordinates": [
+        3058,
+        3308
+      ],
+      "nearbyTeleports": [
+        "Falador teleport"
+      ],
+      "walkingTime": 30
+    },
+    {
+      "id": "falador_flower",
+      "name": "Falador Flower Patch",
+      "location": "Falador",
+      "type": "flower",
+      "coordinates": [
+        3054,
+        3307
+      ],
+      "nearbyTeleports": [
+        "Falador teleport"
+      ],
+      "walkingTime": 35
+    },
+    {
+      "id": "catherby_allotment_north",
+      "name": "Catherby Allotment (North)",
+      "location": "Catherby",
+      "type": "allotment",
+      "coordinates": [
+        2805,
+        3465
+      ],
+      "nearbyTeleports": [
+        "Catherby teleport"
+      ],
+      "walkingTime": 15
+    },
+    {
+      "id": "catherby_allotment_south",
+      "name": "Catherby Allotment (South)",
+      "location": "Catherby",
+      "type": "allotment",
+      "coordinates": [
+        2805,
+        3462
+      ],
+      "nearbyTeleports": [
+        "Catherby teleport"
+      ],
+      "walkingTime": 15
+    },
+    {
+      "id": "catherby_flower",
+      "name": "Catherby Flower Patch",
+      "location": "Catherby",
+      "type": "flower",
+      "coordinates": [
+        2809,
+        3463
+      ],
+      "nearbyTeleports": [
+        "Catherby teleport"
+      ],
+      "walkingTime": 20
+    },
+    {
+      "id": "ardougne_allotment_north",
+      "name": "Ardougne Allotment (North)",
+      "location": "Ardougne",
+      "type": "allotment",
+      "coordinates": [
+        2670,
+        3374
+      ],
+      "nearbyTeleports": [
+        "Ardougne teleport"
+      ],
+      "walkingTime": 45
+    },
+    {
+      "id": "ardougne_allotment_south",
+      "name": "Ardougne Allotment (South)",
+      "location": "Ardougne",
+      "type": "allotment",
+      "coordinates": [
+        2670,
+        3371
+      ],
+      "nearbyTeleports": [
+        "Ardougne teleport"
+      ],
+      "walkingTime": 45
+    },
+    {
+      "id": "ardougne_flower",
+      "name": "Ardougne Flower Patch",
+      "location": "Ardougne",
+      "type": "flower",
+      "coordinates": [
+        2666,
+        3372
+      ],
+      "nearbyTeleports": [
+        "Ardougne teleport"
+      ],
+      "walkingTime": 50
+    },
+    {
+      "id": "hosidius_allotment_north",
+      "name": "Hosidius Allotment (North)",
+      "location": "Hosidius",
+      "type": "allotment",
+      "coordinates": [
+        1739,
+        3550
+      ],
+      "nearbyTeleports": [
+        "Xeric's glade",
+        "Skills necklace"
+      ],
+      "walkingTime": 60
+    },
+    {
+      "id": "hosidius_allotment_south",
+      "name": "Hosidius Allotment (South)",
+      "location": "Hosidius",
+      "type": "allotment",
+      "coordinates": [
+        1739,
+        3547
+      ],
+      "nearbyTeleports": [
+        "Xeric's glade",
+        "Skills necklace"
+      ],
+      "walkingTime": 60
+    },
+    {
+      "id": "hosidius_flower",
+      "name": "Hosidius Flower Patch",
+      "location": "Hosidius",
+      "type": "flower",
+      "coordinates": [
+        1735,
+        3548
+      ],
+      "nearbyTeleports": [
+        "Xeric's glade",
+        "Skills necklace"
+      ],
+      "walkingTime": 65
+    }
+  ]
+}
