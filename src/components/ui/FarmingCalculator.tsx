@@ -43,14 +43,22 @@ type CropOption = {
 };
 
 const CROP_OPTIONS: CropOption[] = [
-  { value: 'potato', label: 'Potato', level: 1, growthTime: 20 },
-  { value: 'onion', label: 'Onion', level: 5, growthTime: 40 },
-  { value: 'cabbage', label: 'Cabbage', level: 7, growthTime: 60 },
+  // Allotment crops
+  { value: 'potato', label: 'Potato', level: 1, growthTime: 80 },
+  { value: 'onion', label: 'Onion', level: 5, growthTime: 80 },
+  { value: 'cabbage', label: 'Cabbage', level: 7, growthTime: 80 },
   { value: 'tomato', label: 'Tomato', level: 12, growthTime: 80 },
-  { value: 'sweetcorn', label: 'Sweetcorn', level: 20, growthTime: 100 },
-  { value: 'strawberry', label: 'Strawberry', level: 31, growthTime: 120 },
-  { value: 'watermelon', label: 'Watermelon', level: 47, growthTime: 160 },
-  { value: 'snape_grass', label: 'Snape Grass', level: 61, growthTime: 140 }
+  { value: 'sweetcorn', label: 'Sweetcorn', level: 20, growthTime: 80 },
+  { value: 'strawberry', label: 'Strawberry', level: 31, growthTime: 80 },
+  { value: 'watermelon', label: 'Watermelon', level: 47, growthTime: 80 },
+  { value: 'snape_grass', label: 'Snape Grass', level: 61, growthTime: 80 },
+  // Flower crops
+  { value: 'marigold', label: 'Marigold', level: 2, growthTime: 20 },
+  { value: 'rosemary', label: 'Rosemary', level: 11, growthTime: 20 },
+  { value: 'nasturtium', label: 'Nasturtium', level: 24, growthTime: 20 },
+  { value: 'woad', label: 'Woad', level: 25, growthTime: 20 },
+  { value: 'limpwurt', label: 'Limpwurt Root', level: 26, growthTime: 20 },
+  { value: 'white_lily', label: 'White Lily', level: 58, growthTime: 20 }
 ];
 
 const COMPOST_OPTIONS = [

@@ -30,6 +30,7 @@ export interface Crop {
   // Yield information
   baseYield?: number;
   yieldRange?: [number, number];
+  isFixedYield?: boolean; // If true, use baseYield instead of algorithm
 
   // Experience
   plantingXP?: number;

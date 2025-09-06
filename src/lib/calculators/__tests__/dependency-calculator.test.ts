@@ -30,9 +30,12 @@ describe('OSRS Farming Dependency Calculator', () => {
 
     test('should return all available crops', () => {
       const crops = getAvailableCrops();
-      expect(crops).toHaveLength(8);
+      expect(crops.length).toBeGreaterThanOrEqual(14); // 8 allotments + 6 flowers
       expect(crops.map(c => c.id)).toContain('potato');
       expect(crops.map(c => c.id)).toContain('tomato');
+      // Check that flower crops are included
+      expect(crops.map(c => c.id)).toContain('marigold');
+      expect(crops.map(c => c.id)).toContain('white_lily');
     });
 
     test('should correctly identify crops with protection', () => {
@@ -222,6 +225,87 @@ describe('OSRS Farming Dependency Calculator', () => {
       expect(result.requirements.onion.patches).toBeGreaterThan(0);
       expect(result.requirements.potato.patches).toBeGreaterThan(0);
       expect(result.summary.totalPatches).toBeGreaterThan(10);
+    });
+  });
+
+  describe('Flower crop calculations', () => {
+    test('should calculate marigold requirements (no dependencies)', () => {
+      const result = calculateDependencies('marigold', 5, 10, 'none', {}, 'average');
+
+      expect(result.targetCrop).toBe('marigold');
+      expect(result.targetQuantity).toBe(5);
+      expect(result.requirements.marigold).toBeDefined();
+      expect(result.requirements.marigold.patches).toBeGreaterThan(0);
+      expect(result.requirements.marigold.reason).toContain('Target harvest');
+
+      // Marigolds have no protection requirements, so should only need marigold patches
+      expect(Object.keys(result.requirements)).toEqual(['marigold']);
+    });
+
+    test('should calculate white lily requirements (no dependencies)', () => {
+      const result = calculateDependencies('white_lily', 3, 60, 'supercompost', {}, 'average');
+
+      expect(result.targetCrop).toBe('white_lily');
+      expect(result.targetQuantity).toBe(3);
+      expect(result.requirements.white_lily).toBeDefined();
+      expect(result.requirements.white_lily.patches).toBeGreaterThan(0);
+
+      // White lilies have no protection requirements
+      expect(Object.keys(result.requirements)).toEqual(['white_lily']);
+    });
+
+    test('should handle flower crops with different farming levels', () => {
+      // Test that we can calculate for different flower crops at appropriate levels
+      const marigoldResult = calculateDependencies('marigold', 1, 2, 'none', {}, 'average');
+      expect(marigoldResult.requirements.marigold).toBeDefined();
+
+      const rosemaryResult = calculateDependencies('rosemary', 1, 11, 'none', {}, 'average');
+      expect(rosemaryResult.requirements.rosemary).toBeDefined();
+
+      const nasturtiumResult = calculateDependencies('nasturtium', 1, 24, 'none', {}, 'average');
+      expect(nasturtiumResult.requirements.nasturtium).toBeDefined();
+    });
+
+    test('should use fixed yields for flowers with isFixedYield property', () => {
+      // Test fixed yield flowers (should always return baseYield regardless of compost/level)
+      const marigoldYieldNone = calculateYield('marigold', 1, 'none');
+      const marigoldYieldSuper = calculateYield('marigold', 99, 'ultracompost');
+      
+      // Marigold has baseYield: 1 and isFixedYield: true
+      expect(marigoldYieldNone).toEqual({ min: 1, max: 1, average: 1 });
+      expect(marigoldYieldSuper).toEqual({ min: 1, max: 1, average: 1 });
+
+      // Woad has baseYield: 3 and isFixedYield: true
+      const woadYield = calculateYield('woad', 50, 'compost');
+      expect(woadYield).toEqual({ min: 3, max: 3, average: 3 });
+    });
+
+    test('should use algorithm for limpwurt (not fixed yield)', () => {
+      // Limpwurt should use the algorithm since it doesn't have isFixedYield: true
+      const limpwurtYieldNone = calculateYield('limpwurt', 26, 'none');
+      const limpwurtYieldSuper = calculateYield('limpwurt', 26, 'supercompost');
+      
+      // These should be different (algorithm varies with compost)
+      expect(limpwurtYieldNone.min).toBeGreaterThan(0);
+      expect(limpwurtYieldSuper.min).toBeGreaterThan(limpwurtYieldNone.min);
+      expect(limpwurtYieldSuper.average).toBeGreaterThan(limpwurtYieldNone.average);
+    });
+
+    test('should calculate correct growth times for flower crops', () => {
+      // Test single flower crop with no dependencies - should be just the flower's growth time
+      const marigoldResult = calculateDependencies('marigold', 1, 10, 'none', {}, 'average');
+      expect(marigoldResult.summary.estimatedTime).toBe(20); // Just marigold's 20 minute growth time
+
+      const nasturtiumResult = calculateDependencies('nasturtium', 1, 24, 'none', {}, 'average');
+      expect(nasturtiumResult.summary.estimatedTime).toBe(20); // Just nasturtium's 20 minute growth time
+
+      // Test multiple patches of flowers - should multiply by patches needed
+      const nasturtium2Result = calculateDependencies('nasturtium', 2, 24, 'none', {}, 'average');
+      expect(nasturtium2Result.summary.estimatedTime).toBe(40); // 20 minutes * 2 patches
+
+      // Test allotment crop for comparison
+      const potatoResult = calculateDependencies('potato', 1, 10, 'none', {}, 'average');
+      expect(potatoResult.summary.estimatedTime).toBe(80); // Just potato's 80 minute growth time
     });
   });
 });

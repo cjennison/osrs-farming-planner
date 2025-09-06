@@ -1,7 +1,7 @@
 // OSRS Farming Dependency Calculator
 // Based on official OSRS Wiki protection payment requirements
 
-import { getAllotmentCrops, getCropById } from '../farming-data-simple';
+import { getAllCrops, getCropById } from '../farming-data-simple';
 
 export interface CropPayment {
   crop: string;
@@ -18,6 +18,8 @@ export interface CropData {
   baseYield: number;
   seedsPerPatch: number;
   expPerHarvest: number;
+  growthTime: number; // in minutes
+  isFixedYield?: boolean; // If true, use baseYield instead of algorithm
 }
 
 export interface CalculationResult {
@@ -84,6 +86,8 @@ function convertToCropData(crop: any): CropData {
     baseYield: crop.baseYield || 3,
     seedsPerPatch: crop.seedsPerPatch || 3,
     expPerHarvest: crop.expPerHarvest || 0,
+    growthTime: crop.growthTime || 80, // Default to 80 minutes if not specified
+    isFixedYield: crop.isFixedYield || false,
     protection: crop.protection ? {
       crop: crop.protection.item, // Use the crop ID directly
       quantity: crop.protection.quantity, // Now represents actual items needed
@@ -104,7 +108,7 @@ function getCropData(cropId: string): CropData | undefined {
  * Get all available crop data
  */
 function getAllCropData(): { [key: string]: CropData } {
-  const allCrops = getAllotmentCrops();
+  const allCrops = getAllCrops();
   const cropData: { [key: string]: CropData } = {};
 
   for (const crop of allCrops) {
@@ -125,6 +129,16 @@ export function calculateYield(
 ): { min: number; max: number; average: number } {
   const cropData = getCropData(crop);
   if (!cropData) throw new Error(`Unknown crop: ${crop}`);
+
+  // Check if this crop has fixed yield (like most flowers)
+  if (cropData.isFixedYield) {
+    const fixedYield = cropData.baseYield;
+    return {
+      min: fixedYield,
+      max: fixedYield,
+      average: fixedYield
+    };
+  }
 
   // Harvest lives system: 3 base + compost bonus
   const compostLives = {
@@ -346,7 +360,33 @@ export function calculateDependencies(
 
   // Calculate summary
   const allPatches = Object.values(requirements).reduce((sum, req) => sum + req.patches, 0);
-  const estimatedTime = allPatches * 80; // ~80 minutes per crop cycle (growth time)
+  
+  // Calculate estimated time based on target crop requirements
+  // For the target crop, multiply growth time by number of patches needed
+  const targetCropData = getCropData(targetCrop);
+  const targetPatches = requirements[targetCrop]?.patches || 1;
+  
+  let estimatedTime = 0;
+  if (targetCropData) {
+    // For flowers with no dependencies, time = growth_time * patches
+    // For crops with dependencies, we need to account for the dependency chain first
+    const dependencyChain = getDependencyChain(targetCrop);
+    
+    if (dependencyChain.length === 1) {
+      // No dependencies, just multiply by patches needed
+      estimatedTime = targetCropData.growthTime * targetPatches;
+    } else {
+      // Has dependencies: grow dependencies once, then target crop patches
+      for (let i = 0; i < dependencyChain.length - 1; i++) {
+        const depCropData = getCropData(dependencyChain[i]);
+        if (depCropData) {
+          estimatedTime += depCropData.growthTime;
+        }
+      }
+      // Add time for target crop patches
+      estimatedTime += targetCropData.growthTime * targetPatches;
+    }
+  }
 
   return {
     targetCrop,
