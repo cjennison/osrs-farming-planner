@@ -5,6 +5,7 @@ import {
   Divider,
   Grid,
   Group,
+  NumberFormatter,
   Paper,
   Stack,
   Text,
@@ -20,6 +21,7 @@ import { ExpectedYields } from "./ExpectedYields";
 import { GrowthBreakdown } from "./GrowthBreakdown";
 import { InputsBreakdown } from "./InputsBreakdown";
 import { ExpBreakdown } from "./ExpBreakdown";
+import { getCropById } from "@/lib/farming-data-simple";
 
 interface CalculatorResultsProps {
   result: CalculationResult | null;
@@ -50,6 +52,37 @@ export function CalculatorResults({
   selectedCrop,
   targetCrop,
 }: CalculatorResultsProps) {
+  // Helper function to calculate total experience
+  const calculateTotalExperience = (result: CalculationResult, yieldStrategy: YieldStrategy): number => {
+    let totalPlantingExp = 0;
+    let totalHarvestingExp = 0;
+
+    for (const [cropId, requirement] of Object.entries(result.requirements)) {
+      const cropData = getCropById(cropId);
+      if (!cropData || requirement.patches === 0) continue;
+
+      const quantity = requirement.patches;
+
+      // Expected harvests based on yield strategy
+      let totalHarvests = quantity;
+      if (yieldStrategy === "min") {
+        totalHarvests = quantity;
+      } else if (yieldStrategy === "average") {
+        totalHarvests = quantity * 3.5;
+      } else {
+        totalHarvests = quantity * 6;
+      }
+
+      const plantingExp = cropData.expBreakdown?.planting || 0;
+      const harvestExp = cropData.expBreakdown?.harvest || 0;
+
+      totalPlantingExp += plantingExp * quantity;
+      totalHarvestingExp += harvestExp * totalHarvests;
+    }
+
+    return totalPlantingExp + totalHarvestingExp;
+  };
+
   if (!result) {
     return (
       <Card
@@ -97,7 +130,7 @@ export function CalculatorResults({
           </Group>
 
           <Grid>
-            <Grid.Col span={6}>
+            <Grid.Col span={4}>
               <Paper p="md" bg="sage.0" radius="md">
                 <Stack gap="xs" align="center">
                   <Text size="sm" c="dimmed">
@@ -109,7 +142,7 @@ export function CalculatorResults({
                 </Stack>
               </Paper>
             </Grid.Col>
-            <Grid.Col span={6}>
+            <Grid.Col span={4}>
               <Paper p="md" bg="forest.0" radius="md">
                 <Stack gap="xs" align="center">
                   <Text size="sm" c="dimmed">
@@ -117,6 +150,21 @@ export function CalculatorResults({
                   </Text>
                   <Text size="xl" fw={700} c="forest.7">
                     {formatTime(result.summary.estimatedTime)}
+                  </Text>
+                </Stack>
+              </Paper>
+            </Grid.Col>
+            <Grid.Col span={4}>
+              <Paper p="md" bg="blue.0" radius="md">
+                <Stack gap="xs" align="center">
+                  <Text size="sm" c="dimmed">
+                    Total EXP
+                  </Text>
+                  <Text size="xl" fw={700} c="blue.7">
+                    <NumberFormatter 
+                      value={calculateTotalExperience(result, yieldStrategy)} 
+                      thousandSeparator="," 
+                    />
                   </Text>
                 </Stack>
               </Paper>
