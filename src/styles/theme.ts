@@ -120,7 +120,7 @@ export const theme = createTheme({
         root: {
           fontWeight: 500,
           transition: 'all 200ms ease',
-          '&:focus-visible': {
+          '&:focusVisible': {
             outline: `2px solid ${theme.colors.sage[5]}`,
             outlineOffset: '2px',
           },

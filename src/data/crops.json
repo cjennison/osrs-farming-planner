@@ -22,6 +22,12 @@
         "checkHealth": 0,
         "harvest": 9.5
       },
+      "protection": {
+        "type": "item",
+        "quantity": 2,
+        "item": "compost",
+        "itemDescription": "compost"
+      },
       "baseYield": 3
     },
     {

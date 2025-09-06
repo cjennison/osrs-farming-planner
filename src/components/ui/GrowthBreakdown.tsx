@@ -5,6 +5,7 @@ import {
   IconChevronDown,
   IconChevronRight,
   IconShield,
+  IconArrowUp,
 } from "@tabler/icons-react";
 import type {
   CalculationResult,
@@ -43,29 +44,35 @@ export function GrowthBreakdown({
 
       <Collapse in={expandedSections.growth}>
         <Stack gap="xs">
-          {result.breakdown.map((step, index) => {
-            const starting = startingResources[step.crop] || 0;
-            const patchesNeeded = step.patchesNeeded[yieldStrategy];
-            const totalYield = step.totalYield[yieldStrategy];
-            const isPurchasable = step.purchaseQuantity !== undefined;
+          {result.breakdown
+            .slice()
+            .reverse()
+            .map((step, index) => {
+              const starting = startingResources[step.crop] || 0;
+              const patchesNeeded = step.patchesNeeded[yieldStrategy];
+              const totalYield = step.totalYield[yieldStrategy];
+              const isPurchasable = step.purchaseQuantity !== undefined;
+              const reversedBreakdown = result.breakdown.slice().reverse();
+              const isLastStep = index === reversedBreakdown.length - 1;
 
-            // Show purchasable items even if patches needed is 0
-            if (patchesNeeded === 0 && !isPurchasable) return null;
+              // Show purchasable items even if patches needed is 0
+              if (patchesNeeded === 0 && !isPurchasable) return null;
 
-            return (
-              <Group
-                key={`${step.crop}-${index}`}
-                gap="md"
-                p="md"
-                bg="white"
-                style={{
-                  borderRadius: 8,
-                  border: "1px solid var(--mantine-color-gray-2)",
-                }}
-              >
-                <Badge variant="filled" color="sage" size="lg">
-                  {step.level}
-                </Badge>
+              return (
+                <Stack key={`${step.crop}-${index}`} gap="xs" align="center">
+                  <Group
+                    gap="md"
+                    p="md"
+                    bg="white"
+                    style={{
+                      borderRadius: 8,
+                      border: "1px solid var(--mantine-color-gray-2)",
+                      width: "100%",
+                    }}
+                  >
+                  <Badge variant="filled" color="sage" size="lg">
+                    {result.breakdown.length - step.level}
+                  </Badge>
                 <Stack gap="xs" flex={1}>
                   <Group gap="xs">
                     <Text fw={500} tt="capitalize">
@@ -102,7 +109,17 @@ export function GrowthBreakdown({
                   </Group>
                 </Stack>
               </Group>
-            );
+              {!isLastStep && (
+                <IconArrowUp 
+                  size={20} 
+                  style={{ 
+                    color: "var(--mantine-color-sage-6)",
+                    opacity: 0.7 
+                  }} 
+                />
+              )}
+                </Stack>
+              );
           })}
         </Stack>
       </Collapse>
