@@ -360,31 +360,15 @@ export function calculateDependencies(
 
   // Calculate summary
   const allPatches = Object.values(requirements).reduce((sum, req) => sum + req.patches, 0);
-  
-  // Calculate estimated time based on target crop requirements
-  // For the target crop, multiply growth time by number of patches needed
-  const targetCropData = getCropData(targetCrop);
-  const targetPatches = requirements[targetCrop]?.patches || 1;
-  
+
+  // Calculate estimated time - sum of all crop growing times (no concurrency)
+  // Each patch takes the full growth time, so total time = sum of (patches * growth_time) for each crop
   let estimatedTime = 0;
-  if (targetCropData) {
-    // For flowers with no dependencies, time = growth_time * patches
-    // For crops with dependencies, we need to account for the dependency chain first
-    const dependencyChain = getDependencyChain(targetCrop);
-    
-    if (dependencyChain.length === 1) {
-      // No dependencies, just multiply by patches needed
-      estimatedTime = targetCropData.growthTime * targetPatches;
-    } else {
-      // Has dependencies: grow dependencies once, then target crop patches
-      for (let i = 0; i < dependencyChain.length - 1; i++) {
-        const depCropData = getCropData(dependencyChain[i]);
-        if (depCropData) {
-          estimatedTime += depCropData.growthTime;
-        }
-      }
-      // Add time for target crop patches
-      estimatedTime += targetCropData.growthTime * targetPatches;
+
+  for (const [cropId, requirement] of Object.entries(requirements)) {
+    const cropData = getCropData(cropId);
+    if (cropData) {
+      estimatedTime += cropData.growthTime * requirement.patches;
     }
   }
 

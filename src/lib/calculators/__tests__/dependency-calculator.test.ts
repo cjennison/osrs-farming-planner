@@ -270,7 +270,7 @@ describe('OSRS Farming Dependency Calculator', () => {
       // Test fixed yield flowers (should always return baseYield regardless of compost/level)
       const marigoldYieldNone = calculateYield('marigold', 1, 'none');
       const marigoldYieldSuper = calculateYield('marigold', 99, 'ultracompost');
-      
+
       // Marigold has baseYield: 1 and isFixedYield: true
       expect(marigoldYieldNone).toEqual({ min: 1, max: 1, average: 1 });
       expect(marigoldYieldSuper).toEqual({ min: 1, max: 1, average: 1 });
@@ -284,7 +284,7 @@ describe('OSRS Farming Dependency Calculator', () => {
       // Limpwurt should use the algorithm since it doesn't have isFixedYield: true
       const limpwurtYieldNone = calculateYield('limpwurt', 26, 'none');
       const limpwurtYieldSuper = calculateYield('limpwurt', 26, 'supercompost');
-      
+
       // These should be different (algorithm varies with compost)
       expect(limpwurtYieldNone.min).toBeGreaterThan(0);
       expect(limpwurtYieldSuper.min).toBeGreaterThan(limpwurtYieldNone.min);
