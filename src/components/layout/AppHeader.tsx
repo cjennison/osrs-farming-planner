@@ -1,0 +1,112 @@
+'use client';
+
+import {
+  AppShell,
+  Group,
+  Text,
+  Title,
+  ActionIcon,
+  useMantineColorScheme,
+  Container,
+  Button,
+} from '@mantine/core';
+import { IconSun, IconMoon, IconPlant, IconCalculator, IconMap } from '@tabler/icons-react';
+import Link from 'next/link';
+
+interface AppHeaderProps {
+  children: React.ReactNode;
+}
+
+export function AppHeader({ children }: AppHeaderProps) {
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+
+  return (
+    <AppShell
+      header={{ height: 70 }}
+      padding="md"
+    >
+      <AppShell.Header
+        style={{
+          borderBottom: '1px solid var(--mantine-color-gray-3)',
+        }}
+      >
+        <Container size="xl" h="100%">
+          <Group justify="space-between" h="100%">
+            {/* Logo and Brand */}
+            <Group gap="sm">
+              <IconPlant
+                size={32}
+                style={{ color: 'var(--mantine-color-sage-6)' }}
+              />
+              <div>
+                <Title
+                  order={3}
+                  c="sage.7"
+                  style={{ fontSize: '1.5rem', lineHeight: 1.2 }}
+                >
+                  OSRS Farming Planner
+                </Title>
+                <Text
+                  size="sm"
+                  c="dimmed"
+                  style={{ fontSize: '0.8rem', lineHeight: 1 }}
+                >
+                  Ironman Resource Calculator
+                </Text>
+              </div>
+            </Group>
+
+            {/* Navigation */}
+            <Group gap="xs" visibleFrom="sm">
+              <Button
+                component={Link}
+                href="/"
+                variant="subtle"
+                leftSection={<IconPlant size={16} />}
+                c="sage.7"
+              >
+                Planner
+              </Button>
+              <Button
+                component={Link}
+                href="/calculator"
+                variant="subtle"
+                leftSection={<IconCalculator size={16} />}
+                c="sage.7"
+              >
+                Calculator
+              </Button>
+              <Button
+                component={Link}
+                href="/patches"
+                variant="subtle"
+                leftSection={<IconMap size={16} />}
+                c="sage.7"
+              >
+                Patch Map
+              </Button>
+            </Group>
+
+            {/* Theme Toggle */}
+            <ActionIcon
+              onClick={toggleColorScheme}
+              variant="subtle"
+              size="lg"
+              aria-label="Toggle color scheme"
+            >
+              {colorScheme === 'dark' ? (
+                <IconSun size={18} />
+              ) : (
+                <IconMoon size={18} />
+              )}
+            </ActionIcon>
+          </Group>
+        </Container>
+      </AppShell.Header>
+
+      <AppShell.Main>
+        {children}
+      </AppShell.Main>
+    </AppShell>
+  );
+}
