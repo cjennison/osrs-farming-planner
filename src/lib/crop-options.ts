@@ -2,7 +2,7 @@
  * Shared crop options utility for generating crop selector data from JSON
  */
 
-import { getAllCrops } from "./farming-data-simple";
+import { getAllCrops, getCropsByType } from "./farming-data-simple";
 
 export interface CropOption {
   value: string;
@@ -39,4 +39,17 @@ export function getCropSelectData() {
     value: crop.value,
     label: `${crop.label} (Level ${crop.level})`
   }));
+}
+
+/**
+ * Get crop counts by type for filter badges
+ */
+export function getCropCounts() {
+  return {
+    all: getAllCrops().length,
+    allotment: getCropsByType("allotment").length,
+    flower: getCropsByType("flower").length,
+    herb: getCropsByType("herb").length,
+    hops: getCropsByType("hops").length,
+  };
 }
