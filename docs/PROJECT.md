@@ -43,10 +43,7 @@ src/
 │   │   └── PlanningTimeline.tsx   # Time-based planning view
 │   └── layout/           # Layout components
 ├── lib/                  # Core business logic
-│   ├── data/             # Game data and APIs
-│   │   ├── crops.ts      # Crop definitions and data
-│   │   ├── patches.ts    # Farming patch locations
-│   │   └── wiki-api.ts   # OSRS Wiki API integration
+│   ├── farming-data-simple.ts # Direct JSON data access (consolidated)
 │   ├── calculators/      # Business logic
 │   │   ├── dependency-calculator.ts # Crop dependency logic
 │   │   ├── yield-calculator.ts     # Crop yield calculations

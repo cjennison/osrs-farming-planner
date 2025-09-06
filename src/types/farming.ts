@@ -19,8 +19,12 @@ export interface Crop {
   // Payment requirements
   protection?: {
     type: "crop" | "item";
-    quantity: number;
+    quantity: number; // Total number of individual items needed
     item: string;
+    itemDescription?: string; // Human-readable description (e.g., "sack of potatoes")
+    isContainer?: boolean; // Whether this is paid with containers
+    containerSize?: number; // Items per container (10 for sacks, 5 for baskets)
+    containerCount?: number; // Number of containers (for display purposes)
   };
 
   // Yield information

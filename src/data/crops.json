@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "lastUpdated": "2025-09-06T10:48:53.889Z",
+    "lastUpdated": "2025-09-06T12:42:59.079Z",
     "version": "1.0.0",
     "source": "OSRS Wiki API"
   },
@@ -12,7 +12,18 @@
       "seedId": 5318,
       "seedName": "Potato seed",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Potato_seed",
-      "lastUpdated": "2025-09-06T10:48:49.907Z"
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 1,
+      "growthTime": 80,
+      "seedsPerPatch": 3,
+      "expPerHarvest": 17.5,
+      "expBreakdown": {
+        "planting": 8.0,
+        "checkHealth": 0,
+        "harvest": 9.5
+      },
+      "baseYield": 3,
+      "maxYield": 10
     },
     {
       "id": "onion",
@@ -21,7 +32,26 @@
       "seedId": 5319,
       "seedName": "Onion seed",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Onion_seed",
-      "lastUpdated": "2025-09-06T10:48:50.174Z"
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 5,
+      "growthTime": 80,
+      "seedsPerPatch": 3,
+      "expPerHarvest": 20.0,
+      "expBreakdown": {
+        "planting": 9.5,
+        "checkHealth": 0,
+        "harvest": 10.5
+      },
+      "baseYield": 3,
+      "maxYield": 10,
+      "protection": {
+        "type": "crop",
+        "quantity": 10,
+        "item": "potato",
+        "itemDescription": "sack of potatoes",
+        "isContainer": true,
+        "containerSize": 10
+      }
     },
     {
       "id": "cabbage",
@@ -30,7 +60,26 @@
       "seedId": 5324,
       "seedName": "Cabbage seed",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Cabbage_seed",
-      "lastUpdated": "2025-09-06T10:48:50.676Z"
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 7,
+      "growthTime": 80,
+      "seedsPerPatch": 3,
+      "expPerHarvest": 21.5,
+      "expBreakdown": {
+        "planting": 10.0,
+        "checkHealth": 0,
+        "harvest": 11.5
+      },
+      "baseYield": 3,
+      "maxYield": 10,
+      "protection": {
+        "type": "crop",
+        "quantity": 10,
+        "item": "onion",
+        "itemDescription": "sack of onions",
+        "isContainer": true,
+        "containerSize": 10
+      }
     },
     {
       "id": "tomato",
@@ -39,7 +88,27 @@
       "seedId": 5322,
       "seedName": "Tomato seed",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Tomato_seed",
-      "lastUpdated": "2025-09-06T10:48:50.933Z"
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 12,
+      "growthTime": 80,
+      "seedsPerPatch": 3,
+      "expPerHarvest": 26.5,
+      "expBreakdown": {
+        "planting": 12.5,
+        "checkHealth": 0,
+        "harvest": 14.0
+      },
+      "baseYield": 3,
+      "maxYield": 6,
+      "protection": {
+        "type": "crop",
+        "quantity": 20,
+        "item": "cabbage",
+        "itemDescription": "sack of cabbages",
+        "isContainer": true,
+        "containerSize": 10,
+        "containerCount": 2
+      }
     },
     {
       "id": "sweetcorn",
@@ -48,7 +117,24 @@
       "seedId": 5320,
       "seedName": "Sweetcorn seed",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Sweetcorn_seed",
-      "lastUpdated": "2025-09-06T10:48:51.194Z"
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 20,
+      "growthTime": 80,
+      "seedsPerPatch": 3,
+      "expPerHarvest": 36.5,
+      "expBreakdown": {
+        "planting": 17.0,
+        "checkHealth": 0,
+        "harvest": 19.5
+      },
+      "baseYield": 3,
+      "maxYield": 6,
+      "protection": {
+        "type": "item",
+        "quantity": 10,
+        "item": "jute fibre",
+        "itemDescription": "jute fibres"
+      }
     },
     {
       "id": "strawberry",
@@ -57,7 +143,26 @@
       "seedId": 5323,
       "seedName": "Strawberry seed",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Strawberry_seed",
-      "lastUpdated": "2025-09-06T10:48:51.465Z"
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 31,
+      "growthTime": 80,
+      "seedsPerPatch": 3,
+      "expPerHarvest": 55.0,
+      "expBreakdown": {
+        "planting": 26.0,
+        "checkHealth": 0,
+        "harvest": 29.0
+      },
+      "baseYield": 4,
+      "maxYield": 7,
+      "protection": {
+        "type": "item",
+        "quantity": 5,
+        "item": "apple",
+        "itemDescription": "basket of apples",
+        "isContainer": true,
+        "containerSize": 5
+      }
     },
     {
       "id": "watermelon",
@@ -66,7 +171,24 @@
       "seedId": 5321,
       "seedName": "Watermelon seed",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Watermelon_seed",
-      "lastUpdated": "2025-09-06T10:48:51.716Z"
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 47,
+      "growthTime": 80,
+      "seedsPerPatch": 3,
+      "expPerHarvest": 103.0,
+      "expBreakdown": {
+        "planting": 48.5,
+        "checkHealth": 0,
+        "harvest": 54.5
+      },
+      "baseYield": 3,
+      "maxYield": 7,
+      "protection": {
+        "type": "item",
+        "quantity": 10,
+        "item": "curry leaf",
+        "itemDescription": "curry leaves"
+      }
     },
     {
       "id": "snape_grass",
@@ -75,7 +197,24 @@
       "seedId": 22879,
       "seedName": "Snape grass seed",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Snape_grass_seed",
-      "lastUpdated": "2025-09-06T10:48:51.968Z"
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 61,
+      "growthTime": 80,
+      "seedsPerPatch": 3,
+      "expPerHarvest": 154.0,
+      "expBreakdown": {
+        "planting": 73.0,
+        "checkHealth": 0,
+        "harvest": 81.0
+      },
+      "baseYield": 3,
+      "maxYield": 8,
+      "protection": {
+        "type": "item",
+        "quantity": 5,
+        "item": "jangerberry",
+        "itemDescription": "jangerberries"
+      }
     }
   ],
   "flowers": [
@@ -86,7 +225,14 @@
       "seedId": 5096,
       "seedName": "Marigold seed",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Marigold_seed",
-      "lastUpdated": "2025-09-06T10:48:52.410Z"
+      "lastUpdated": "2025-09-06T12:42:57.333Z",
+      "seedsPerPatch": 3,
+      "expPerHarvest": 0,
+      "expBreakdown": {
+        "planting": 0,
+        "checkHealth": 0,
+        "harvest": 0
+      }
     },
     {
       "id": "rosemary",
@@ -95,7 +241,14 @@
       "seedId": 5097,
       "seedName": "Rosemary seed",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Rosemary_seed",
-      "lastUpdated": "2025-09-06T10:48:52.679Z"
+      "lastUpdated": "2025-09-06T12:42:57.587Z",
+      "seedsPerPatch": 3,
+      "expPerHarvest": 0,
+      "expBreakdown": {
+        "planting": 0,
+        "checkHealth": 0,
+        "harvest": 0
+      }
     },
     {
       "id": "nasturtium",
@@ -104,7 +257,14 @@
       "seedId": 5098,
       "seedName": "Nasturtium seed",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Nasturtium_seed",
-      "lastUpdated": "2025-09-06T10:48:52.957Z"
+      "lastUpdated": "2025-09-06T12:42:57.839Z",
+      "seedsPerPatch": 3,
+      "expPerHarvest": 0,
+      "expBreakdown": {
+        "planting": 0,
+        "checkHealth": 0,
+        "harvest": 0
+      }
     },
     {
       "id": "woad",
@@ -113,7 +273,14 @@
       "seedId": 5099,
       "seedName": "Woad seed",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Woad_seed",
-      "lastUpdated": "2025-09-06T10:48:53.249Z"
+      "lastUpdated": "2025-09-06T12:42:58.246Z",
+      "seedsPerPatch": 3,
+      "expPerHarvest": 0,
+      "expBreakdown": {
+        "planting": 0,
+        "checkHealth": 0,
+        "harvest": 0
+      }
     },
     {
       "id": "limpwurt",
@@ -122,7 +289,14 @@
       "seedId": 5100,
       "seedName": "Limpwurt seed",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Limpwurt_seed",
-      "lastUpdated": "2025-09-06T10:48:53.507Z"
+      "lastUpdated": "2025-09-06T12:42:58.507Z",
+      "seedsPerPatch": 3,
+      "expPerHarvest": 0,
+      "expBreakdown": {
+        "planting": 0,
+        "checkHealth": 0,
+        "harvest": 0
+      }
     },
     {
       "id": "white_lily",
@@ -131,7 +305,14 @@
       "seedId": 14589,
       "seedName": "White lily seed",
       "wikiUrl": "https://oldschool.runescape.wiki/w/White_lily_seed",
-      "lastUpdated": "2025-09-06T10:48:53.772Z"
+      "lastUpdated": "2025-09-06T12:42:58.977Z",
+      "seedsPerPatch": 3,
+      "expPerHarvest": 0,
+      "expBreakdown": {
+        "planting": 0,
+        "checkHealth": 0,
+        "harvest": 0
+      }
     }
   ]
 }

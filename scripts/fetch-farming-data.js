@@ -260,12 +260,24 @@ async function fetchSeedPrices() {
  * Parse farming info from a wiki page
  */
 function parseFarmingInfo(wikitext, cropInfo) {
+  // Log a sample of the wikitext for debugging
+  if (cropInfo.name === "Potato") {
+    console.log(`\n--- DEBUGGING WIKITEXT FOR ${cropInfo.name} ---`);
+    console.log("First 500 characters of wikitext:");
+    console.log(wikitext.substring(0, 500));
+    console.log("--- SEARCHING FOR PATTERNS ---");
+  }
+
   // Extract farming table information using regex patterns
   const farmingPatterns = {
     growthTime: /(\d+)\s*minutes?\s*\((\d+x\d+)\s*minutes?\)/i,
     farmingLevel: /Farming\s+(\d+)/i,
     protection: /protection.*?(\d+)\s*(.*?)(?:sack|bag|basket)/i,
     baseYield: /(\d+)\+\s*\(varies\)/i,
+    seedsPerPatch: /(?:Seeds\s+per\s+patch|plant.*?seeds?)\s*(?:\|\s*)?(\d+)/i,
+    plantingExp: /(?:Plant.*?experience|Planting.*?exp|Plant.*?exp)\s*(?:\|\s*)?([0-9.]+)/i,
+    harvestExp: /(?:Harvest.*?experience|Harvesting.*?exp|Harvest.*?exp)\s*(?:\|\s*)?([0-9.]+)/i,
+    checkHealthExp: /(?:Check.*?health.*?experience|Check.*?health.*?exp)\s*(?:\|\s*)?([0-9.]+)/i,
   };
 
   const result = {
@@ -276,28 +288,91 @@ function parseFarmingInfo(wikitext, cropInfo) {
     seedName: cropInfo.seedName,
     wikiUrl: `https://oldschool.runescape.wiki/w/${cropInfo.seedName.replace(/ /g, "_")}`,
     lastUpdated: new Date().toISOString(),
+    seedsPerPatch: 3, // Default for allotments
+    expPerHarvest: 0, // Will be calculated from planting + harvest exp
   };
 
   // Parse growth time
   const growthMatch = wikitext.match(farmingPatterns.growthTime);
   if (growthMatch) {
-    result.growthTime = parseInt(growthMatch[1]);
+    result.growthTime = parseInt(growthMatch[1], 10);
+    if (cropInfo.name === "Potato") console.log(`Found growth time: ${result.growthTime}`);
+  } else if (cropInfo.name === "Potato") {
+    console.log("Growth time pattern not found");
   }
 
   // Parse farming level requirement
   const levelMatch = wikitext.match(farmingPatterns.farmingLevel);
   if (levelMatch) {
-    result.farmingLevel = parseInt(levelMatch[1]);
+    result.farmingLevel = parseInt(levelMatch[1], 10);
+    if (cropInfo.name === "Potato") console.log(`Found farming level: ${result.farmingLevel}`);
+  } else if (cropInfo.name === "Potato") {
+    console.log("Farming level pattern not found");
   }
+
+  // Parse seeds per patch
+  const seedsMatch = wikitext.match(farmingPatterns.seedsPerPatch);
+  if (seedsMatch) {
+    result.seedsPerPatch = parseInt(seedsMatch[1], 10);
+    if (cropInfo.name === "Potato") console.log(`Found seeds per patch: ${result.seedsPerPatch}`);
+  } else if (cropInfo.name === "Potato") {
+    console.log("Seeds per patch pattern not found");
+  }
+
+  // Parse experience values
+  let plantingExp = 0;
+  let harvestExp = 0;
+  let checkHealthExp = 0;
+
+  const plantingExpMatch = wikitext.match(farmingPatterns.plantingExp);
+  if (plantingExpMatch) {
+    plantingExp = parseFloat(plantingExpMatch[1]);
+    if (cropInfo.name === "Potato") console.log(`Found planting exp: ${plantingExp}`);
+  } else if (cropInfo.name === "Potato") {
+    console.log("Planting exp pattern not found");
+  }
+
+  const harvestExpMatch = wikitext.match(farmingPatterns.harvestExp);
+  if (harvestExpMatch) {
+    harvestExp = parseFloat(harvestExpMatch[1]);
+    if (cropInfo.name === "Potato") console.log(`Found harvest exp: ${harvestExp}`);
+  } else if (cropInfo.name === "Potato") {
+    console.log("Harvest exp pattern not found");
+  }
+
+  const checkHealthExpMatch = wikitext.match(farmingPatterns.checkHealthExp);
+  if (checkHealthExpMatch) {
+    checkHealthExp = parseFloat(checkHealthExpMatch[1]);
+    if (cropInfo.name === "Potato") console.log(`Found check health exp: ${checkHealthExp}`);
+  } else if (cropInfo.name === "Potato") {
+    console.log("Check health exp pattern not found");
+  }
+
+  // Calculate total experience per harvest cycle (planting + check health + harvest)
+  result.expPerHarvest = plantingExp + checkHealthExp + harvestExp;
+
+  // Store individual exp components for debugging
+  result.expBreakdown = {
+    planting: plantingExp,
+    checkHealth: checkHealthExp,
+    harvest: harvestExp,
+  };
 
   // Parse protection requirements
   const protectionMatch = wikitext.match(farmingPatterns.protection);
   if (protectionMatch) {
     result.protection = {
       type: "crop",
-      quantity: parseInt(protectionMatch[1]),
+      quantity: parseInt(protectionMatch[1], 10),
       item: protectionMatch[2].trim(),
     };
+    if (cropInfo.name === "Potato") console.log(`Found protection: ${result.protection.quantity} ${result.protection.item}`);
+  } else if (cropInfo.name === "Potato") {
+    console.log("Protection pattern not found");
+  }
+
+  if (cropInfo.name === "Potato") {
+    console.log("--- END DEBUG ---\n");
   }
 
   return result;
@@ -321,11 +396,25 @@ async function fetchCropDetails(crops) {
         format: "json",
       });
 
+      console.log(`    API Response for ${crop.name}:`, JSON.stringify(pageData, null, 2));
+
       const pages = pageData.query?.pages || {};
       const pageId = Object.keys(pages)[0];
       const wikitext = pages[pageId]?.wikitext?.["*"] || "";
 
+      console.log(`    Page ID: ${pageId}, Wikitext length: ${wikitext.length}`);
+
       const cropInfo = parseFarmingInfo(wikitext, crop);
+      console.log(`    ✅ Parsed data for ${cropInfo.name}:`);
+      console.log(`       - Farming level: ${cropInfo.farmingLevel || 'Unknown'}`);
+      console.log(`       - Growth time: ${cropInfo.growthTime || 'Unknown'} minutes`);
+      console.log(`       - Seeds per patch: ${cropInfo.seedsPerPatch}`);
+      console.log(`       - Experience per harvest: ${cropInfo.expPerHarvest}`);
+      if (cropInfo.expBreakdown) {
+        console.log(`       - EXP breakdown: Plant(${cropInfo.expBreakdown.planting}), Check(${cropInfo.expBreakdown.checkHealth}), Harvest(${cropInfo.expBreakdown.harvest})`);
+      }
+      console.log(`       - Protection: ${cropInfo.protection ? `${cropInfo.protection.quantity} ${cropInfo.protection.item}` : 'None'}`);
+
       cropData.push(cropInfo);
 
       // Add delay to be respectful to the API

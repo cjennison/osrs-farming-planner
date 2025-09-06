@@ -332,6 +332,11 @@ export function FarmingCalculator() {
                               <Group key={crop} justify="space-between" p="xs" bg="gray.0" style={{ borderRadius: 4 }}>
                                 <Group gap="xs">
                                   <Text size="sm" tt="capitalize">{crop}</Text>
+                                  {requirement.paymentInfo && (
+                                    <Badge size="xs" variant="light" color="orange">
+                                      {requirement.paymentInfo.containerDescription} × {requirement.paymentInfo.containerQuantity}
+                                    </Badge>
+                                  )}
                                   <Badge size="xs" variant="light" c="dimmed">
                                     {requirement.reason}
                                   </Badge>

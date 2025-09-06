@@ -1,6 +1,8 @@
 // OSRS Farming Dependency Calculator
 // Based on official OSRS Wiki protection payment requirements
 
+import { getAllotmentCrops, getCropById } from '../farming-data-simple';
+
 export interface CropPayment {
   crop: string;
   quantity: number;
@@ -15,6 +17,8 @@ export interface CropData {
   protection?: CropPayment;
   baseYield: number;
   maxYield: number;
+  seedsPerPatch: number;
+  expPerHarvest: number;
 }
 
 export interface CalculationResult {
@@ -24,6 +28,11 @@ export interface CalculationResult {
     [cropId: string]: {
       patches: number;
       reason: string;
+      paymentInfo?: {
+        containerDescription: string;
+        containerQuantity: number;
+        totalCropsNeeded: number;
+      };
       totalYield: {
         min: number;
         max: number;
@@ -64,88 +73,48 @@ export interface StartingResources {
 
 export type YieldStrategy = 'min' | 'average' | 'max';
 
-// Official OSRS crop protection data
-export const CROP_DATA: { [key: string]: CropData } = {
-  potato: {
-    id: 'potato',
-    name: 'Potato',
-    type: 'allotment',
-    farmingLevel: 1,
-    baseYield: 3,
-    maxYield: 6,
-  },
-  onion: {
-    id: 'onion',
-    name: 'Onion',
-    type: 'allotment',
-    farmingLevel: 5,
-    protection: {
-      crop: 'potato',
-      quantity: 10,
-      note: '1 sack of potatoes (10 potatoes)'
-    },
-    baseYield: 3,
-    maxYield: 6,
-  },
-  cabbage: {
-    id: 'cabbage',
-    name: 'Cabbage',
-    type: 'allotment',
-    farmingLevel: 7,
-    protection: {
-      crop: 'onion',
-      quantity: 1,
-      note: '1 onion'
-    },
-    baseYield: 3,
-    maxYield: 6,
-  },
-  tomato: {
-    id: 'tomato',
-    name: 'Tomato',
-    type: 'allotment',
-    farmingLevel: 12,
-    protection: {
-      crop: 'cabbage',
-      quantity: 2,
-      note: '2 cabbages'
-    },
-    baseYield: 3,
-    maxYield: 6,
-  },
-  sweetcorn: {
-    id: 'sweetcorn',
-    name: 'Sweetcorn',
-    type: 'allotment',
-    farmingLevel: 20,
-    baseYield: 3,
-    maxYield: 6,
-  },
-  strawberry: {
-    id: 'strawberry',
-    name: 'Strawberry',
-    type: 'allotment',
-    farmingLevel: 31,
-    baseYield: 3,
-    maxYield: 6,
-  },
-  watermelon: {
-    id: 'watermelon',
-    name: 'Watermelon',
-    type: 'allotment',
-    farmingLevel: 47,
-    baseYield: 3,
-    maxYield: 6,
-  },
-  snape_grass: {
-    id: 'snape_grass',
-    name: 'Snape grass',
-    type: 'allotment',
-    farmingLevel: 61,
-    baseYield: 3,
-    maxYield: 6,
-  },
-};
+/**
+ * Convert JSON crop data to CropData format for calculations
+ */
+function convertToCropData(crop: any): CropData {
+  return {
+    id: crop.id,
+    name: crop.name,
+    type: crop.type as 'allotment' | 'flower',
+    farmingLevel: crop.farmingLevel || 1,
+    baseYield: crop.baseYield || 3,
+    maxYield: crop.maxYield || 6,
+    seedsPerPatch: crop.seedsPerPatch || 3,
+    expPerHarvest: crop.expPerHarvest || 0,
+    protection: crop.protection ? {
+      crop: crop.protection.item, // Use the crop ID directly
+      quantity: crop.protection.quantity, // Now represents actual items needed
+      note: crop.protection.type === 'item' ? 'Compost payment' : 'Crop payment'
+    } : undefined,
+  };
+}
+
+/**
+ * Get crop data by ID from the loaded farming data
+ */
+function getCropData(cropId: string): CropData | undefined {
+  const crop = getCropById(cropId);
+  return crop ? convertToCropData(crop) : undefined;
+}
+
+/**
+ * Get all available crop data
+ */
+function getAllCropData(): { [key: string]: CropData } {
+  const allCrops = getAllotmentCrops();
+  const cropData: { [key: string]: CropData } = {};
+
+  for (const crop of allCrops) {
+    cropData[crop.id] = convertToCropData(crop);
+  }
+
+  return cropData;
+}
 
 /**
  * Calculate yield range based on farming level and compost type using OSRS harvest lives system
@@ -156,7 +125,7 @@ export function calculateYield(
   farmingLevel: number,
   compostType: 'none' | 'compost' | 'supercompost' | 'ultracompost' = 'none'
 ): { min: number; max: number; average: number } {
-  const cropData = CROP_DATA[crop];
+  const cropData = getCropData(crop);
   if (!cropData) throw new Error(`Unknown crop: ${crop}`);
 
   // Harvest lives system: 3 base + compost bonus
@@ -239,7 +208,7 @@ export function calculateDependencies(
   startingResources: StartingResources = {},
   yieldStrategy: YieldStrategy = 'average'
 ): CalculationResult {
-  const cropData = CROP_DATA[targetCrop];
+  const cropData = getCropData(targetCrop);
   if (!cropData) {
     throw new Error(`Unknown target crop: ${targetCrop}`);
   }
@@ -254,7 +223,7 @@ export function calculateDependencies(
     level: number,
     purpose: string
   ): number {
-    const data = CROP_DATA[crop];
+    const data = getCropData(crop);
     if (!data) throw new Error(`Unknown crop: ${crop}`);
 
     // Check if we have starting resources
@@ -333,12 +302,37 @@ export function calculateDependencies(
     // Recursively calculate dependencies
     if (data.protection) {
       const paymentNeeded = patchesNeeded * data.protection.quantity;
-      calculateRequirement(
+      const paymentCropPatches = calculateRequirement(
         data.protection.crop,
         paymentNeeded,
         level + 1,
         `Payment for ${data.name} (${data.protection.quantity} per patch)`
       );
+
+      // Add payment information to the payment crop's requirement
+      if (requirements[data.protection.crop]) {
+        const originalCrop = getCropById(crop);
+        if (originalCrop?.protection?.itemDescription) {
+          const totalItemsNeeded = patchesNeeded * data.protection.quantity;
+
+          if (originalCrop.protection.isContainer && originalCrop.protection.containerSize) {
+            // Calculate containers needed
+            const containersNeeded = Math.ceil(totalItemsNeeded / originalCrop.protection.containerSize);
+            requirements[data.protection.crop].paymentInfo = {
+              containerDescription: originalCrop.protection.itemDescription,
+              containerQuantity: containersNeeded,
+              totalCropsNeeded: totalItemsNeeded
+            };
+          } else {
+            // Individual items (no containers)
+            requirements[data.protection.crop].paymentInfo = {
+              containerDescription: originalCrop.protection.itemDescription,
+              containerQuantity: totalItemsNeeded,
+              totalCropsNeeded: totalItemsNeeded
+            };
+          }
+        }
+      }
     }
 
     return patchesNeeded;
@@ -373,14 +367,14 @@ export function calculateDependencies(
  * Get all available crops for the calculator
  */
 export function getAvailableCrops(): CropData[] {
-  return Object.values(CROP_DATA);
+  return Object.values(getAllCropData());
 }
 
 /**
  * Validate if a crop has protection dependencies
  */
 export function hasProtection(cropId: string): boolean {
-  const crop = CROP_DATA[cropId];
+  const crop = getCropData(cropId);
   return !!crop?.protection;
 }
 
@@ -393,7 +387,7 @@ export function getDependencyChain(cropId: string): string[] {
 
   while (current) {
     chain.push(current);
-    const crop = CROP_DATA[current];
+    const crop = getCropData(current);
     current = crop?.protection?.crop || '';
   }
 

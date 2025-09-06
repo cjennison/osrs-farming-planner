@@ -1,7 +1,7 @@
 {
   "metadata": {
     "description": "Farming yield calculations based on level and compost",
-    "lastUpdated": "2025-09-06T10:48:53.889Z"
+    "lastUpdated": "2025-09-06T12:42:59.079Z"
   },
   "calculations": {
     "baseFormula": "Base yield + level bonus + compost bonus",

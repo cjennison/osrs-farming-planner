@@ -25,6 +25,8 @@
       "markdown": true
     },
 
+    "chat.agent.maxRequests": 100,
+
     // Biome (replaces ESLint + Prettier)
     "editor.defaultFormatter": "biomejs.biome",
     "editor.formatOnSave": true,
