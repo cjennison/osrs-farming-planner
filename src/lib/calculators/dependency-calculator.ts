@@ -13,7 +13,7 @@ export interface CropPayment {
 export interface CropData {
   id: string;
   name: string;
-  type: "allotment" | "flower" | "hops";
+  type: "allotment" | "flower" | "hops" | "herb";
   farmingLevel: number;
   protection?: CropPayment;
   baseYield: number;
@@ -85,7 +85,7 @@ function convertToCropData(crop: any): CropData {
   return {
     id: crop.id,
     name: crop.name,
-    type: crop.type as "allotment" | "flower" | "hops",
+    type: crop.type as "allotment" | "flower" | "hops" | "herb",
     farmingLevel: crop.farmingLevel || 1,
     baseYield: crop.baseYield || 3,
     seedsPerPatch: crop.seedsPerPatch || 3,
@@ -195,6 +195,24 @@ export function calculateYield(
     yanillian: { low: 118, high: 180 }, // Level 16 crop
     krandorian: { low: 125, high: 180 }, // Level 21 crop
     wildblood: { low: 135, high: 180 }, // Level 28 crop
+
+    // Herbs - Base yield of 3, similar CTS values to allotments
+    guam: { low: 109, high: 180 }, // Level 9 crop
+    marrentill: { low: 114, high: 180 }, // Level 14 crop
+    tarromin: { low: 119, high: 180 }, // Level 19 crop
+    harralander: { low: 126, high: 180 }, // Level 26 crop
+    gout_tuber: { low: 129, high: 180 }, // Level 29 crop (goutweed)
+    ranarr: { low: 132, high: 180 }, // Level 32 crop
+    toadflax: { low: 138, high: 180 }, // Level 38 crop
+    irit: { low: 144, high: 180 }, // Level 44 crop
+    avantoe: { low: 150, high: 180 }, // Level 50 crop
+    kwuarm: { low: 156, high: 180 }, // Level 56 crop
+    snapdragon: { low: 162, high: 180 }, // Level 62 crop
+    huasca: { low: 165, high: 180 }, // Level 65 crop
+    cadantine: { low: 167, high: 180 }, // Level 67 crop
+    lantadyme: { low: 173, high: 180 }, // Level 73 crop
+    dwarf_weed: { low: 179, high: 180 }, // Level 79 crop
+    torstol: { low: 185, high: 190 }, // Level 85 crop
   };
 
   const constants = cropConstants[crop] || { low: 100, high: 180 };
