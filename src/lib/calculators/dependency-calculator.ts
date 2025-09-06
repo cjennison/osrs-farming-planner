@@ -16,7 +16,6 @@ export interface CropData {
   farmingLevel: number;
   protection?: CropPayment;
   baseYield: number;
-  maxYield: number;
   seedsPerPatch: number;
   expPerHarvest: number;
 }
@@ -83,7 +82,6 @@ function convertToCropData(crop: any): CropData {
     type: crop.type as 'allotment' | 'flower',
     farmingLevel: crop.farmingLevel || 1,
     baseYield: crop.baseYield || 3,
-    maxYield: crop.maxYield || 6,
     seedsPerPatch: crop.seedsPerPatch || 3,
     expPerHarvest: crop.expPerHarvest || 0,
     protection: crop.protection ? {

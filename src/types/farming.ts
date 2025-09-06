@@ -68,7 +68,6 @@ export interface DependencyRelationship {
 
 export interface YieldCalculation {
   baseYield: number;
-  maxYield: number;
   farmingLevel?: number;
   compostBonus?: number;
 }

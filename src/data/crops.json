@@ -22,8 +22,7 @@
         "checkHealth": 0,
         "harvest": 9.5
       },
-      "baseYield": 3,
-      "maxYield": 10
+      "baseYield": 3
     },
     {
       "id": "onion",
@@ -43,7 +42,6 @@
         "harvest": 10.5
       },
       "baseYield": 3,
-      "maxYield": 10,
       "protection": {
         "type": "crop",
         "quantity": 10,
@@ -71,7 +69,6 @@
         "harvest": 11.5
       },
       "baseYield": 3,
-      "maxYield": 10,
       "protection": {
         "type": "crop",
         "quantity": 10,
@@ -99,7 +96,6 @@
         "harvest": 14.0
       },
       "baseYield": 3,
-      "maxYield": 6,
       "protection": {
         "type": "crop",
         "quantity": 20,
@@ -128,7 +124,6 @@
         "harvest": 19.5
       },
       "baseYield": 3,
-      "maxYield": 6,
       "protection": {
         "type": "item",
         "quantity": 10,
@@ -154,7 +149,6 @@
         "harvest": 29.0
       },
       "baseYield": 4,
-      "maxYield": 7,
       "protection": {
         "type": "item",
         "quantity": 5,
@@ -182,7 +176,6 @@
         "harvest": 54.5
       },
       "baseYield": 3,
-      "maxYield": 7,
       "protection": {
         "type": "item",
         "quantity": 10,
@@ -207,8 +200,7 @@
         "checkHealth": 0,
         "harvest": 81.0
       },
-      "baseYield": 3,
-      "maxYield": 8,
+      "baseYield": 4,
       "protection": {
         "type": "item",
         "quantity": 5,

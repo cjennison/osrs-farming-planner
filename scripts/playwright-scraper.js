@@ -118,7 +118,6 @@ async function scrapeFarmingData(cropInfo) {
       },
       protection: null,
       baseYield: null,
-      maxYield: null,
     };
 
     console.log(`   ✅ Structure created for ${cropInfo.name}`);

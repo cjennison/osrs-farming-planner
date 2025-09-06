@@ -550,14 +550,14 @@ function generateYieldTables() {
     },
     crops: {
       // These will be filled with actual data from wiki parsing
-      potato: { baseYield: 3, maxYield: 6 },
-      onion: { baseYield: 3, maxYield: 6 },
-      cabbage: { baseYield: 3, maxYield: 6 },
-      tomato: { baseYield: 3, maxYield: 6 },
-      sweetcorn: { baseYield: 3, maxYield: 6 },
-      strawberry: { baseYield: 3, maxYield: 6 },
-      watermelon: { baseYield: 3, maxYield: 6 },
-      snape_grass: { baseYield: 3, maxYield: 6 },
+      potato: { baseYield: 3 },
+      onion: { baseYield: 3 },
+      cabbage: { baseYield: 3 },
+      tomato: { baseYield: 3 },
+      sweetcorn: { baseYield: 3 },
+      strawberry: { baseYield: 3 },
+      watermelon: { baseYield: 3 },
+      snape_grass: { baseYield: 3 },
     },
   };
 }
