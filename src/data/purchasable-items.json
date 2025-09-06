@@ -25,10 +25,7 @@
           }
         ]
       },
-      "uses": [
-        "Allotment patch protection",
-        "Hops patch protection"
-      ]
+      "uses": ["Allotment patch protection", "Hops patch protection"]
     },
     "supercompost": {
       "id": "supercompost",
@@ -50,9 +47,7 @@
           }
         ]
       },
-      "uses": [
-        "Enhanced allotment patch protection"
-      ]
+      "uses": ["Enhanced allotment patch protection"]
     },
     "ultracompost": {
       "id": "ultracompost",
@@ -68,9 +63,7 @@
         "available": false,
         "locations": []
       },
-      "uses": [
-        "Premium allotment patch protection"
-      ]
+      "uses": ["Premium allotment patch protection"]
     },
     "jute_fibre": {
       "id": "jute_fibre",
@@ -92,9 +85,7 @@
           }
         ]
       },
-      "uses": [
-        "Sweetcorn protection payment"
-      ]
+      "uses": ["Sweetcorn protection payment"]
     },
     "apple": {
       "id": "apple",
@@ -128,9 +119,7 @@
         "containerSize": 5,
         "containerItemId": 5386
       },
-      "uses": [
-        "Strawberry protection payment"
-      ]
+      "uses": ["Strawberry protection payment"]
     },
     "curry_leaf": {
       "id": "curry_leaf",
@@ -157,9 +146,7 @@
           }
         ]
       },
-      "uses": [
-        "Watermelon protection payment"
-      ]
+      "uses": ["Watermelon protection payment"]
     },
     "jangerberry": {
       "id": "jangerberry",
@@ -181,9 +168,7 @@
           }
         ]
       },
-      "uses": [
-        "Snape grass protection payment"
-      ]
+      "uses": ["Snape grass protection payment"]
     },
     "barley_malt": {
       "id": "barley_malt",
@@ -205,9 +190,7 @@
           }
         ]
       },
-      "uses": [
-        "Jute protection payment"
-      ]
+      "uses": ["Jute protection payment"]
     },
     "sack_of_potatoes": {
       "id": "sack_of_potatoes",
@@ -224,9 +207,7 @@
         "quantity": 10,
         "emptyContainer": "empty_sack"
       },
-      "uses": [
-        "Crop protection payments"
-      ]
+      "uses": ["Crop protection payments"]
     },
     "sack_of_onions": {
       "id": "sack_of_onions",
@@ -243,9 +224,7 @@
         "quantity": 10,
         "emptyContainer": "empty_sack"
       },
-      "uses": [
-        "Crop protection payments"
-      ]
+      "uses": ["Crop protection payments"]
     },
     "sack_of_cabbages": {
       "id": "sack_of_cabbages",
@@ -262,9 +241,7 @@
         "quantity": 10,
         "emptyContainer": "empty_sack"
       },
-      "uses": [
-        "Crop protection payments"
-      ]
+      "uses": ["Crop protection payments"]
     },
     "basket_of_tomatoes": {
       "id": "basket_of_tomatoes",
@@ -281,9 +258,7 @@
         "quantity": 5,
         "emptyContainer": "empty_basket"
       },
-      "uses": [
-        "Crop protection payments"
-      ]
+      "uses": ["Crop protection payments"]
     },
     "basket_of_apples": {
       "id": "basket_of_apples",
@@ -300,9 +275,7 @@
         "quantity": 5,
         "emptyContainer": "empty_basket"
       },
-      "uses": [
-        "Crop protection payments"
-      ]
+      "uses": ["Crop protection payments"]
     }
   }
 }

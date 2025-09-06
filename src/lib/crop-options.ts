@@ -17,27 +17,29 @@ export interface CropOption {
 export function getCropOptions(): CropOption[] {
   const allCrops = getAllCrops();
 
-  return allCrops.map(crop => ({
-    value: crop.id,
-    label: crop.name,
-    level: crop.farmingLevel,
-    growthTime: crop.growthTime
-  })).sort((a, b) => {
-    // Sort by farming level, then by name
-    if (a.level !== b.level) {
-      return a.level - b.level;
-    }
-    return a.label.localeCompare(b.label);
-  });
+  return allCrops
+    .map((crop) => ({
+      value: crop.id,
+      label: crop.name,
+      level: crop.farmingLevel,
+      growthTime: crop.growthTime,
+    }))
+    .sort((a, b) => {
+      // Sort by farming level, then by name
+      if (a.level !== b.level) {
+        return a.level - b.level;
+      }
+      return a.label.localeCompare(b.label);
+    });
 }
 
 /**
  * Get crop options formatted for Mantine Select component
  */
 export function getCropSelectData() {
-  return getCropOptions().map(crop => ({
+  return getCropOptions().map((crop) => ({
     value: crop.value,
-    label: `${crop.label} (Level ${crop.level})`
+    label: `${crop.label} (Level ${crop.level})`,
   }));
 }
 

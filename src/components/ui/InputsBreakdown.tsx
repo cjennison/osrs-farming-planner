@@ -24,10 +24,13 @@ import type {
   YieldStrategy,
 } from "@/lib/calculators/dependency-calculator";
 import { getCropById } from "@/lib/farming-data-simple";
-import { getPurchasableItemById, getPurchasableItemByName } from "@/lib/purchasable-items";
+import {
+  getPurchasableItemById,
+  getPurchasableItemByName,
+} from "@/lib/purchasable-items";
 
 interface InputItem {
-  type: 'seed' | 'purchase';
+  type: "seed" | "purchase";
   name: string;
   quantity: number;
   image: string;
@@ -46,7 +49,7 @@ export function InputsBreakdown({
   yieldStrategy,
 }: InputsBreakdownProps) {
   const [opened, setOpened] = useState(true);
-    // Calculate required inputs based on calculation result
+  // Calculate required inputs based on calculation result
   const requiredInputs: InputItem[] = [];
 
   // Add seeds for each crop
@@ -56,10 +59,12 @@ export function InputsBreakdown({
       if (cropData) {
         const seedsNeeded = requirement.patches * (cropData.seedsPerPatch || 1);
         requiredInputs.push({
-          type: 'seed',
+          type: "seed",
           name: cropData.seedName || `${cropData.name} seed`,
           quantity: seedsNeeded,
-          image: cropData.images?.seed || "https://oldschool.runescape.wiki/images/0/0a/Seed_placeholder.png",
+          image:
+            cropData.images?.seed ||
+            "https://oldschool.runescape.wiki/images/0/0a/Seed_placeholder.png",
           crop: cropData.name,
           link: cropData.wikiUrl,
         });
@@ -73,15 +78,19 @@ export function InputsBreakdown({
       // Clean the crop name by removing " (purchasable)" suffix
       const cleanCropName = step.crop.replace(" (purchasable)", "").trim();
 
-            // Try to find the purchasable item by name or alias
+      // Try to find the purchasable item by name or alias
       let purchasableItem = getPurchasableItemByName(cleanCropName);
 
-      const itemName = purchasableItem?.name || (cleanCropName.charAt(0).toUpperCase() + cleanCropName.slice(1));
-      const itemImage = purchasableItem?.images?.item || "https://oldschool.runescape.wiki/images/0/0a/Placeholder_item.png";
+      const itemName =
+        purchasableItem?.name ||
+        cleanCropName.charAt(0).toUpperCase() + cleanCropName.slice(1);
+      const itemImage =
+        purchasableItem?.images?.item ||
+        "https://oldschool.runescape.wiki/images/0/0a/Placeholder_item.png";
       const itemLink = purchasableItem?.wikiUrl;
 
       requiredInputs.push({
-        type: 'purchase',
+        type: "purchase",
         name: itemName,
         quantity: step.purchaseQuantity,
         image: itemImage,
@@ -98,8 +107,13 @@ export function InputsBreakdown({
           <Text fw={500} c="sage.7">
             Required Inputs
           </Text>
-          <Text size="xs" c="dimmed" style={{ fontStyle: 'italic' }}>
-            Click items with <IconExternalLink size={10} style={{ display: 'inline', verticalAlign: 'middle' }} /> to view on OSRS Wiki
+          <Text size="xs" c="dimmed" style={{ fontStyle: "italic" }}>
+            Click items with{" "}
+            <IconExternalLink
+              size={10}
+              style={{ display: "inline", verticalAlign: "middle" }}
+            />{" "}
+            to view on OSRS Wiki
           </Text>
         </Stack>
         <ActionIcon variant="subtle" onClick={() => setOpened(!opened)}>
@@ -114,8 +128,9 @@ export function InputsBreakdown({
       <Collapse in={opened}>
         <Stack gap="xs">
           {requiredInputs.map((input, index) => {
-            const isPurchasableWithLink = input.type === 'purchase' && input.link;
-            const isSeedWithLink = input.type === 'seed' && input.link;
+            const isPurchasableWithLink =
+              input.type === "purchase" && input.link;
+            const isSeedWithLink = input.type === "seed" && input.link;
             const hasLink = isPurchasableWithLink || isSeedWithLink;
 
             const content = (
@@ -130,20 +145,34 @@ export function InputsBreakdown({
                 />
                 <Stack gap={2} flex={1}>
                   <Group gap="xs">
-                    {input.type === 'seed' ? (
-                      <IconSeeding size={16} style={{ color: "var(--mantine-color-green-7)" }} />
+                    {input.type === "seed" ? (
+                      <IconSeeding
+                        size={16}
+                        style={{ color: "var(--mantine-color-green-7)" }}
+                      />
                     ) : (
-                      <IconShoppingCart size={16} style={{ color: "var(--mantine-color-blue-7)" }} />
+                      <IconShoppingCart
+                        size={16}
+                        style={{ color: "var(--mantine-color-blue-7)" }}
+                      />
                     )}
                     <Text fw={500} size="sm">
                       {input.name}
                     </Text>
                     {(isPurchasableWithLink || isSeedWithLink) && (
-                      <IconExternalLink size={12} style={{ color: input.type === 'seed' ? "var(--mantine-color-green-6)" : "var(--mantine-color-blue-6)" }} />
+                      <IconExternalLink
+                        size={12}
+                        style={{
+                          color:
+                            input.type === "seed"
+                              ? "var(--mantine-color-green-6)"
+                              : "var(--mantine-color-blue-6)",
+                        }}
+                      />
                     )}
                     <Badge
                       variant="filled"
-                      color={input.type === 'seed' ? 'green' : 'blue'}
+                      color={input.type === "seed" ? "green" : "blue"}
                       size="sm"
                     >
                       {input.quantity}
@@ -167,19 +196,29 @@ export function InputsBreakdown({
               <Paper
                 key={`${input.name}-${index}`}
                 p="md"
-                bg={input.type === 'seed' ? 'green.0' : 'blue.0'}
+                bg={input.type === "seed" ? "green.0" : "blue.0"}
                 style={{
                   borderRadius: 6,
-                  cursor: hasLink ? 'pointer' : 'default',
-                  transition: 'transform 0.1s ease',
+                  cursor: hasLink ? "pointer" : "default",
+                  transition: "transform 0.1s ease",
                 }}
-                onClick={hasLink ? () => window.open(input.link, '_blank') : undefined}
-                onMouseEnter={hasLink ? (e) => {
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                } : undefined}
-                onMouseLeave={hasLink ? (e) => {
-                  e.currentTarget.style.transform = 'translateY(0px)';
-                } : undefined}
+                onClick={
+                  hasLink ? () => window.open(input.link, "_blank") : undefined
+                }
+                onMouseEnter={
+                  hasLink
+                    ? (e) => {
+                        e.currentTarget.style.transform = "translateY(-1px)";
+                      }
+                    : undefined
+                }
+                onMouseLeave={
+                  hasLink
+                    ? (e) => {
+                        e.currentTarget.style.transform = "translateY(0px)";
+                      }
+                    : undefined
+                }
               >
                 {content}
               </Paper>

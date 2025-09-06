@@ -2,7 +2,10 @@
 // Based on official OSRS Wiki protection payment requirements
 
 import { getAllCrops, getCropById } from "../farming-data-simple";
-import { isPurchasableItem, getPurchasableItemByName } from "../purchasable-items";
+import {
+  isPurchasableItem,
+  getPurchasableItemByName,
+} from "../purchasable-items";
 
 export interface CropPayment {
   crop: string;
@@ -97,9 +100,7 @@ function convertToCropData(crop: any): CropData {
           crop: crop.protection.item, // Use the original item name, not mapped to crop ID
           quantity: crop.protection.quantity, // Now represents actual items needed
           note:
-            crop.protection.type === "item"
-              ? "Item payment"
-              : "Crop payment",
+            crop.protection.type === "item" ? "Item payment" : "Crop payment",
         }
       : undefined,
   };

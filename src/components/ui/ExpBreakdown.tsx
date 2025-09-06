@@ -100,7 +100,10 @@ export function ExpBreakdown({ result, yieldStrategy }: ExpBreakdownProps) {
         onClick={() => setOpened(!opened)}
       >
         <Group gap="sm">
-          <IconStar size={20} style={{ color: "var(--mantine-color-yellow-6)" }} />
+          <IconStar
+            size={20}
+            style={{ color: "var(--mantine-color-yellow-6)" }}
+          />
           <Title order={4} c="var(--mantine-color-text)">
             Experience Breakdown
           </Title>
@@ -125,33 +128,48 @@ export function ExpBreakdown({ result, yieldStrategy }: ExpBreakdownProps) {
             <Grid.Col span={4}>
               <Card bg="var(--mantine-color-blue-0)" p="sm" radius="sm">
                 <Group gap="xs">
-                  <IconSeeding size={16} style={{ color: "var(--mantine-color-blue-6)" }} />
+                  <IconSeeding
+                    size={16}
+                    style={{ color: "var(--mantine-color-blue-6)" }}
+                  />
                   <Text size="sm" fw={500} c="blue.6">
                     Planting
                   </Text>
                 </Group>
                 <Text size="lg" fw={600} c="blue.7">
-                  <NumberFormatter value={totalPlantingExp} thousandSeparator="," />
+                  <NumberFormatter
+                    value={totalPlantingExp}
+                    thousandSeparator=","
+                  />
                 </Text>
               </Card>
             </Grid.Col>
             <Grid.Col span={4}>
               <Card bg="var(--mantine-color-green-0)" p="sm" radius="sm">
                 <Group gap="xs">
-                  <IconStar size={16} style={{ color: "var(--mantine-color-green-6)" }} />
+                  <IconStar
+                    size={16}
+                    style={{ color: "var(--mantine-color-green-6)" }}
+                  />
                   <Text size="sm" fw={500} c="green.6">
                     Harvesting
                   </Text>
                 </Group>
                 <Text size="lg" fw={600} c="green.7">
-                  <NumberFormatter value={totalHarvestingExp} thousandSeparator="," />
+                  <NumberFormatter
+                    value={totalHarvestingExp}
+                    thousandSeparator=","
+                  />
                 </Text>
               </Card>
             </Grid.Col>
             <Grid.Col span={4}>
               <Card bg="var(--mantine-color-yellow-0)" p="sm" radius="sm">
                 <Group gap="xs">
-                  <IconStar size={16} style={{ color: "var(--mantine-color-yellow-6)" }} />
+                  <IconStar
+                    size={16}
+                    style={{ color: "var(--mantine-color-yellow-6)" }}
+                  />
                   <Text size="sm" fw={500} c="yellow.6">
                     Total XP
                   </Text>
@@ -187,27 +205,43 @@ export function ExpBreakdown({ result, yieldStrategy }: ExpBreakdownProps) {
                     </Badge>
                   </Group>
                   <Badge color="yellow" variant="light">
-                    <NumberFormatter value={crop.totalExp} thousandSeparator="," /> XP
+                    <NumberFormatter
+                      value={crop.totalExp}
+                      thousandSeparator=","
+                    />{" "}
+                    XP
                   </Badge>
                 </Group>
 
                 <Grid>
                   <Grid.Col span={4}>
-                    <Text size="xs" c="dimmed">Planting</Text>
+                    <Text size="xs" c="dimmed">
+                      Planting
+                    </Text>
                     <Text size="sm" fw={500} c="blue.6">
-                      {crop.plantingExp} × {crop.quantity} = {" "}
-                      <NumberFormatter value={crop.totalPlantingExp} thousandSeparator="," />
+                      {crop.plantingExp} × {crop.quantity} ={" "}
+                      <NumberFormatter
+                        value={crop.totalPlantingExp}
+                        thousandSeparator=","
+                      />
                     </Text>
                   </Grid.Col>
                   <Grid.Col span={4}>
-                    <Text size="xs" c="dimmed">Harvesting</Text>
+                    <Text size="xs" c="dimmed">
+                      Harvesting
+                    </Text>
                     <Text size="sm" fw={500} c="green.6">
-                      {crop.harvestExp} × {crop.totalHarvests} = {" "}
-                      <NumberFormatter value={crop.totalHarvestExp} thousandSeparator="," />
+                      {crop.harvestExp} × {crop.totalHarvests} ={" "}
+                      <NumberFormatter
+                        value={crop.totalHarvestExp}
+                        thousandSeparator=","
+                      />
                     </Text>
                   </Grid.Col>
                   <Grid.Col span={4}>
-                    <Text size="xs" c="dimmed">Expected Harvests</Text>
+                    <Text size="xs" c="dimmed">
+                      Expected Harvests
+                    </Text>
                     <Text size="sm" fw={500} c="var(--mantine-color-text)">
                       {crop.totalHarvests} total
                     </Text>

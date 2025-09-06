@@ -41,7 +41,12 @@ export function getHerbCrops(): any[] {
  * Get all crops (allotments + flowers + hops + herbs)
  */
 export function getAllCrops(): any[] {
-  return [...getAllotmentCrops(), ...getFlowerCrops(), ...getHopsCrops(), ...getHerbCrops()];
+  return [
+    ...getAllotmentCrops(),
+    ...getFlowerCrops(),
+    ...getHopsCrops(),
+    ...getHerbCrops(),
+  ];
 }
 
 /**
@@ -54,7 +59,9 @@ export function getCropById(id: string): any | undefined {
 /**
  * Get crops by type
  */
-export function getCropsByType(type: "allotment" | "flower" | "hops" | "herb"): any[] {
+export function getCropsByType(
+  type: "allotment" | "flower" | "hops" | "herb",
+): any[] {
   if (type === "allotment") return getAllotmentCrops();
   if (type === "flower") return getFlowerCrops();
   if (type === "hops") return getHopsCrops();

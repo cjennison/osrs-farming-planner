@@ -29,7 +29,12 @@ const CROP_COUNTS = getCropCounts();
 // Crop type filter options
 const CROP_TYPE_FILTERS = [
   { value: "all", label: "All Crops", icon: "🌱", count: CROP_COUNTS.all },
-  { value: "allotment", label: "Allotments", icon: "🥔", count: CROP_COUNTS.allotment },
+  {
+    value: "allotment",
+    label: "Allotments",
+    icon: "🥔",
+    count: CROP_COUNTS.allotment,
+  },
   { value: "flower", label: "Flowers", icon: "🌸", count: CROP_COUNTS.flower },
   { value: "herb", label: "Herbs", icon: "🌿", count: CROP_COUNTS.herb },
   { value: "hops", label: "Hops", icon: "🍺", count: CROP_COUNTS.hops },
@@ -105,17 +110,21 @@ export function CalculatorInputs({
     }
 
     // Get crops of the selected type
-    const cropsOfType = getCropsByType(selectedCropType as "allotment" | "flower" | "hops" | "herb");
-    const cropIds = new Set(cropsOfType.map(crop => crop.id));
+    const cropsOfType = getCropsByType(
+      selectedCropType as "allotment" | "flower" | "hops" | "herb",
+    );
+    const cropIds = new Set(cropsOfType.map((crop) => crop.id));
 
     // Filter the select data to only include crops of the selected type
-    return CROP_SELECT_DATA.filter(option => cropIds.has(option.value));
+    return CROP_SELECT_DATA.filter((option) => cropIds.has(option.value));
   }, [selectedCropType]);
 
   // Reset target crop when filter changes and current crop is not in filtered results
   useEffect(() => {
     if (targetCrop) {
-      const isTargetCropInFilter = filteredCropOptions.some(option => option.value === targetCrop);
+      const isTargetCropInFilter = filteredCropOptions.some(
+        (option) => option.value === targetCrop,
+      );
       if (!isTargetCropInFilter) {
         setTargetCrop("");
       }
@@ -150,10 +159,7 @@ export function CalculatorInputs({
           <Text size="sm" fw={500}>
             Filter by Crop Type
           </Text>
-          <Chip.Group
-            value={selectedCropType}
-            onChange={handleCropTypeChange}
-          >
+          <Chip.Group value={selectedCropType} onChange={handleCropTypeChange}>
             <Group gap="xs">
               {CROP_TYPE_FILTERS.map((filter) => (
                 <Chip
@@ -173,7 +179,9 @@ export function CalculatorInputs({
           key={selectedCropType} // Force remount when filter changes
           label={
             <Group gap="xs" align="center">
-              <Text size="sm" fw={500}>Target Crop</Text>
+              <Text size="sm" fw={500}>
+                Target Crop
+              </Text>
               {selectedCropType !== "all" && (
                 <Badge size="sm" variant="light" color="blue">
                   {filteredCropOptions.length} available

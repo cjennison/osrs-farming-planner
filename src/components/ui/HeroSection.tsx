@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Container,
@@ -9,13 +9,9 @@ import {
   Group,
   SimpleGrid,
   Box,
-} from '@mantine/core';
-import {
-  IconCalculator,
-  IconMap,
-  IconPlant,
-} from '@tabler/icons-react';
-import Link from 'next/link';
+} from "@mantine/core";
+import { IconCalculator, IconMap, IconPlant } from "@tabler/icons-react";
+import Link from "next/link";
 
 export function HeroSection() {
   return (
@@ -34,12 +30,7 @@ export function HeroSection() {
           </Stack>
 
           {/* Tool Navigation */}
-          <SimpleGrid
-            cols={{ base: 1, sm: 3 }}
-            spacing="md"
-            w="100%"
-            maw={600}
-          >
+          <SimpleGrid cols={{ base: 1, sm: 3 }} spacing="md" w="100%" maw={600}>
             <Button
               component={Link}
               href="/planner"

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   AppShell,
@@ -9,9 +9,15 @@ import {
   useMantineColorScheme,
   Container,
   Button,
-} from '@mantine/core';
-import { IconSun, IconMoon, IconPlant, IconCalculator, IconMap } from '@tabler/icons-react';
-import Link from 'next/link';
+} from "@mantine/core";
+import {
+  IconSun,
+  IconMoon,
+  IconPlant,
+  IconCalculator,
+  IconMap,
+} from "@tabler/icons-react";
+import Link from "next/link";
 
 interface AppHeaderProps {
   children: React.ReactNode;
@@ -21,13 +27,10 @@ export function AppHeader({ children }: AppHeaderProps) {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
 
   return (
-    <AppShell
-      header={{ height: 70 }}
-      padding="md"
-    >
+    <AppShell header={{ height: 70 }} padding="md">
       <AppShell.Header
         style={{
-          borderBottom: '1px solid var(--mantine-color-gray-3)',
+          borderBottom: "1px solid var(--mantine-color-gray-3)",
         }}
       >
         <Container size="xl" h="100%">
@@ -38,17 +41,17 @@ export function AppHeader({ children }: AppHeaderProps) {
               href="/"
               variant="subtle"
               p={0}
-              style={{ height: 'auto' }}
+              style={{ height: "auto" }}
             >
               <Group gap="sm">
                 <IconPlant
                   size={24}
-                  style={{ color: 'var(--mantine-color-sage-6)' }}
+                  style={{ color: "var(--mantine-color-sage-6)" }}
                 />
                 <Title
                   order={3}
                   c="sage.7"
-                  style={{ fontSize: '1.25rem', lineHeight: 1.2 }}
+                  style={{ fontSize: "1.25rem", lineHeight: 1.2 }}
                 >
                   OSRS Farming Planner
                 </Title>
@@ -93,7 +96,7 @@ export function AppHeader({ children }: AppHeaderProps) {
               size="lg"
               aria-label="Toggle color scheme"
             >
-              {colorScheme === 'dark' ? (
+              {colorScheme === "dark" ? (
                 <IconSun size={18} />
               ) : (
                 <IconMoon size={18} />
@@ -103,9 +106,7 @@ export function AppHeader({ children }: AppHeaderProps) {
         </Container>
       </AppShell.Header>
 
-      <AppShell.Main>
-        {children}
-      </AppShell.Main>
+      <AppShell.Main>{children}</AppShell.Main>
     </AppShell>
   );
 }

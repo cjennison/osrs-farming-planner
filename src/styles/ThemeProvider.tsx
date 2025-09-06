@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { MantineProvider, ColorSchemeScript, createTheme } from '@mantine/core';
-import { Notifications } from '@mantine/notifications';
-import { theme } from './theme';
+import { MantineProvider, ColorSchemeScript, createTheme } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
+import { theme } from "./theme";
 
 // Import Mantine core styles
-import '@mantine/core/styles.css';
-import '@mantine/notifications/styles.css';
-import '@mantine/dates/styles.css';
+import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
+import "@mantine/dates/styles.css";
 
 interface ThemeProviderProps {
   children: React.ReactNode;

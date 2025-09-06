@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { AppHeader } from "@/components/layout/AppHeader";
 import { FarmingCalculator } from "@/components/ui/FarmingCalculator";

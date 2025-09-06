@@ -53,18 +53,23 @@ export function getAllPurchasableItems(): PurchasableItem[] {
 /**
  * Get a purchasable item by ID
  */
-export function getPurchasableItemById(id: string): PurchasableItem | undefined {
+export function getPurchasableItemById(
+  id: string,
+): PurchasableItem | undefined {
   return database.items[id];
 }
 
 /**
  * Get a purchasable item by name or alias
  */
-export function getPurchasableItemByName(name: string): PurchasableItem | undefined {
+export function getPurchasableItemByName(
+  name: string,
+): PurchasableItem | undefined {
   const normalizedName = name.toLowerCase();
-  return Object.values(database.items).find(item =>
-    item.name.toLowerCase() === normalizedName ||
-    item.aliases?.some(alias => alias.toLowerCase() === normalizedName)
+  return Object.values(database.items).find(
+    (item) =>
+      item.name.toLowerCase() === normalizedName ||
+      item.aliases?.some((alias) => alias.toLowerCase() === normalizedName),
   );
 }
 
@@ -99,8 +104,12 @@ export function mapItemToCrop(itemName: string): string {
 /**
  * Get purchasable items by category
  */
-export function getPurchasableItemsByCategory(category: string): PurchasableItem[] {
-  return Object.values(database.items).filter(item => item.category === category);
+export function getPurchasableItemsByCategory(
+  category: string,
+): PurchasableItem[] {
+  return Object.values(database.items).filter(
+    (item) => item.category === category,
+  );
 }
 
 /**

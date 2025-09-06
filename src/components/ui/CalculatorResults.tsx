@@ -53,7 +53,10 @@ export function CalculatorResults({
   targetCrop,
 }: CalculatorResultsProps) {
   // Helper function to calculate total experience
-  const calculateTotalExperience = (result: CalculationResult, yieldStrategy: YieldStrategy): number => {
+  const calculateTotalExperience = (
+    result: CalculationResult,
+    yieldStrategy: YieldStrategy,
+  ): number => {
     let totalPlantingExp = 0;
     let totalHarvestingExp = 0;
 
@@ -161,9 +164,9 @@ export function CalculatorResults({
                     Total EXP
                   </Text>
                   <Text size="xl" fw={700} c="blue.7">
-                    <NumberFormatter 
-                      value={calculateTotalExperience(result, yieldStrategy)} 
-                      thousandSeparator="," 
+                    <NumberFormatter
+                      value={calculateTotalExperience(result, yieldStrategy)}
+                      thousandSeparator=","
                     />
                   </Text>
                 </Stack>
@@ -195,18 +198,12 @@ export function CalculatorResults({
           {/* Inputs Breakdown */}
           <Divider />
 
-          <InputsBreakdown
-            result={result}
-            yieldStrategy={yieldStrategy}
-          />
+          <InputsBreakdown result={result} yieldStrategy={yieldStrategy} />
 
           {/* Experience Breakdown */}
           <Divider />
 
-          <ExpBreakdown
-            result={result}
-            yieldStrategy={yieldStrategy}
-          />
+          <ExpBreakdown result={result} yieldStrategy={yieldStrategy} />
 
           {/* Yield Information */}
           <Divider />

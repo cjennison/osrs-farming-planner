@@ -11,7 +11,9 @@ body {
 }
 
 /* Ensure full height */
-html, body, #__next {
+html,
+body,
+#__next {
   height: 100%;
 }
 
@@ -61,7 +63,8 @@ html, body, #__next {
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {

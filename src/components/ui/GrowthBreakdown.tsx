@@ -70,57 +70,57 @@ export function GrowthBreakdown({
                       width: "100%",
                     }}
                   >
-                  <Badge variant="filled" color="sage" size="lg">
-                    {result.breakdown.length - step.level}
-                  </Badge>
-                <Stack gap="xs" flex={1}>
-                  <Group gap="xs">
-                    <Text fw={500} tt="capitalize">
-                      {step.crop}
-                    </Text>
-                    {isPurchasable ? (
-                      <Badge size="xs" variant="light" color="blue">
-                        {step.purchaseQuantity} needed
-                      </Badge>
-                    ) : (
-                      <>
-                        <Badge size="xs" variant="light">
-                          {patchesNeeded} patches
-                        </Badge>
-                        <Badge size="xs" variant="outline" c="dimmed">
-                          {totalYield.toFixed(1)} total expected yield
-                        </Badge>
-                      </>
-                    )}
-                    {starting > 0 && (
-                      <Badge size="xs" variant="outline" c="blue">
-                        +{starting} units
-                      </Badge>
-                    )}
+                    <Badge variant="filled" color="sage" size="lg">
+                      {result.breakdown.length - step.level}
+                    </Badge>
+                    <Stack gap="xs" flex={1}>
+                      <Group gap="xs">
+                        <Text fw={500} tt="capitalize">
+                          {step.crop}
+                        </Text>
+                        {isPurchasable ? (
+                          <Badge size="xs" variant="light" color="blue">
+                            {step.purchaseQuantity} needed
+                          </Badge>
+                        ) : (
+                          <>
+                            <Badge size="xs" variant="light">
+                              {patchesNeeded} patches
+                            </Badge>
+                            <Badge size="xs" variant="outline" c="dimmed">
+                              {totalYield.toFixed(1)} total expected yield
+                            </Badge>
+                          </>
+                        )}
+                        {starting > 0 && (
+                          <Badge size="xs" variant="outline" c="blue">
+                            +{starting} units
+                          </Badge>
+                        )}
+                      </Group>
+                      <Group gap="xs">
+                        <IconShield
+                          size={14}
+                          style={{ color: "var(--mantine-color-blue-6)" }}
+                        />
+                        <Text size="xs" c="dimmed">
+                          {step.purpose}
+                        </Text>
+                      </Group>
+                    </Stack>
                   </Group>
-                  <Group gap="xs">
-                    <IconShield
-                      size={14}
-                      style={{ color: "var(--mantine-color-blue-6)" }}
+                  {!isLastStep && (
+                    <IconArrowUp
+                      size={20}
+                      style={{
+                        color: "var(--mantine-color-sage-6)",
+                        opacity: 0.7,
+                      }}
                     />
-                    <Text size="xs" c="dimmed">
-                      {step.purpose}
-                    </Text>
-                  </Group>
-                </Stack>
-              </Group>
-              {!isLastStep && (
-                <IconArrowUp
-                  size={20}
-                  style={{
-                    color: "var(--mantine-color-sage-6)",
-                    opacity: 0.7
-                  }}
-                />
-              )}
+                  )}
                 </Stack>
               );
-          })}
+            })}
         </Stack>
       </Collapse>
     </Stack>

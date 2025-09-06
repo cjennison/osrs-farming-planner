@@ -122,7 +122,6 @@ async function scrapeFarmingData(cropInfo) {
 
     console.log(`   ✅ Structure created for ${cropInfo.name}`);
     return farmingData;
-
   } catch (error) {
     console.error(`   ❌ Error scraping ${cropInfo.name}:`, error.message);
     return null;
@@ -264,7 +263,7 @@ async function main() {
       }
 
       // Be respectful to the server
-      await new Promise(resolve => setTimeout(resolve, CONFIG.delay));
+      await new Promise((resolve) => setTimeout(resolve, CONFIG.delay));
     }
 
     // Step 2: Generate dependencies and yield tables
@@ -277,7 +276,6 @@ async function main() {
     console.log("\n✅ Scraping completed successfully!");
     console.log(`📁 Data saved to: ${CONFIG.dataDir}`);
     console.log(`🌱 Processed ${Object.keys(farmingData).length} crops`);
-
   } catch (error) {
     console.error("\n❌ Scraping failed:", error.message);
     process.exit(1);
