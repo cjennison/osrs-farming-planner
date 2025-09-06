@@ -15,40 +15,11 @@ import {
 } from "@mantine/core";
 import { IconInfoCircle, IconLeaf, IconSeedling } from "@tabler/icons-react";
 import type { YieldStrategy } from "@/lib/calculators/dependency-calculator";
+import { getCropSelectData } from "@/lib/crop-options";
+import type { CropOption } from "@/lib/crop-options";
 
-type CropOption = {
-  value: string;
-  label: string;
-  level: number;
-  growthTime: number;
-};
-
-const CROP_OPTIONS: CropOption[] = [
-  // Allotment crops
-  { value: "potato", label: "Potato", level: 1, growthTime: 80 },
-  { value: "onion", label: "Onion", level: 5, growthTime: 80 },
-  { value: "cabbage", label: "Cabbage", level: 7, growthTime: 80 },
-  { value: "tomato", label: "Tomato", level: 12, growthTime: 80 },
-  { value: "sweetcorn", label: "Sweetcorn", level: 20, growthTime: 80 },
-  { value: "strawberry", label: "Strawberry", level: 31, growthTime: 80 },
-  { value: "watermelon", label: "Watermelon", level: 47, growthTime: 80 },
-  { value: "snape_grass", label: "Snape Grass", level: 61, growthTime: 80 },
-  // Flower crops
-  { value: "marigold", label: "Marigold", level: 2, growthTime: 20 },
-  { value: "rosemary", label: "Rosemary", level: 11, growthTime: 20 },
-  { value: "nasturtium", label: "Nasturtium", level: 24, growthTime: 20 },
-  { value: "woad", label: "Woad", level: 25, growthTime: 20 },
-  { value: "limpwurt", label: "Limpwurt Root", level: 26, growthTime: 20 },
-  { value: "white_lily", label: "White Lily", level: 58, growthTime: 20 },
-  // Hops crops
-  { value: "barley", label: "Barley", level: 3, growthTime: 40 },
-  { value: "hammerstone", label: "Hammerstone", level: 4, growthTime: 40 },
-  { value: "asgarnian", label: "Asgarnian", level: 8, growthTime: 50 },
-  { value: "jute", label: "Jute", level: 13, growthTime: 50 },
-  { value: "yanillian", label: "Yanillian", level: 16, growthTime: 60 },
-  { value: "krandorian", label: "Krandorian", level: 21, growthTime: 70 },
-  { value: "wildblood", label: "Wildblood", level: 28, growthTime: 80 },
-];
+// Get crop options from data files instead of hardcoded array
+const CROP_SELECT_DATA = getCropSelectData();
 
 const COMPOST_OPTIONS = [
   { value: "none", label: "No Compost", bonus: 0 },
@@ -130,10 +101,7 @@ export function CalculatorInputs({
         <Select
           label="Target Crop"
           placeholder="Choose your target crop"
-          data={CROP_OPTIONS.map((crop) => ({
-            value: crop.value,
-            label: `${crop.label} (Level ${crop.level})`,
-          }))}
+          data={CROP_SELECT_DATA}
           value={targetCrop}
           onChange={(value) => setTargetCrop(value || "")}
           searchable

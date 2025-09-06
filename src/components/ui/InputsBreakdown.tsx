@@ -73,31 +73,8 @@ export function InputsBreakdown({
       // Clean the crop name by removing " (purchasable)" suffix
       const cleanCropName = step.crop.replace(" (purchasable)", "").trim();
 
-      // Try to find purchasable item by name or common mappings
+            // Try to find the purchasable item by name or alias
       let purchasableItem = getPurchasableItemByName(cleanCropName);
-
-      // If not found, try common item mappings
-      if (!purchasableItem) {
-        const commonMappings: Record<string, string> = {
-          "compost": "compost",
-          "supercompost": "supercompost",
-          "ultracompost": "ultracompost",
-          "jute fibre": "jute_fibre",
-          "jute fibres": "jute_fibre",
-          "curry leaf": "curry_leaf",
-          "curry leaves": "curry_leaf",
-          "jangerberry": "jangerberry",
-          "jangerberries": "jangerberry",
-          "apple": "apple",
-          "cooking apple": "apple",
-          "barley malt": "barley_malt",
-        };
-
-        const mappedId = commonMappings[cleanCropName.toLowerCase()];
-        if (mappedId) {
-          purchasableItem = getPurchasableItemById(mappedId);
-        }
-      }
 
       const itemName = purchasableItem?.name || (cleanCropName.charAt(0).toUpperCase() + cleanCropName.slice(1));
       const itemImage = purchasableItem?.images?.item || "https://oldschool.runescape.wiki/images/0/0a/Placeholder_item.png";

@@ -2,7 +2,7 @@
 // Based on official OSRS Wiki protection payment requirements
 
 import { getAllCrops, getCropById } from "../farming-data-simple";
-import { mapItemToCrop } from "../purchasable-items";
+import { isPurchasableItem, getPurchasableItemByName } from "../purchasable-items";
 
 export interface CropPayment {
   crop: string;
@@ -113,29 +113,12 @@ function getCropData(cropId: string): CropData | undefined {
   // First try direct crop lookup
   let crop = getCropById(cropId);
 
-  // If not found, check item-to-crop mappings
+  // If not found, check if it's a purchasable item that maps to a crop container
   if (!crop) {
-    const itemToCropMap: Record<string, string> = {
-      // Jute products
-      "jute fibre": "jute",
-      "jute fibres": "jute",
-
-      // Barley products
-      barley_malt: "barley",
-
-      // Container mappings for payments
-      "sack of potatoes": "potato",
-      "sack of onions": "onion",
-      "sack of cabbages": "cabbage",
-      "basket of tomatoes": "tomato",
-      "basket of apples": "apple",
-
-      // Add more mappings as needed
-    };
-
-    const mappedCropId = itemToCropMap[cropId];
-    if (mappedCropId) {
-      crop = getCropById(mappedCropId);
+    const purchasableItem = getPurchasableItemByName(cropId);
+    if (purchasableItem?.containerInfo?.isContainer) {
+      // For container items, try to find the crop by the item ID
+      crop = getCropById(purchasableItem.id);
     }
   }
 
@@ -365,17 +348,7 @@ export function calculateDependencies(
       const paymentNeeded = patchesNeeded * data.protection.quantity;
 
       // Check if the protection item is a purchasable item (not a crop)
-      const purchasableItems = new Set([
-        "compost",
-        "supercompost",
-        "ultracompost",
-        "apple", // for strawberry
-        "curry leaf", // for watermelon
-        "jangerberry", // for snape grass
-        // Add other purchasable items as needed
-      ]);
-
-      if (!purchasableItems.has(data.protection.crop)) {
+      if (!isPurchasableItem(data.protection.crop)) {
         // Only recurse if it's actually a crop, not a purchasable item
         calculateRequirement(
           data.protection.crop,
@@ -405,7 +378,7 @@ export function calculateDependencies(
 
       // Add payment information to the payment crop's requirement (only for actual crops)
       if (
-        !purchasableItems.has(data.protection.crop) &&
+        !isPurchasableItem(data.protection.crop) &&
         requirements[data.protection.crop]
       ) {
         const originalCrop = getCropById(crop);

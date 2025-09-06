@@ -508,7 +508,7 @@
       "protection": {
         "type": "item",
         "quantity": 6,
-        "item": "barley_malt",
+        "item": "barley malt",
         "itemDescription": "barley malt"
       }
     },
@@ -604,6 +604,392 @@
         "item": "nasturtium",
         "itemDescription": "nasturtium"
       }
+    }
+  ],
+  "herbs": [
+    {
+      "id": "guam",
+      "name": "Guam",
+      "type": "herb",
+      "seedId": 5291,
+      "seedName": "Guam seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Guam_seed",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 9,
+      "growthTime": 80,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 23.5,
+      "expBreakdown": {
+        "planting": 11.0,
+        "checkHealth": 0,
+        "harvest": 12.5
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Guam_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/3/34/Grimy_guam_leaf.png"
+      },
+      "baseYield": 3,
+      "protection": null
+    },
+    {
+      "id": "marrentill",
+      "name": "Marrentill",
+      "type": "herb",
+      "seedId": 5292,
+      "seedName": "Marrentill seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Marrentill_seed",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 14,
+      "growthTime": 80,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 28.5,
+      "expBreakdown": {
+        "planting": 13.5,
+        "checkHealth": 0,
+        "harvest": 15.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Marrentill_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/c/cb/Grimy_marrentill.png"
+      },
+      "baseYield": 3,
+      "protection": null
+    },
+    {
+      "id": "tarromin",
+      "name": "Tarromin",
+      "type": "herb",
+      "seedId": 5293,
+      "seedName": "Tarromin seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Tarromin_seed",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 19,
+      "growthTime": 80,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 34.0,
+      "expBreakdown": {
+        "planting": 16.0,
+        "checkHealth": 0,
+        "harvest": 18.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Tarromin_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/1/19/Grimy_tarromin.png"
+      },
+      "baseYield": 3,
+      "protection": null
+    },
+    {
+      "id": "harralander",
+      "name": "Harralander",
+      "type": "herb",
+      "seedId": 5294,
+      "seedName": "Harralander seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Harralander_seed",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 26,
+      "growthTime": 80,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 45.5,
+      "expBreakdown": {
+        "planting": 21.5,
+        "checkHealth": 0,
+        "harvest": 24.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Harralander_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/3/32/Grimy_harralander.png"
+      },
+      "baseYield": 3,
+      "protection": null
+    },
+    {
+      "id": "gout_tuber",
+      "name": "Goutweed",
+      "type": "herb",
+      "seedId": 3261,
+      "seedName": "Gout tuber",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Gout_tuber",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 29,
+      "growthTime": 80,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 150.0,
+      "expBreakdown": {
+        "planting": 105.0,
+        "checkHealth": 0,
+        "harvest": 45.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Gout_tuber_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/4/46/Goutweed.png"
+      },
+      "baseYield": 3,
+      "protection": null
+    },
+    {
+      "id": "ranarr",
+      "name": "Ranarr",
+      "type": "herb",
+      "seedId": 5295,
+      "seedName": "Ranarr seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Ranarr_seed",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 32,
+      "growthTime": 80,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 57.5,
+      "expBreakdown": {
+        "planting": 27.0,
+        "checkHealth": 0,
+        "harvest": 30.5
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Ranarr_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/0/05/Grimy_ranarr_weed.png"
+      },
+      "baseYield": 3,
+      "protection": null
+    },
+    {
+      "id": "toadflax",
+      "name": "Toadflax",
+      "type": "herb",
+      "seedId": 5296,
+      "seedName": "Toadflax seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Toadflax_seed",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 38,
+      "growthTime": 80,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 72.5,
+      "expBreakdown": {
+        "planting": 34.0,
+        "checkHealth": 0,
+        "harvest": 38.5
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Toadflax_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/3/36/Grimy_toadflax.png"
+      },
+      "baseYield": 3,
+      "protection": null
+    },
+    {
+      "id": "irit",
+      "name": "Irit",
+      "type": "herb",
+      "seedId": 5297,
+      "seedName": "Irit seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Irit_seed",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 44,
+      "growthTime": 80,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 91.5,
+      "expBreakdown": {
+        "planting": 43.0,
+        "checkHealth": 0,
+        "harvest": 48.5
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Irit_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/9/97/Grimy_irit_leaf.png"
+      },
+      "baseYield": 3,
+      "protection": null
+    },
+    {
+      "id": "avantoe",
+      "name": "Avantoe",
+      "type": "herb",
+      "seedId": 5298,
+      "seedName": "Avantoe seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Avantoe_seed",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 50,
+      "growthTime": 80,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 116.0,
+      "expBreakdown": {
+        "planting": 54.5,
+        "checkHealth": 0,
+        "harvest": 61.5
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Avantoe_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/2/2a/Grimy_avantoe.png"
+      },
+      "baseYield": 3,
+      "protection": null
+    },
+    {
+      "id": "kwuarm",
+      "name": "Kwuarm",
+      "type": "herb",
+      "seedId": 5299,
+      "seedName": "Kwuarm seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Kwuarm_seed",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 56,
+      "growthTime": 80,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 147.0,
+      "expBreakdown": {
+        "planting": 69.0,
+        "checkHealth": 0,
+        "harvest": 78.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Kwuarm_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/a/ab/Grimy_kwuarm.png"
+      },
+      "baseYield": 3,
+      "protection": null
+    },
+    {
+      "id": "snapdragon",
+      "name": "Snapdragon",
+      "type": "herb",
+      "seedId": 5300,
+      "seedName": "Snapdragon seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Snapdragon_seed",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 62,
+      "growthTime": 80,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 186.0,
+      "expBreakdown": {
+        "planting": 87.5,
+        "checkHealth": 0,
+        "harvest": 98.5
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Snapdragon_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/3/30/Grimy_snapdragon.png"
+      },
+      "baseYield": 3,
+      "protection": null
+    },
+    {
+      "id": "huasca",
+      "name": "Huasca",
+      "type": "herb",
+      "seedId": 29870,
+      "seedName": "Huasca seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Huasca_seed",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 65,
+      "growthTime": 80,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 196.5,
+      "expBreakdown": {
+        "planting": 86.5,
+        "checkHealth": 0,
+        "harvest": 110.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Huasca_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/f/f4/Grimy_huasca.png"
+      },
+      "baseYield": 3,
+      "protection": null
+    },
+    {
+      "id": "cadantine",
+      "name": "Cadantine",
+      "type": "herb",
+      "seedId": 5301,
+      "seedName": "Cadantine seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Cadantine_seed",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 67,
+      "growthTime": 80,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 226.5,
+      "expBreakdown": {
+        "planting": 106.5,
+        "checkHealth": 0,
+        "harvest": 120.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Cadantine_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/4/42/Grimy_cadantine.png"
+      },
+      "baseYield": 3,
+      "protection": null
+    },
+    {
+      "id": "lantadyme",
+      "name": "Lantadyme",
+      "type": "herb",
+      "seedId": 5302,
+      "seedName": "Lantadyme seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Lantadyme_seed",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 73,
+      "growthTime": 80,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 286.0,
+      "expBreakdown": {
+        "planting": 134.5,
+        "checkHealth": 0,
+        "harvest": 151.5
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Lantadyme_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/2/2b/Grimy_lantadyme.png"
+      },
+      "baseYield": 3,
+      "protection": null
+    },
+    {
+      "id": "dwarf_weed",
+      "name": "Dwarf weed",
+      "type": "herb",
+      "seedId": 5303,
+      "seedName": "Dwarf weed seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Dwarf_weed_seed",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 79,
+      "growthTime": 80,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 362.5,
+      "expBreakdown": {
+        "planting": 170.5,
+        "checkHealth": 0,
+        "harvest": 192.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Dwarf_weed_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/3/3c/Grimy_dwarf_weed.png"
+      },
+      "baseYield": 3,
+      "protection": null
+    },
+    {
+      "id": "torstol",
+      "name": "Torstol",
+      "type": "herb",
+      "seedId": 5304,
+      "seedName": "Torstol seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Torstol_seed",
+      "lastUpdated": "2025-09-06T18:30:00.000Z",
+      "farmingLevel": 85,
+      "growthTime": 80,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 424.0,
+      "expBreakdown": {
+        "planting": 199.5,
+        "checkHealth": 0,
+        "harvest": 224.5
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Torstol_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/1/16/Grimy_torstol.png"
+      },
+      "baseYield": 3,
+      "protection": null
     }
   ]
 }
