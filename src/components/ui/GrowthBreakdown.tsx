@@ -110,12 +110,12 @@ export function GrowthBreakdown({
                 </Stack>
               </Group>
               {!isLastStep && (
-                <IconArrowUp 
-                  size={20} 
-                  style={{ 
+                <IconArrowUp
+                  size={20}
+                  style={{
                     color: "var(--mantine-color-sage-6)",
-                    opacity: 0.7 
-                  }} 
+                    opacity: 0.7
+                  }}
                 />
               )}
                 </Stack>

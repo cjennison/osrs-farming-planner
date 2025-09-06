@@ -18,6 +18,8 @@ import type {
 import { CropRequirements } from "./CropRequirements";
 import { ExpectedYields } from "./ExpectedYields";
 import { GrowthBreakdown } from "./GrowthBreakdown";
+import { InputsBreakdown } from "./InputsBreakdown";
+import { ExpBreakdown } from "./ExpBreakdown";
 
 interface CalculatorResultsProps {
   result: CalculationResult | null;
@@ -153,6 +155,22 @@ export function CalculatorResults({
             expandedSections={expandedSections}
             toggleSection={toggleSection}
             formatCompostText={formatCompostText}
+          />
+
+          {/* Inputs Breakdown */}
+          <Divider />
+
+          <InputsBreakdown
+            result={result}
+            yieldStrategy={yieldStrategy}
+          />
+
+          {/* Experience Breakdown */}
+          <Divider />
+
+          <ExpBreakdown
+            result={result}
+            yieldStrategy={yieldStrategy}
           />
         </Stack>
       </Card>

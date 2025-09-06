@@ -22,6 +22,10 @@
         "checkHealth": 0,
         "harvest": 9.5
       },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Potato_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/0/08/Potato.png"
+      },
       "protection": {
         "type": "item",
         "quantity": 2,
@@ -46,6 +50,10 @@
         "planting": 9.5,
         "checkHealth": 0,
         "harvest": 10.5
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Onion_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/e/e6/Onion.png"
       },
       "baseYield": 3,
       "protection": {
@@ -74,6 +82,10 @@
         "checkHealth": 0,
         "harvest": 11.5
       },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Cabbage_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/9/91/Cabbage.png"
+      },
       "baseYield": 3,
       "protection": {
         "type": "crop",
@@ -100,6 +112,10 @@
         "planting": 12.5,
         "checkHealth": 0,
         "harvest": 14.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Tomato_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/f/f4/Tomato.png"
       },
       "baseYield": 3,
       "protection": {
@@ -129,6 +145,10 @@
         "checkHealth": 0,
         "harvest": 19.5
       },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Sweetcorn_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/b/b8/Sweetcorn.png"
+      },
       "baseYield": 3,
       "protection": {
         "type": "item",
@@ -153,6 +173,10 @@
         "planting": 26.0,
         "checkHealth": 0,
         "harvest": 29.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Strawberry_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/4/43/Strawberry.png"
       },
       "baseYield": 4,
       "protection": {
@@ -181,6 +205,10 @@
         "checkHealth": 0,
         "harvest": 54.5
       },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Watermelon_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/9/93/Watermelon.png"
+      },
       "baseYield": 3,
       "protection": {
         "type": "item",
@@ -205,6 +233,10 @@
         "planting": 73.0,
         "checkHealth": 0,
         "harvest": 81.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Snape_grass_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/d/d0/Snape_grass.png"
       },
       "baseYield": 4,
       "protection": {
@@ -233,6 +265,10 @@
         "checkHealth": 0,
         "harvest": 38.5
       },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Marigold_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/4/43/Marigold.png"
+      },
       "baseYield": 1,
       "isFixedYield": true
     },
@@ -252,6 +288,10 @@
         "planting": 12.0,
         "checkHealth": 0,
         "harvest": 54.5
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Rosemary_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/1/19/Rosemary.png"
       },
       "baseYield": 1,
       "isFixedYield": true
@@ -273,6 +313,10 @@
         "checkHealth": 0,
         "harvest": 91.5
       },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Nasturtium_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/3/34/Nasturtium.png"
+      },
       "baseYield": 1,
       "isFixedYield": true
     },
@@ -292,6 +336,10 @@
         "planting": 20.5,
         "checkHealth": 0,
         "harvest": 95.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Woad_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/8/84/Woad_leaf.png"
       },
       "baseYield": 3,
       "isFixedYield": true
@@ -313,6 +361,10 @@
         "checkHealth": 0,
         "harvest": 98.5
       },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Limpwurt_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/1/1f/Limpwurt_root.png"
+      },
       "baseYield": 1
     },
     {
@@ -331,6 +383,10 @@
         "planting": 70.0,
         "checkHealth": 0,
         "harvest": 270.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/White_lily_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/f/f2/White_lily.png"
       },
       "baseYield": 1,
       "isFixedYield": true
@@ -353,6 +409,10 @@
         "planting": 8.5,
         "checkHealth": 0,
         "harvest": 9.5
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Barley_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/0/09/Barley.png"
       },
       "baseYield": 3,
       "protection": {
@@ -379,6 +439,10 @@
         "checkHealth": 0,
         "harvest": 10.0
       },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Hammerstone_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/f/fc/Hammerstone_hops.png"
+      },
       "baseYield": 3,
       "protection": {
         "type": "crop",
@@ -403,6 +467,10 @@
         "planting": 10.9,
         "checkHealth": 0,
         "harvest": 12.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Asgarnian_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/6/64/Asgarnian_hops.png"
       },
       "baseYield": 3,
       "protection": {
@@ -432,6 +500,10 @@
         "checkHealth": 0,
         "harvest": 14.5
       },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Jute_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/c/c1/Jute_fibre.png"
+      },
       "baseYield": 3,
       "protection": {
         "type": "item",
@@ -456,6 +528,10 @@
         "planting": 14.5,
         "checkHealth": 0,
         "harvest": 16.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Yanillian_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/c/c6/Yanillian_hops.png"
       },
       "baseYield": 3,
       "protection": {
@@ -485,6 +561,10 @@
         "checkHealth": 0,
         "harvest": 19.5
       },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Krandorian_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/0/07/Krandorian_hops.png"
+      },
       "baseYield": 3,
       "protection": {
         "type": "crop",
@@ -512,6 +592,10 @@
         "planting": 23.0,
         "checkHealth": 0,
         "harvest": 26.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Wildblood_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/1/1f/Wildblood_hops.png"
       },
       "baseYield": 3,
       "protection": {
