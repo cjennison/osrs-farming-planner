@@ -39,8 +39,16 @@ export interface CalculationResult {
   breakdown: {
     level: number;
     crop: string;
-    patchesNeeded: number;
-    totalYield: number;
+    patchesNeeded: {
+      min: number;
+      average: number;
+      max: number;
+    };
+    totalYield: {
+      min: number;
+      average: number;
+      max: number;
+    };
     purpose: string;
   }[];
   summary: {
@@ -53,6 +61,8 @@ export interface CalculationResult {
 export interface StartingResources {
   [cropId: string]: number;
 }
+
+export type YieldStrategy = 'min' | 'average' | 'max';
 
 // Official OSRS crop protection data
 export const CROP_DATA: { [key: string]: CropData } = {
@@ -226,7 +236,8 @@ export function calculateDependencies(
   targetQuantity: number,
   farmingLevel: number = 99,
   compostType: 'none' | 'compost' | 'supercompost' | 'ultracompost' = 'supercompost',
-  startingResources: StartingResources = {}
+  startingResources: StartingResources = {},
+  yieldStrategy: YieldStrategy = 'average'
 ): CalculationResult {
   const cropData = CROP_DATA[targetCrop];
   if (!cropData) {
@@ -256,8 +267,16 @@ export function calculateDependencies(
         breakdown.push({
           level,
           crop: data.name,
-          patchesNeeded: 0,
-          totalYield: available,
+          patchesNeeded: {
+            min: 0,
+            average: 0,
+            max: 0
+          },
+          totalYield: {
+            min: available,
+            average: available,
+            max: available
+          },
           purpose: `${purpose} (using ${Math.min(available, neededQuantity)} from starting resources)`
         });
       }
@@ -267,9 +286,15 @@ export function calculateDependencies(
     // Calculate yield for this crop
     const cropYield = calculateYield(crop, farmingLevel, compostType);
 
-    // Calculate patches needed (using average yield for realistic planning)
-    const patchesNeeded = Math.ceil(stillNeeded / cropYield.average);
-    const actualYield = patchesNeeded * cropYield.average;
+    // Calculate patches needed based on yield strategy
+    const patchesNeededMin = Math.ceil(stillNeeded / cropYield.min);
+    const patchesNeededAverage = Math.ceil(stillNeeded / cropYield.average);
+    const patchesNeededMax = Math.ceil(stillNeeded / cropYield.max);
+
+    // Use the selected strategy for actual planning
+    const patchesNeeded = yieldStrategy === 'min' ? patchesNeededMin
+                        : yieldStrategy === 'max' ? patchesNeededMax
+                        : patchesNeededAverage;
 
     // Store requirement
     requirements[crop] = {
@@ -278,7 +303,7 @@ export function calculateDependencies(
       totalYield: {
         min: patchesNeeded * cropYield.min,
         max: patchesNeeded * cropYield.max,
-        average: actualYield,
+        average: patchesNeeded * cropYield.average,
       },
       perPatchYield: {
         min: cropYield.min,
@@ -290,8 +315,16 @@ export function calculateDependencies(
     breakdown.push({
       level,
       crop: data.name,
-      patchesNeeded,
-      totalYield: actualYield,
+      patchesNeeded: {
+        min: patchesNeededMin,
+        average: patchesNeededAverage,
+        max: patchesNeededMax
+      },
+      totalYield: {
+        min: patchesNeededMin * cropYield.min,
+        average: patchesNeededAverage * cropYield.average,
+        max: patchesNeededMax * cropYield.max
+      },
       purpose: available > 0
         ? `${purpose} (${stillNeeded} needed, ${available} from starting resources)`
         : purpose

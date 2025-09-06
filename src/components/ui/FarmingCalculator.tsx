@@ -33,7 +33,7 @@ import {
   IconLeaf,
   IconShield
 } from '@tabler/icons-react';
-import { calculateDependencies, type CalculationResult } from '@/lib/calculators/dependency-calculator';
+import { calculateDependencies, type CalculationResult, type YieldStrategy } from '@/lib/calculators/dependency-calculator';
 
 type CropOption = {
   value: string;
@@ -60,11 +60,18 @@ const COMPOST_OPTIONS = [
   { value: 'ultracompost', label: 'Ultracompost', bonus: 3 }
 ];
 
+const YIELD_STRATEGY_OPTIONS = [
+  { value: 'min' as YieldStrategy, label: 'Conservative (Min Yield)', description: 'Plan for worst-case yields' },
+  { value: 'average' as YieldStrategy, label: 'Realistic (Average Yield)', description: 'Plan using expected yields' },
+  { value: 'max' as YieldStrategy, label: 'Optimistic (Max Yield)', description: 'Plan for best-case yields' }
+];
+
 export function FarmingCalculator() {
   const [targetCrop, setTargetCrop] = useState<string>('');
   const [quantity, setQuantity] = useState<number>(1);
   const [farmingLevel, setFarmingLevel] = useState<number>(1);
   const [compostType, setCompostType] = useState<string>('none');
+  const [yieldStrategy, setYieldStrategy] = useState<YieldStrategy>('average');
   const [startingResources, setStartingResources] = useState<Record<string, number>>({});
   const [result, setResult] = useState<CalculationResult | null>(null);
   const [error, setError] = useState<string>('');
@@ -89,7 +96,8 @@ export function FarmingCalculator() {
         quantity,
         farmingLevel,
         compostType as 'none' | 'compost' | 'supercompost' | 'ultracompost',
-        startingResources
+        startingResources,
+        yieldStrategy
       );
       setResult(calculationResult);
       setError('');
@@ -107,7 +115,7 @@ export function FarmingCalculator() {
       setResult(null);
       setError('');
     }
-  }, [targetCrop, quantity, farmingLevel, compostType, startingResources]);
+  }, [targetCrop, quantity, farmingLevel, compostType, startingResources, yieldStrategy]);
 
   const updateStartingResource = (crop: string, amount: number) => {
     setStartingResources(prev => ({
@@ -209,6 +217,18 @@ export function FarmingCalculator() {
                   }))}
                   value={compostType}
                   onChange={(value) => setCompostType(value || 'none')}
+                />
+
+                <Select
+                  label="Yield Strategy"
+                  placeholder="Select planning strategy"
+                  description="Choose your planning approach based on risk tolerance"
+                  data={YIELD_STRATEGY_OPTIONS.map(strategy => ({
+                    value: strategy.value,
+                    label: strategy.label
+                  }))}
+                  value={yieldStrategy}
+                  onChange={(value) => setYieldStrategy((value as YieldStrategy) || 'average')}
                 />
 
                 {/* Starting Resources */}
@@ -357,7 +377,8 @@ export function FarmingCalculator() {
                         <Stack gap="xs">
                           {result.breakdown.map((step, index) => {
                             const starting = startingResources[step.crop] || 0;
-                            const patchesNeeded = step.patchesNeeded;
+                            const patchesNeeded = step.patchesNeeded[yieldStrategy];
+                            const totalYield = step.totalYield[yieldStrategy];
 
                             if (patchesNeeded === 0) return null;
 
@@ -373,7 +394,7 @@ export function FarmingCalculator() {
                                       {patchesNeeded} patches
                                     </Badge>
                                     <Badge size="xs" variant="outline" c="dimmed">
-                                      {step.totalYield.toFixed(1)} total expected yield
+                                      {totalYield.toFixed(1)} total expected yield
                                     </Badge>
                                     {starting > 0 && (
                                       <Badge size="xs" variant="outline" c="blue">
@@ -456,7 +477,19 @@ export function FarmingCalculator() {
                   </Text>
                   {selectedCrop && farmingLevel < selectedCrop.level && (
                     <Alert color="orange" title="Level Requirement">
-                      You need level {selectedCrop.level} farming to grow {selectedCrop.label}.
+                      <Stack gap="sm">
+                        <Text>
+                          You need level {selectedCrop.level} farming to grow {selectedCrop.label}.
+                        </Text>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          color="orange"
+                          onClick={() => setFarmingLevel(selectedCrop.level)}
+                        >
+                          Set farming level to {selectedCrop.level}
+                        </Button>
+                      </Stack>
                     </Alert>
                   )}
                 </Stack>
