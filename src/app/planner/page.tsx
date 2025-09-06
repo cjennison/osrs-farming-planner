@@ -27,7 +27,7 @@ export default function PlannerPage() {
               Farming Planner
             </Title>
             <Text c="dimmed" maw={600}>
-              Plan your complete farming strategy with intelligent crop dependency calculation and optimal timing.
+              Plan farming strategies with crop dependency calculation.
             </Text>
           </Stack>
 
@@ -38,16 +38,15 @@ export default function PlannerPage() {
                 Coming Soon
               </Title>
               <Text c="dimmed">
-                The interactive farming planner is currently under development.
-                This will include crop selection, dependency visualization, and complete farming strategy planning.
+                The farming planner is in development.
               </Text>
               <Text size="sm" c="dimmed">
                 Features in development:
               </Text>
               <Stack gap="xs" align="flex-start">
-                <Text size="sm" c="dimmed">• Interactive crop selector with filtering</Text>
-                <Text size="sm" c="dimmed">• Dependency tree visualization</Text>
-                <Text size="sm" c="dimmed">• Planting timeline optimization</Text>
+                <Text size="sm" c="dimmed">• Crop selector</Text>
+                <Text size="sm" c="dimmed">• Dependency visualization</Text>
+                <Text size="sm" c="dimmed">• Planting timeline</Text>
                 <Text size="sm" c="dimmed">• Resource requirement summary</Text>
                 <Text size="sm" c="dimmed">• Save and share farming plans</Text>
               </Stack>

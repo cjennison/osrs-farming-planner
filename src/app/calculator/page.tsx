@@ -27,7 +27,7 @@ export default function CalculatorPage() {
               Dependency Calculator
             </Title>
             <Text c="dimmed" maw={600}>
-              Calculate exact crop requirements for complex farming chains with multi-level dependencies.
+              Calculate crop requirements for farming chains.
             </Text>
           </Stack>
 
@@ -38,16 +38,15 @@ export default function CalculatorPage() {
                 Coming Soon
               </Title>
               <Text c="dimmed">
-                The dependency calculator is currently under development.
-                This will calculate how many supporting crops you need for your target crops.
+                The dependency calculator is in development.
               </Text>
               <Text size="sm" c="dimmed">
                 Features in development:
               </Text>
               <Stack gap="xs" align="flex-start">
-                <Text size="sm" c="dimmed">• Multi-level dependency calculation</Text>
-                <Text size="sm" c="dimmed">• Farming level yield bonuses</Text>
-                <Text size="sm" c="dimmed">• Alternative payment paths</Text>
+                <Text size="sm" c="dimmed">• Dependency calculation</Text>
+                <Text size="sm" c="dimmed">• Farming level bonuses</Text>
+                <Text size="sm" c="dimmed">• Alternative payments</Text>
                 <Text size="sm" c="dimmed">• Compost and protection effects</Text>
                 <Text size="sm" c="dimmed">• Exact seed requirements</Text>
               </Stack>

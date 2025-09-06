@@ -27,7 +27,7 @@ export default function PatchesPage() {
               Patch Map
             </Title>
             <Text c="dimmed" maw={600}>
-              Interactive map of all farming patches with locations, requirements, and optimal routes.
+              Map of farming patches with locations and requirements.
             </Text>
           </Stack>
 
@@ -38,16 +38,15 @@ export default function PatchesPage() {
                 Coming Soon
               </Title>
               <Text c="dimmed">
-                The interactive patch map is currently under development.
-                This will show all farming patches with detailed information and route optimization.
+                The patch map is in development.
               </Text>
               <Text size="sm" c="dimmed">
                 Features in development:
               </Text>
               <Stack gap="xs" align="flex-start">
-                <Text size="sm" c="dimmed">• Interactive world map with all patches</Text>
-                <Text size="sm" c="dimmed">• Patch requirements and accessibility</Text>
-                <Text size="sm" c="dimmed">• Teleport locations and walking times</Text>
+                <Text size="sm" c="dimmed">• World map with patches</Text>
+                <Text size="sm" c="dimmed">• Patch requirements</Text>
+                <Text size="sm" c="dimmed">• Teleport locations</Text>
                 <Text size="sm" c="dimmed">• Optimal farming route planning</Text>
                 <Text size="sm" c="dimmed">• Protection flower assignments</Text>
               </Stack>

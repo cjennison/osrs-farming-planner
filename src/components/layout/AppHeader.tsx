@@ -33,34 +33,33 @@ export function AppHeader({ children }: AppHeaderProps) {
         <Container size="xl" h="100%">
           <Group justify="space-between" h="100%">
             {/* Logo and Brand */}
-            <Group gap="sm">
-              <IconPlant
-                size={32}
-                style={{ color: 'var(--mantine-color-sage-6)' }}
-              />
-              <div>
+            <Button
+              component={Link}
+              href="/"
+              variant="subtle"
+              p={0}
+              style={{ height: 'auto' }}
+            >
+              <Group gap="sm">
+                <IconPlant
+                  size={24}
+                  style={{ color: 'var(--mantine-color-sage-6)' }}
+                />
                 <Title
                   order={3}
                   c="sage.7"
-                  style={{ fontSize: '1.5rem', lineHeight: 1.2 }}
+                  style={{ fontSize: '1.25rem', lineHeight: 1.2 }}
                 >
                   OSRS Farming Planner
                 </Title>
-                <Text
-                  size="sm"
-                  c="dimmed"
-                  style={{ fontSize: '0.8rem', lineHeight: 1 }}
-                >
-                  Ironman Resource Calculator
-                </Text>
-              </div>
-            </Group>
+              </Group>
+            </Button>
 
             {/* Navigation */}
             <Group gap="xs" visibleFrom="sm">
               <Button
                 component={Link}
-                href="/"
+                href="/planner"
                 variant="subtle"
                 leftSection={<IconPlant size={16} />}
                 c="sage.7"

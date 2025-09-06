@@ -10,23 +10,11 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "OSRS Farming Planner - Ironman Resource Calculator",
-  description: "The ultimate farming assistant for Old School RuneScape Ironmen. Calculate crop dependencies, optimize planting sequences, and plan self-sufficient farming strategies.",
-  keywords: ["OSRS", "Old School RuneScape", "farming", "calculator", "ironman", "planner"],
-  authors: [{ name: "OSRS Farming Planner" }],
+  title: "OSRS Farming Planner",
+  description: "Calculate crop dependencies and plan farming routes for Old School RuneScape.",
+  keywords: ["OSRS", "Old School RuneScape", "farming", "calculator", "planner"],
   viewport: "width=device-width, initial-scale=1",
   robots: "index, follow",
-  openGraph: {
-    title: "OSRS Farming Planner - Ironman Resource Calculator",
-    description: "Calculate complex crop dependencies and optimize your farming strategy for OSRS Ironman mode.",
-    type: "website",
-    locale: "en_US",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "OSRS Farming Planner",
-    description: "Calculate complex crop dependencies and optimize your farming strategy for OSRS Ironman mode.",
-  },
 };
 
 export default function RootLayout({
