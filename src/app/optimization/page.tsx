@@ -33,6 +33,7 @@ export default function OptimizedLevelingPage() {
     hasSecateurs: false,
     kandarinDiary: "none",
     yieldStrategy: "average",
+    xpStrategy: "no-rollover", // Default to no rollover
     excludeFlowers: true, // Default to true as requested
     excludeHerbs: false, // Default to false as requested
     excludeBushes: false, // Default to false for bushes
@@ -103,6 +104,10 @@ export default function OptimizedLevelingPage() {
                 onKandarinDiaryChange={(value) =>
                   handleOptionsChange({ kandarinDiary: value })
                 }
+                xpStrategy={options.xpStrategy || "no-rollover"}
+                onXpStrategyChange={(value) =>
+                  handleOptionsChange({ xpStrategy: value })
+                }
                 excludeFlowers={options.excludeFlowers ?? true}
                 onExcludeFlowersChange={(value) =>
                   handleOptionsChange({ excludeFlowers: value })
@@ -151,43 +156,22 @@ export default function OptimizedLevelingPage() {
               </Stack>
               <Stack gap="xs">
                 <Text size="sm" c="dimmed">
-                  Total Experience
+                  {options.xpStrategy === "rollover"
+                    ? "Total Experience Gained"
+                    : "Total Experience (No Rollover)"}
                 </Text>
                 <Text fw={600} size="lg">
                   {progression.steps
                     .reduce((total, step) => {
-                      // Use the same XP calculation as the dependency calculator
-                      let stepXP = 0;
-
-                      // Calculate XP from all crops in the dependency result
-                      for (const [cropId, requirement] of Object.entries(
-                        step.calculationResult.requirements,
-                      )) {
-                        const cropData = getCropById(cropId);
-                        if (!cropData || requirement.patches === 0) continue;
-
-                        const plantingExpPerPatch =
-                          cropData.expBreakdown?.planting || 0;
-                        const checkHealthExpPerPatch =
-                          cropData.expBreakdown?.checkHealth || 0;
-                        const harvestExpPerItem =
-                          cropData.expBreakdown?.harvest || 0;
-
-                        // Calculate total XP: planting XP + checking XP + (harvest XP per item × average yield per patch)
-                        const plantingExp =
-                          plantingExpPerPatch * requirement.patches;
-                        const checkHealthExp =
-                          checkHealthExpPerPatch * requirement.patches;
-                        const harvestExp =
-                          harvestExpPerItem * requirement.totalYield.average;
-
-                        stepXP += plantingExp + checkHealthExp + harvestExp;
-                      }
-
-                      return total + stepXP;
+                      return total + step.expGained;
                     }, 0)
                     .toLocaleString()}
                 </Text>
+                {options.xpStrategy === "rollover" && (
+                  <Text size="xs" c="dimmed">
+                    Strategy: XP overflow reduces future requirements
+                  </Text>
+                )}
               </Stack>
             </Group>
           </Paper>
@@ -219,9 +203,21 @@ export default function OptimizedLevelingPage() {
                         </Text>
                       </Table.Td>
                       <Table.Td>
-                        <Text size="sm">
-                          {step.expRequired.toLocaleString()}
-                        </Text>
+                        <Stack gap={2}>
+                          <Text size="sm">
+                            {step.expRequired.toLocaleString()}
+                          </Text>
+                          {options.xpStrategy === "rollover" &&
+                            step.expRollover > 0 && (
+                              <Text size="xs" c="dimmed">
+                                (After -
+                                {(
+                                  step.expGained - step.expRequired
+                                ).toLocaleString()}{" "}
+                                rollover)
+                              </Text>
+                            )}
+                        </Stack>
                       </Table.Td>
                       <Table.Td>
                         <Group gap="xs">
@@ -464,42 +460,17 @@ export default function OptimizedLevelingPage() {
                         </Group>
                       </Table.Td>
                       <Table.Td>
-                        <Text size="sm" fw={500} c="green">
-                          +{(() => {
-                            // Use the same XP calculation as the dependency calculator
-                            let totalXP = 0;
-
-                            // Calculate XP from all crops in the dependency result
-                            for (const [cropId, requirement] of Object.entries(
-                              step.calculationResult.requirements,
-                            )) {
-                              const cropData = getCropById(cropId);
-                              if (!cropData || requirement.patches === 0)
-                                continue;
-
-                              const plantingExpPerPatch =
-                                cropData.expBreakdown?.planting || 0;
-                              const checkHealthExpPerPatch =
-                                cropData.expBreakdown?.checkHealth || 0;
-                              const harvestExpPerItem =
-                                cropData.expBreakdown?.harvest || 0;
-
-                              // Calculate total XP: planting XP + checking XP + (harvest XP per item × average yield per patch)
-                              const plantingExp =
-                                plantingExpPerPatch * requirement.patches;
-                              const checkHealthExp =
-                                checkHealthExpPerPatch * requirement.patches;
-                              const harvestExp =
-                                harvestExpPerItem *
-                                requirement.totalYield.average;
-
-                              totalXP +=
-                                plantingExp + checkHealthExp + harvestExp;
-                            }
-
-                            return totalXP.toLocaleString();
-                          })()}
-                        </Text>
+                        <Stack gap={2}>
+                          <Text size="sm" fw={500} c="green">
+                            +{step.expGained.toLocaleString()}
+                          </Text>
+                          {options.xpStrategy === "rollover" &&
+                            step.expRollover > 0 && (
+                              <Text size="xs" c="orange">
+                                {step.expRollover.toLocaleString()} overflow
+                              </Text>
+                            )}
+                        </Stack>
                       </Table.Td>
                     </Table.Tr>
                   ))}

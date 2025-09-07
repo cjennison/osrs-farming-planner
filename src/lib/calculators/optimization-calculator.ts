@@ -19,12 +19,15 @@ import {
   type YieldStrategy,
 } from "./dependency-calculator";
 
+export type XpStrategy = "no-rollover" | "rollover";
+
 export interface CalculationOptions {
   compostType?: "none" | "compost" | "supercompost" | "ultracompost";
   hasAltasSeed?: boolean;
   hasSecateurs?: boolean;
   kandarinDiary?: KandarinDiaryLevel;
   yieldStrategy?: YieldStrategy;
+  xpStrategy?: XpStrategy;
   excludeFlowers?: boolean;
   excludeHerbs?: boolean;
   excludeBushes?: boolean;
@@ -35,6 +38,8 @@ export interface OptimizationStep {
   fromLevel: number;
   toLevel: number;
   expRequired: number;
+  expGained: number; // Total XP gained from this step (may be more than required)
+  expRollover: number; // XP that carries over to next step (only for rollover strategy)
   optimalCrop: {
     id: string;
     name: string;
@@ -64,10 +69,23 @@ export function calculateOptimalProgression(
   const totalSeeds: { [seedId: string]: number } = {};
   const totalPurchasables: { [itemId: string]: number } = {};
 
+  // Track XP rollover for the rollover strategy
+  let rolloverXp = 0;
+
   // Process each level from 1 to 98 (can't go beyond 99)
   for (let currentLevel = 1; currentLevel < 99; currentLevel++) {
     const nextLevel = currentLevel + 1;
-    const expRequired = getXpNeeded(currentLevel, nextLevel);
+    const baseExpRequired = getXpNeeded(currentLevel, nextLevel);
+
+    // Calculate actual XP needed based on strategy
+    let actualExpRequired: number;
+    if (options.xpStrategy === "rollover" && rolloverXp > 0) {
+      // Subtract rollover XP from the required amount
+      actualExpRequired = Math.max(0, baseExpRequired - rolloverXp);
+    } else {
+      // No rollover strategy - need full amount for this level
+      actualExpRequired = baseExpRequired;
+    }
 
     // Find the best crop available at this level
     const optimalCrop = findOptimalCropForLevel(currentLevel, options);
@@ -77,23 +95,37 @@ export function calculateOptimalProgression(
     }
 
     // Find the quantity needed to reach the XP target
-    const { targetQuantity, calculationResult } = findQuantityForXPTarget(
-      optimalCrop.id,
-      expRequired,
-      currentLevel,
-      options,
-    );
+    const { targetQuantity, calculationResult, actualExpGained } =
+      findQuantityForXPTarget(
+        optimalCrop.id,
+        actualExpRequired,
+        currentLevel,
+        options,
+      );
+
+    // Calculate rollover for next step
+    const newRolloverXp =
+      options.xpStrategy === "rollover"
+        ? Math.max(0, actualExpGained - actualExpRequired)
+        : 0;
 
     const step: OptimizationStep = {
       fromLevel: currentLevel,
       toLevel: nextLevel,
-      expRequired,
+      expRequired: actualExpRequired,
+      expGained: actualExpGained,
+      expRollover: newRolloverXp,
       optimalCrop,
       targetQuantity,
       calculationResult,
     };
 
     steps.push(step);
+
+    // Update rollover for next iteration
+    if (options.xpStrategy === "rollover") {
+      rolloverXp = newRolloverXp;
+    }
 
     // Accumulate totals from the calculation result
     calculationResult.breakdown.forEach((breakdownStep) => {
@@ -161,9 +193,39 @@ function findQuantityForXPTarget(
 ): {
   targetQuantity: number;
   calculationResult: CalculationResult;
+  actualExpGained: number;
 } {
   let quantity = 1;
   let result: CalculationResult;
+  let finalTotalXP = 0;
+
+  // If targetXP is 0 (fully covered by rollover), return minimal result
+  if (targetXP <= 0) {
+    result = calculateDependencies(
+      cropId,
+      1,
+      farmingLevel,
+      options.compostType || "none",
+      {}, // startingResources
+      options.yieldStrategy || "average",
+      options.hasSecateurs || false,
+      false, // farmingCape
+      options.hasAltasSeed || false,
+      options.kandarinDiary || "none",
+      "none", // kourendDiary
+    );
+
+    return {
+      targetQuantity: 0,
+      calculationResult: {
+        ...result,
+        requirements: {},
+        breakdown: [],
+        summary: { totalPatches: 0, totalSeeds: 0, estimatedTime: 0 },
+      },
+      actualExpGained: 0,
+    };
+  }
 
   // Keep incrementing quantity until we meet or exceed the XP target
   while (true) {
@@ -199,10 +261,13 @@ function findQuantityForXPTarget(
       }
     });
 
+    finalTotalXP = totalXP;
+
     if (totalXP >= targetXP) {
       return {
         targetQuantity: quantity,
         calculationResult: result,
+        actualExpGained: finalTotalXP,
       };
     }
 

@@ -2,6 +2,7 @@
 
 import { Checkbox, Group, Select, Stack, Text, Title } from "@mantine/core";
 import type { KandarinDiaryLevel } from "@/lib/calculators/dependency-calculator";
+import type { XpStrategy } from "@/lib/calculators/optimization-calculator";
 
 interface OptimizationInputsProps {
   compostType: "none" | "compost" | "supercompost" | "ultracompost";
@@ -14,6 +15,8 @@ interface OptimizationInputsProps {
   onSecateursChange: (value: boolean) => void;
   kandarinDiary: KandarinDiaryLevel;
   onKandarinDiaryChange: (value: KandarinDiaryLevel) => void;
+  xpStrategy: XpStrategy;
+  onXpStrategyChange: (value: XpStrategy) => void;
   excludeFlowers: boolean;
   onExcludeFlowersChange: (value: boolean) => void;
   excludeHerbs: boolean;
@@ -23,6 +26,17 @@ interface OptimizationInputsProps {
   excludeFruitTrees: boolean;
   onExcludeFruitTreesChange: (value: boolean) => void;
 }
+
+const XP_STRATEGY_OPTIONS = [
+  {
+    value: "no-rollover",
+    label: "No Rollover - Full XP per level",
+  },
+  {
+    value: "rollover",
+    label: "Rollover - Use XP overflow",
+  },
+];
 
 const COMPOST_OPTIONS = [
   { value: "none", label: "No Compost" },
@@ -47,6 +61,8 @@ export function OptimizationInputs({
   onSecateursChange,
   kandarinDiary,
   onKandarinDiaryChange,
+  xpStrategy,
+  onXpStrategyChange,
   excludeFlowers,
   onExcludeFlowersChange,
   excludeHerbs,
@@ -97,6 +113,22 @@ export function OptimizationInputs({
           onChange={(event) => onSecateursChange(event.currentTarget.checked)}
         />
       </Group>
+
+      <Title order={4} c="sage.7" mt="md">
+        Experience Strategy
+      </Title>
+
+      <Select
+        label="XP Strategy"
+        description={
+          xpStrategy === "rollover"
+            ? "Excess XP from previous levels reduces future requirements. More efficient but less predictable."
+            : "Calculate XP needed for each level independently. Predictable but may use more crops than necessary."
+        }
+        value={xpStrategy}
+        onChange={(value) => onXpStrategyChange(value as XpStrategy)}
+        data={XP_STRATEGY_OPTIONS}
+      />
 
       <Title order={4} c="sage.7" mt="md">
         Crop Type Exclusions
