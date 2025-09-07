@@ -211,10 +211,63 @@ export function CalculatorInputs({
     }
   }, [filteredCropOptions, targetCrop, setTargetCrop]);
 
+  // Initialize level values when component mounts in level mode
+  useEffect(() => {
+    if (calculationMode === "level") {
+      // Set default farming level if not present
+      if (!farmingLevel || farmingLevel === 0) {
+        setFarmingLevel(1);
+      }
+      // Set default target level if not present
+      if (!targetLevel || targetLevel === 0) {
+        setTargetLevel(farmingLevel > 0 ? farmingLevel + 1 : 2);
+      } else if (targetLevel <= farmingLevel) {
+        // Ensure target level is always at least 1 higher than farming level
+        setTargetLevel(farmingLevel + 1);
+      }
+    }
+  }, [
+    calculationMode,
+    farmingLevel,
+    targetLevel,
+    setFarmingLevel,
+    setTargetLevel,
+  ]);
+
   // Handle crop type filter changes
   const handleCropTypeChange = (value: string | string[]) => {
     const newCropType = Array.isArray(value) ? value[0] || "all" : value;
     setSelectedCropType(newCropType);
+  };
+
+  // Handle calculation mode changes with automatic level adjustments
+  const handleCalculationModeChange = (newMode: CalculationMode) => {
+    setCalculationMode(newMode);
+
+    // When switching to level mode for the first time
+    if (newMode === "level") {
+      // Set default values if not present
+      if (!farmingLevel || farmingLevel === 0) {
+        setFarmingLevel(1);
+      }
+      if (!targetLevel || targetLevel === 0) {
+        setTargetLevel(farmingLevel > 0 ? farmingLevel + 1 : 2);
+      } else if (targetLevel <= farmingLevel) {
+        // Ensure target level is always at least 1 higher than farming level
+        setTargetLevel(farmingLevel + 1);
+      }
+    }
+  };
+
+  // Handle farming level changes with automatic target level adjustment
+  const handleFarmingLevelChange = (newLevel: number) => {
+    const level = newLevel || 1;
+    setFarmingLevel(level);
+
+    // If in level mode and farming level exceeds target level, adjust target
+    if (calculationMode === "level" && level >= targetLevel) {
+      setTargetLevel(level + 1);
+    }
   };
 
   return (
@@ -263,7 +316,7 @@ export function CalculatorInputs({
           <Chip.Group
             value={calculationMode}
             onChange={(value) =>
-              setCalculationMode(
+              handleCalculationModeChange(
                 (Array.isArray(value) ? value[0] : value) as CalculationMode,
               )
             }
@@ -321,7 +374,7 @@ export function CalculatorInputs({
               label="Starting Farming Level"
               placeholder="Your current farming level"
               value={farmingLevel}
-              onChange={(value) => setFarmingLevel(Number(value) || 1)}
+              onChange={(value) => handleFarmingLevelChange(Number(value) || 1)}
               min={1}
               max={98}
               description="Your current farming level (must be high enough to grow the target crop)"

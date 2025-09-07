@@ -211,28 +211,28 @@ export function VariableCropYieldFormula({
                 </Text>
                 <Stack gap="xs">
                   <Text size="xs">
-                    🔢 Base CTS: {baseCtsLow} (low) / {baseCtsHigh} (high)
+                    Base CTS: {baseCtsLow} (low) / {baseCtsHigh} (high)
                   </Text>
                   {(magicSecateurs || farmingCape) && (
                     <Text size="xs">
-                      🛠️ After item bonuses (+{Math.round(itemBonus * 100)}%):{" "}
+                      After item bonuses (+{Math.round(itemBonus * 100)}%):{" "}
                       {itemBoostedCtsLow} / {itemBoostedCtsHigh}
                     </Text>
                   )}
                   {diaryBonus > 0 && (
                     <Text size="xs">
-                      📜 After diary bonus (+{diaryBonus}): {diaryBoostedCtsLow}{" "}
-                      / {diaryBoostedCtsHigh}
+                      After diary bonus (+{diaryBonus}): {diaryBoostedCtsLow} /{" "}
+                      {diaryBoostedCtsHigh}
                     </Text>
                   )}
                   {attasSeed && (
                     <Text size="xs">
-                      🌱 Final CTS (+{Math.round(attasBonus * 100)}%):{" "}
+                      Final CTS (+{Math.round(attasBonus * 100)}%):{" "}
                       {finalCtsLow} / {finalCtsHigh}
                     </Text>
                   )}
                   <Text size="xs" fw={600} color="green">
-                    ✨ Total CTS increase: +{finalCtsLow - baseCtsLow} / +
+                    Total CTS increase: +{finalCtsLow - baseCtsLow} / +
                     {finalCtsHigh - baseCtsHigh}
                   </Text>
                 </Stack>
