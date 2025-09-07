@@ -6,6 +6,8 @@ import type {
   CalculationResult,
   YieldStrategy,
 } from "@/lib/calculators/dependency-calculator";
+import { getCropById } from "@/lib/farming-data-simple";
+import { getPurchasableItemById } from "@/lib/purchasable-items";
 import { SectionHeader } from "./SectionHeader";
 
 interface GrowthBreakdownProps {
@@ -65,8 +67,22 @@ export function GrowthBreakdown({
                     </Badge>
                     <Stack gap="xs" flex={1}>
                       <Group gap="xs">
-                        <Text fw={500} tt="capitalize">
-                          {step.crop}
+                        <Text fw={500}>
+                          {(() => {
+                            if (isPurchasable) {
+                              // Extract the item ID from "item_id (purchasable)" format
+                              const itemId = step.crop
+                                .replace(" (purchasable)", "")
+                                .trim();
+                              const purchasableItem =
+                                getPurchasableItemById(itemId);
+                              return purchasableItem
+                                ? `${purchasableItem.name} (purchasable)`
+                                : step.crop;
+                            } else {
+                              return getCropById(step.crop)?.name || step.crop;
+                            }
+                          })()}
                         </Text>
                         {isPurchasable ? (
                           <Badge size="xs" variant="light" color="blue">

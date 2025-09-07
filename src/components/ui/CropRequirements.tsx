@@ -2,6 +2,7 @@
 
 import { Badge, Collapse, Group, Stack, Text } from "@mantine/core";
 import type { CalculationResult } from "@/lib/calculators/dependency-calculator";
+import { getCropById } from "@/lib/farming-data-simple";
 import { SectionHeader } from "./SectionHeader";
 
 interface CropRequirementsProps {
@@ -31,6 +32,8 @@ export function CropRequirements({
           {Object.entries(result.requirements).map(([crop, requirement]) => {
             const starting = startingResources[crop] || 0;
             const patchesNeeded = requirement.patches;
+            const cropData = getCropById(crop);
+            const displayName = cropData?.name || crop;
 
             return (
               <Group
@@ -41,9 +44,7 @@ export function CropRequirements({
                 style={{ borderRadius: 4 }}
               >
                 <Group gap="xs">
-                  <Text size="sm" tt="capitalize">
-                    {crop}
-                  </Text>
+                  <Text size="sm">{displayName}</Text>
                   {requirement.paymentInfo && (
                     <Badge size="xs" variant="light" color="orange">
                       {requirement.paymentInfo.containerDescription} ×{" "}

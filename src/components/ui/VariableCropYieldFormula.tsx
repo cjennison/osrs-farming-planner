@@ -14,6 +14,7 @@ import {
 } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import { useState } from "react";
+import { getCropById } from "@/lib/farming-data-simple";
 import { getCropConstants } from "@/lib/farming-data-utils";
 import { SectionHeader } from "./SectionHeader";
 
@@ -44,6 +45,10 @@ export function VariableCropYieldFormula({
   const cropConstants = getCropConstants(targetCrop);
   const baseCtsLow = cropConstants.low;
   const baseCtsHigh = cropConstants.high;
+
+  // Get display name for the crop
+  const cropData = getCropById(targetCrop);
+  const displayName = cropData?.name || targetCrop;
 
   // Calculate boost multipliers step by step
   const itemBonus = (magicSecateurs ? 0.1 : 0) + (farmingCape ? 0.05 : 0);
@@ -160,7 +165,7 @@ export function VariableCropYieldFormula({
               <Text>Chance to Save = (1 + ⌊</Text>
 
               <Tooltip
-                label={`CTSlow: Base chance constant for ${targetCrop} at level 1 farming`}
+                label={`CTSlow: Base chance constant for ${displayName} at level 1 farming`}
               >
                 <Badge variant="light" color="blue" style={{ cursor: "help" }}>
                   {finalCtsLow}
@@ -178,7 +183,7 @@ export function VariableCropYieldFormula({
               <Text>/98 +</Text>
 
               <Tooltip
-                label={`CTShigh: Base chance constant for ${targetCrop} at level 99 farming`}
+                label={`CTShigh: Base chance constant for ${displayName} at level 99 farming`}
               >
                 <Badge variant="light" color="blue" style={{ cursor: "help" }}>
                   {finalCtsHigh}
