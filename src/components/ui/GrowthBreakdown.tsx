@@ -67,7 +67,11 @@ export function GrowthBreakdown({
                       {result.breakdown.length - step.level}
                     </Badge>
                     <OSRSImage
-                      itemId={isPurchasable ? step.crop.replace(" (purchasable)", "").trim() : step.crop}
+                      itemId={
+                        isPurchasable
+                          ? step.crop.replace(" (purchasable)", "").trim()
+                          : step.crop
+                      }
                       isPurchasable={isPurchasable}
                       imageType="crop"
                       size={40}
