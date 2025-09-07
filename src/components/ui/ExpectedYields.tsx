@@ -5,6 +5,7 @@ import type {
   CalculationResult,
   YieldStrategy,
 } from "@/lib/calculators/dependency-calculator";
+import { getCropById } from "@/lib/farming-data-simple";
 import { SectionHeader } from "./SectionHeader";
 
 interface ExpectedYieldsProps {
@@ -37,11 +38,15 @@ export function ExpectedYields({
 
       <Collapse in={expandedSections.yields}>
         <Stack gap="xs">
-          {Object.entries(result.requirements).map(([crop, requirement]) => (
+          {Object.entries(result.requirements).map(([crop, requirement]) => {
+            const cropData = getCropById(crop);
+            const displayName = cropData?.name || crop;
+            
+            return (
             <Paper key={crop} p="md" bg="gold.0" style={{ borderRadius: 6 }}>
               <Group justify="space-between" align="flex-start">
-                <Text size="sm" tt="capitalize" fw={500}>
-                  {crop}
+                <Text size="sm" fw={500}>
+                  {displayName}
                 </Text>
                 <Group gap="md" align="center">
                   <Stack gap={2} align="center">
@@ -94,7 +99,8 @@ export function ExpectedYields({
                 {formatCompostText(compostType)}
               </Text>
             </Paper>
-          ))}
+            );
+          })}
         </Stack>
       </Collapse>
     </Stack>
