@@ -1,4 +1,4 @@
-import { createTheme, MantineTheme } from "@mantine/core";
+import { createTheme, type MantineTheme } from "@mantine/core";
 
 // OSRS-inspired earthy color palette with modern UX considerations
 // Light mode: Fresh greens and earthy browns for farming theme

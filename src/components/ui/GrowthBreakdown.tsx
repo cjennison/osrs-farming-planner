@@ -2,10 +2,10 @@
 
 import { ActionIcon, Badge, Collapse, Group, Stack, Text } from "@mantine/core";
 import {
+  IconArrowUp,
   IconChevronDown,
   IconChevronRight,
   IconShield,
-  IconArrowUp,
 } from "@tabler/icons-react";
 import type {
   CalculationResult,

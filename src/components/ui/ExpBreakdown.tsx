@@ -1,18 +1,18 @@
 "use client";
 
 import {
-  Collapse,
-  Group,
-  Text,
-  Box,
   Badge,
-  Stack,
+  Box,
   Card,
-  Title,
+  Collapse,
   Grid,
+  Group,
   NumberFormatter,
+  Stack,
+  Text,
+  Title,
 } from "@mantine/core";
-import { IconChevronDown, IconStar, IconSeeding } from "@tabler/icons-react";
+import { IconChevronDown, IconSeeding, IconStar } from "@tabler/icons-react";
 import { useState } from "react";
 import type {
   CalculationResult,

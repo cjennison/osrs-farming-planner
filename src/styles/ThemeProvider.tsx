@@ -1,6 +1,6 @@
 "use client";
 
-import { MantineProvider, ColorSchemeScript, createTheme } from "@mantine/core";
+import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { theme } from "./theme";
 

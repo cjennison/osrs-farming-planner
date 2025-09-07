@@ -1,21 +1,20 @@
 "use client";
 
 import {
-  AppShell,
-  Group,
-  Text,
-  Title,
   ActionIcon,
-  useMantineColorScheme,
-  Container,
+  AppShell,
   Button,
+  Container,
+  Group,
+  Title,
+  useMantineColorScheme,
 } from "@mantine/core";
 import {
-  IconSun,
-  IconMoon,
-  IconPlant,
   IconCalculator,
   IconMap,
+  IconMoon,
+  IconPlant,
+  IconSun,
 } from "@tabler/icons-react";
 import Link from "next/link";
 

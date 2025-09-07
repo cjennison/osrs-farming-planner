@@ -3,8 +3,8 @@
 
 import { getAllCrops, getCropById } from "../farming-data-simple";
 import {
-  isPurchasableItem,
   getPurchasableItemByName,
+  isPurchasableItem,
 } from "../purchasable-items";
 
 export interface CropPayment {
@@ -148,6 +148,7 @@ export function calculateYield(
   crop: string,
   farmingLevel: number,
   compostType: "none" | "compost" | "supercompost" | "ultracompost" = "none",
+  magicSecateurs: boolean = false,
 ): { min: number; max: number; average: number } {
   const cropData = getCropData(crop);
   if (!cropData) throw new Error(`Unknown crop: ${crop}`);
@@ -218,14 +219,30 @@ export function calculateYield(
 
   const constants = cropConstants[crop] || { low: 100, high: 180 };
 
-  // Calculate chance to save using OSRS formula (without magic secateurs for base calculation)
+  // Apply Magic Secateurs bonus (10% increase to CTS constants)
+  // According to OSRS Wiki: https://oldschool.runescape.wiki/w/Farming#Variable_crop_yield
+  // Magic secateurs affect herbs, allotments, grape vines, and hops
+  let adjustedConstants = constants;
+  if (
+    magicSecateurs &&
+    (cropData.type === "herb" ||
+      cropData.type === "allotment" ||
+      cropData.type === "hops")
+  ) {
+    adjustedConstants = {
+      low: Math.floor(constants.low * 1.1),
+      high: Math.floor(constants.high * 1.1),
+    };
+  }
+
+  // Calculate chance to save using OSRS formula
   // Chance = (1 + floor(CTSlow * (99-F)/98 + CTShigh * (F-1)/98 + 0.5)) / 256
   const farmingLevelClamped = Math.max(1, Math.min(99, farmingLevel));
   const chanceNumerator =
     1 +
     Math.floor(
-      (constants.low * (99 - farmingLevelClamped)) / 98 +
-        (constants.high * (farmingLevelClamped - 1)) / 98 +
+      (adjustedConstants.low * (99 - farmingLevelClamped)) / 98 +
+        (adjustedConstants.high * (farmingLevelClamped - 1)) / 98 +
         0.5,
     );
 
@@ -266,6 +283,7 @@ export function calculateDependencies(
     | "ultracompost" = "supercompost",
   startingResources: StartingResources = {},
   yieldStrategy: YieldStrategy = "average",
+  magicSecateurs: boolean = false,
 ): CalculationResult {
   const cropData = getCropData(targetCrop);
   if (!cropData) {
@@ -312,7 +330,12 @@ export function calculateDependencies(
     }
 
     // Calculate yield for this crop
-    const cropYield = calculateYield(crop, farmingLevel, compostType);
+    const cropYield = calculateYield(
+      crop,
+      farmingLevel,
+      compostType,
+      magicSecateurs,
+    );
 
     // Calculate patches needed based on yield strategy
     const patchesNeededMin = Math.ceil(stillNeeded / cropYield.min);

@@ -1,14 +1,13 @@
 "use client";
 
 import {
-  Container,
-  Title,
-  Text,
-  Button,
-  Stack,
-  Group,
-  SimpleGrid,
   Box,
+  Button,
+  Container,
+  SimpleGrid,
+  Stack,
+  Text,
+  Title,
 } from "@mantine/core";
 import { IconCalculator, IconMap, IconPlant } from "@tabler/icons-react";
 import Link from "next/link";

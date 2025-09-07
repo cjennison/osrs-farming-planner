@@ -6,6 +6,7 @@ import {
   Badge,
   Button,
   Card,
+  Checkbox,
   Chip,
   Group,
   NumberInput,
@@ -16,10 +17,10 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { IconInfoCircle, IconLeaf, IconSeedling } from "@tabler/icons-react";
-import { useState, useMemo, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { YieldStrategy } from "@/lib/calculators/dependency-calculator";
-import { getCropSelectData, getCropCounts } from "@/lib/crop-options";
 import type { CropOption } from "@/lib/crop-options";
+import { getCropCounts, getCropSelectData } from "@/lib/crop-options";
 import { getCropsByType } from "@/lib/farming-data-simple";
 
 // Get crop options from data files instead of hardcoded array
@@ -81,6 +82,8 @@ interface CalculatorInputsProps {
   error: string;
   selectedCrop: CropOption | undefined;
   getDependencyChain: (crop: string) => string[];
+  magicSecateurs: boolean;
+  setMagicSecateurs: (value: boolean) => void;
 }
 
 export function CalculatorInputs({
@@ -99,6 +102,8 @@ export function CalculatorInputs({
   error,
   selectedCrop,
   getDependencyChain,
+  magicSecateurs,
+  setMagicSecateurs,
 }: CalculatorInputsProps) {
   // Local state for crop type filter
   const [selectedCropType, setSelectedCropType] = useState<string>("all");
@@ -129,7 +134,7 @@ export function CalculatorInputs({
         setTargetCrop("");
       }
     }
-  }, [selectedCropType, filteredCropOptions, targetCrop, setTargetCrop]);
+  }, [filteredCropOptions, targetCrop, setTargetCrop]);
 
   // Handle crop type filter changes
   const handleCropTypeChange = (value: string | string[]) => {
@@ -237,6 +242,13 @@ export function CalculatorInputs({
           onChange={(value) =>
             setYieldStrategy((value as YieldStrategy) || "average")
           }
+        />
+
+        <Checkbox
+          label="Magic Secateurs"
+          description="Increase crop yield by 10% (herbs, allotments, grape vines, and hops)"
+          checked={magicSecateurs}
+          onChange={(event) => setMagicSecateurs(event.currentTarget.checked)}
         />
 
         {/* Starting Resources */}

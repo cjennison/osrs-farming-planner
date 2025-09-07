@@ -1,6 +1,6 @@
+import { ColorSchemeScript } from "@mantine/core";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { ColorSchemeScript } from "@mantine/core";
 import { ThemeProvider } from "@/styles/ThemeProvider";
 import "./globals.css";
 

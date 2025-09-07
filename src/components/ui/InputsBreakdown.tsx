@@ -3,7 +3,6 @@
 import {
   ActionIcon,
   Badge,
-  Card,
   Collapse,
   Group,
   Image,
@@ -24,10 +23,7 @@ import type {
   YieldStrategy,
 } from "@/lib/calculators/dependency-calculator";
 import { getCropById } from "@/lib/farming-data-simple";
-import {
-  getPurchasableItemById,
-  getPurchasableItemByName,
-} from "@/lib/purchasable-items";
+import { getPurchasableItemByName } from "@/lib/purchasable-items";
 
 interface InputItem {
   type: "seed" | "purchase";
@@ -44,10 +40,7 @@ interface InputsBreakdownProps {
   yieldStrategy: YieldStrategy;
 }
 
-export function InputsBreakdown({
-  result,
-  yieldStrategy,
-}: InputsBreakdownProps) {
+export function InputsBreakdown({ result }: InputsBreakdownProps) {
   const [opened, setOpened] = useState(true);
   // Calculate required inputs based on calculation result
   const requiredInputs: InputItem[] = [];
@@ -79,7 +72,7 @@ export function InputsBreakdown({
       const cleanCropName = step.crop.replace(" (purchasable)", "").trim();
 
       // Try to find the purchasable item by name or alias
-      let purchasableItem = getPurchasableItemByName(cleanCropName);
+      const purchasableItem = getPurchasableItemByName(cleanCropName);
 
       const itemName =
         purchasableItem?.name ||

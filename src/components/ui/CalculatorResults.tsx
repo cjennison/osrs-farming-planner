@@ -16,12 +16,12 @@ import type {
   CalculationResult,
   YieldStrategy,
 } from "@/lib/calculators/dependency-calculator";
+import { getCropById } from "@/lib/farming-data-simple";
 import { CropRequirements } from "./CropRequirements";
+import { ExpBreakdown } from "./ExpBreakdown";
 import { ExpectedYields } from "./ExpectedYields";
 import { GrowthBreakdown } from "./GrowthBreakdown";
 import { InputsBreakdown } from "./InputsBreakdown";
-import { ExpBreakdown } from "./ExpBreakdown";
-import { getCropById } from "@/lib/farming-data-simple";
 
 interface CalculatorResultsProps {
   result: CalculationResult | null;

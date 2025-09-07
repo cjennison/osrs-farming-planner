@@ -2,8 +2,8 @@ import {
   calculateDependencies,
   calculateYield,
   getAvailableCrops,
-  hasProtection,
   getDependencyChain,
+  hasProtection,
 } from "../dependency-calculator";
 
 describe("OSRS Farming Dependency Calculator", () => {
@@ -64,7 +64,7 @@ describe("OSRS Farming Dependency Calculator", () => {
 
   describe("Yield calculations", () => {
     test("should calculate base yields correctly", () => {
-      const cropYield = calculateYield("potato", 99, "none");
+      const cropYield = calculateYield("potato", 99, "none", {});
       expect(cropYield).toEqual({
         min: 3, // 3 base harvest lives
         max: 10, // Conservative upper bound (2x expected)
@@ -73,7 +73,7 @@ describe("OSRS Farming Dependency Calculator", () => {
     });
 
     test("should apply compost bonuses correctly", () => {
-      const supercompostYield = calculateYield("onion", 99, "supercompost");
+      const supercompostYield = calculateYield("onion", 99, "supercompost", {});
       expect(supercompostYield).toEqual({
         min: 5, // 3 base + 2 supercompost lives
         max: 16, // Conservative upper bound
@@ -82,7 +82,12 @@ describe("OSRS Farming Dependency Calculator", () => {
     });
 
     test("should handle ultracompost", () => {
-      const ultracompostYield = calculateYield("cabbage", 99, "ultracompost");
+      const ultracompostYield = calculateYield(
+        "cabbage",
+        99,
+        "ultracompost",
+        {},
+      );
       expect(ultracompostYield).toEqual({
         min: 6, // 3 base + 3 ultracompost lives
         max: 19, // Conservative upper bound
