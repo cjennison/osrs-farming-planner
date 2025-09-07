@@ -8,7 +8,6 @@ import {
   calculateDependencies,
   type YieldStrategy,
 } from "@/lib/calculators/dependency-calculator";
-import type { CropOption } from "@/lib/crop-options";
 import { getCropOptions } from "@/lib/crop-options";
 import { getCropById } from "@/lib/farming-data-simple";
 import { CalculatorInputs } from "./CalculatorInputs";
@@ -39,6 +38,7 @@ export function FarmingCalculator() {
   const [compostType, setCompostType] = useState<string>("none");
   const [yieldStrategy, setYieldStrategy] = useState<YieldStrategy>("average");
   const [magicSecateurs, setMagicSecateurs] = useState<boolean>(false);
+  const [farmingCape, setFarmingCape] = useState<boolean>(false);
   const [startingResources, setStartingResources] = useState<
     Record<string, number>
   >({});
@@ -75,6 +75,7 @@ export function FarmingCalculator() {
         startingResources,
         yieldStrategy,
         magicSecateurs,
+        farmingCape,
       );
       setResult(calculationResult);
       setError("");
@@ -90,6 +91,7 @@ export function FarmingCalculator() {
     startingResources,
     yieldStrategy,
     magicSecateurs,
+    farmingCape,
     canCalculate,
   ]);
 
@@ -139,7 +141,7 @@ export function FarmingCalculator() {
           // No crop dependency (might be item dependency or no protection)
           break;
         }
-      } catch (error) {
+      } catch (_error) {
         // If we can't get crop data, break the chain
         break;
       }
@@ -187,6 +189,8 @@ export function FarmingCalculator() {
               getDependencyChain={getDependencyChain}
               magicSecateurs={magicSecateurs}
               setMagicSecateurs={setMagicSecateurs}
+              farmingCape={farmingCape}
+              setFarmingCape={setFarmingCape}
             />
           </Grid.Col>
 

@@ -149,6 +149,7 @@ export function calculateYield(
   farmingLevel: number,
   compostType: "none" | "compost" | "supercompost" | "ultracompost" = "none",
   magicSecateurs: boolean = false,
+  farmingCape: boolean = false,
 ): { min: number; max: number; average: number } {
   const cropData = getCropData(crop);
   if (!cropData) throw new Error(`Unknown crop: ${crop}`);
@@ -235,6 +236,16 @@ export function calculateYield(
     };
   }
 
+  // Apply Farming Cape bonus (5% increase to yield, herbs only)
+  // According to OSRS Wiki: "The farming cape increases the yield of herb patches by 5%"
+  // This affects the CTS constants only for herbs
+  if (farmingCape && cropData.type === "herb") {
+    adjustedConstants = {
+      low: Math.floor(adjustedConstants.low * 1.05),
+      high: Math.floor(adjustedConstants.high * 1.05),
+    };
+  }
+
   // Calculate chance to save using OSRS formula
   // Chance = (1 + floor(CTSlow * (99-F)/98 + CTShigh * (F-1)/98 + 0.5)) / 256
   const farmingLevelClamped = Math.max(1, Math.min(99, farmingLevel));
@@ -284,6 +295,7 @@ export function calculateDependencies(
   startingResources: StartingResources = {},
   yieldStrategy: YieldStrategy = "average",
   magicSecateurs: boolean = false,
+  farmingCape: boolean = false,
 ): CalculationResult {
   const cropData = getCropData(targetCrop);
   if (!cropData) {
@@ -335,6 +347,7 @@ export function calculateDependencies(
       farmingLevel,
       compostType,
       magicSecateurs,
+      farmingCape,
     );
 
     // Calculate patches needed based on yield strategy

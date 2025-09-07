@@ -84,6 +84,8 @@ interface CalculatorInputsProps {
   getDependencyChain: (crop: string) => string[];
   magicSecateurs: boolean;
   setMagicSecateurs: (value: boolean) => void;
+  farmingCape: boolean;
+  setFarmingCape: (value: boolean) => void;
 }
 
 export function CalculatorInputs({
@@ -104,6 +106,8 @@ export function CalculatorInputs({
   getDependencyChain,
   magicSecateurs,
   setMagicSecateurs,
+  farmingCape,
+  setFarmingCape,
 }: CalculatorInputsProps) {
   // Local state for crop type filter
   const [selectedCropType, setSelectedCropType] = useState<string>("all");
@@ -249,6 +253,13 @@ export function CalculatorInputs({
           description="Increase crop yield by 10% (herbs, allotments, grape vines, and hops)"
           checked={magicSecateurs}
           onChange={(event) => setMagicSecateurs(event.currentTarget.checked)}
+        />
+
+        <Checkbox
+          label="Farming Cape / Max Cape"
+          description="Increase herb yield by 5% (herb patches only)"
+          checked={farmingCape}
+          onChange={(event) => setFarmingCape(event.currentTarget.checked)}
         />
 
         {/* Starting Resources */}
