@@ -36,7 +36,7 @@ export default function OptimizedLevelingPage() {
     kandarinDiary: "none",
     yieldStrategy: "average",
     xpStrategy: "no-rollover", // Default to no rollover
-    useResourceBanking: false, // Default to disabled
+    useResourceBanking: true, // Default to enabled for better demonstration
     excludeFlowers: true, // Default to true as requested
     excludeHerbs: false, // Default to false as requested
     excludeBushes: false, // Default to false for bushes
@@ -382,7 +382,7 @@ export default function OptimizedLevelingPage() {
                       </Table.Td>
                       <Table.Td>
                         <Group gap={4}>
-                          {/* Seeds - sorted by dependency order */}
+                          {/* Seeds - sorted by dependency order with banking info */}
                           {(() => {
                             // Helper function to get dependency order
                             const getDependencyOrder = (
@@ -495,10 +495,83 @@ export default function OptimizedLevelingPage() {
                                   ? `${crop.name} seed`
                                   : `Seed ${seedId}`);
 
+                              // DEBUG: Log banking information
+                              console.log(
+                                `[DEBUG] Step ${step.fromLevel}→${step.toLevel}, Seed: ${seedName}`,
+                                {
+                                  seedId,
+                                  cropId: crop?.id,
+                                  resourcesUsedFromBank:
+                                    step.resourcesUsedFromBank,
+                                  hasResourcesUsed:
+                                    Object.keys(step.resourcesUsedFromBank)
+                                      .length > 0,
+                                  requirements:
+                                    step.calculationResult.requirements,
+                                },
+                              );
+
+                              // Check if we have this crop in banked resources used (for any purpose)
+                              const cropUsedFromBank = crop?.id
+                                ? step.resourcesUsedFromBank[crop.id] || 0
+                                : 0;
+
+                              // However, we need to check if this saved amount actually reduces THIS step's requirements
+                              // If we used banked crops for protection payments of OTHER crops, it doesn't reduce this crop's seeds
+                              // Let me calculate the actual seed reduction properly
+
+                              // First, get the original requirement for this crop from the calculation
+                              const originalRequirement = crop?.id
+                                ? step.calculationResult.requirements[crop.id]
+                                : null;
+
+                              // If this crop has a requirement and we used banked resources of this crop type,
+                              // then calculate the reduction
+                              let actualSeedsSaved = 0;
+                              if (originalRequirement && cropUsedFromBank > 0) {
+                                // Calculate how much of the banked crop was used to fulfill THIS crop's requirement
+                                const totalYieldNeeded =
+                                  originalRequirement.totalYield.average;
+                                const bankContribution = Math.min(
+                                  cropUsedFromBank,
+                                  totalYieldNeeded,
+                                );
+                                const patchesSaved = Math.floor(
+                                  bankContribution / (crop.baseYield || 1),
+                                );
+                                actualSeedsSaved =
+                                  patchesSaved * (crop.seedsPerPatch || 1);
+
+                                console.log(
+                                  `[DEBUG] Banking calculation for ${seedName}:`,
+                                  {
+                                    cropUsedFromBank,
+                                    totalYieldNeeded,
+                                    bankContribution,
+                                    baseYield: crop.baseYield,
+                                    seedsPerPatch: crop.seedsPerPatch,
+                                    patchesSaved,
+                                    actualSeedsSaved,
+                                  },
+                                );
+                              }
+
+                              // Net seeds needed after banking
+                              const netSeeds = Math.max(
+                                0,
+                                quantity - actualSeedsSaved,
+                              );
+
+                              const tooltipContent =
+                                cropUsedFromBank > 0 && actualSeedsSaved > 0
+                                  ? `${seedName}: ${quantity} needed - ${actualSeedsSaved} saved (${Math.round(cropUsedFromBank)} from bank) = ${netSeeds} seeds`
+                                  : `${seedName}: ${quantity}`;
+
                               return (
                                 <Tooltip
                                   key={seedId}
-                                  label={`${seedName}: ${quantity}`}
+                                  label={tooltipContent}
+                                  multiline
                                 >
                                   <Group gap={2}>
                                     <OSRSImage
@@ -506,7 +579,25 @@ export default function OptimizedLevelingPage() {
                                       imageType="seed"
                                       size={20}
                                     />
-                                    <Text size="xs">{quantity}</Text>
+                                    {cropUsedFromBank > 0 &&
+                                    actualSeedsSaved > 0 ? (
+                                      <Stack gap={0} align="center">
+                                        <Text
+                                          size="xs"
+                                          c="dimmed"
+                                          style={{
+                                            textDecoration: "line-through",
+                                          }}
+                                        >
+                                          {quantity}
+                                        </Text>
+                                        <Text size="xs" c="green" fw={500}>
+                                          {netSeeds}
+                                        </Text>
+                                      </Stack>
+                                    ) : (
+                                      <Text size="xs">{quantity}</Text>
+                                    )}
                                   </Group>
                                 </Tooltip>
                               );

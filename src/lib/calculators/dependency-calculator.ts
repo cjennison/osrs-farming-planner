@@ -393,8 +393,9 @@ export function calculateDependencies(
     // Use the actual crop ID from the data (handles mappings like barley_malt -> barley)
     const actualCropId = data.id;
 
-    // Check if we have starting resources
-    const available = startingResources[actualCropId] || 0;
+    // Check if we have starting resources (but NEVER for target crops)
+    const isTargetCrop = purpose.startsWith("Target harvest");
+    const available = !isTargetCrop ? startingResources[actualCropId] || 0 : 0;
     const stillNeeded = Math.max(0, neededQuantity - available);
 
     if (stillNeeded === 0) {

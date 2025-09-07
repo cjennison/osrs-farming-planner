@@ -131,7 +131,18 @@ export function calculateOptimalProgression(
 
     // Update the resource bank for next step only if banking is enabled
     if (options.useResourceBanking) {
-      // Merge the newly banked resources with the existing bank
+      // First, subtract the resources that were used from the bank
+      Object.entries(resourcesUsedFromBank).forEach(([cropId, usedAmount]) => {
+        if (resourceBank[cropId]) {
+          resourceBank[cropId] = Math.max(0, resourceBank[cropId] - usedAmount);
+          // Remove crops with zero quantity to keep bank clean
+          if (resourceBank[cropId] === 0) {
+            delete resourceBank[cropId];
+          }
+        }
+      });
+
+      // Then, add the newly banked resources
       Object.entries(resourcesBanked).forEach(([cropId, amount]) => {
         resourceBank[cropId] = (resourceBank[cropId] || 0) + amount;
       });
@@ -291,17 +302,36 @@ function findQuantityForXPTarget(
     );
 
     // Track which banked resources were actually used
-    for (const [cropId, bankAmount] of Object.entries(resourceBank)) {
-      // Check if this crop appears in the breakdown with a note about starting resources
-      const breakdownStep = result.breakdown.find(
-        (step) =>
-          getCropById(step.crop)?.id === cropId &&
-          step.purpose.includes("starting resources"),
-      );
+    for (const [bankCropId, bankAmount] of Object.entries(resourceBank)) {
+      if (bankAmount > 0) {
+        // Check if this crop appears in the breakdown with a note about starting resources
+        const breakdownStep = result.breakdown.find((step) => {
+          // Try multiple ways to match the crop
+          const stepCrop =
+            getCropById(step.crop) || getCropById(step.crop.toLowerCase());
+          const stepCropId = stepCrop?.id;
 
-      if (breakdownStep && bankAmount > 0) {
-        resourcesUsedFromBank[cropId] =
-          (resourcesUsedFromBank[cropId] || 0) + Math.min(bankAmount, quantity);
+          // Also try direct string comparison (case insensitive)
+          const directMatch =
+            step.crop.toLowerCase() === bankCropId.toLowerCase();
+
+          const matches =
+            (stepCropId === bankCropId || directMatch) &&
+            step.purpose.includes("starting resources");
+          return matches;
+        });
+
+        if (breakdownStep) {
+          // Extract how much was actually used from the purpose string
+          const usedMatch = breakdownStep.purpose.match(
+            /using (\d+(?:\.\d+)?)/,
+          );
+          const usedAmount = usedMatch ? parseFloat(usedMatch[1]) : 0;
+
+          if (usedAmount > 0) {
+            resourcesUsedFromBank[bankCropId] = usedAmount;
+          }
+        }
       }
     }
 
