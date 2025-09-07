@@ -86,6 +86,8 @@ interface CalculatorInputsProps {
   setMagicSecateurs: (value: boolean) => void;
   farmingCape: boolean;
   setFarmingCape: (value: boolean) => void;
+  attasSeed: boolean;
+  setAttasSeed: (value: boolean) => void;
 }
 
 export function CalculatorInputs({
@@ -108,6 +110,8 @@ export function CalculatorInputs({
   setMagicSecateurs,
   farmingCape,
   setFarmingCape,
+  attasSeed,
+  setAttasSeed,
 }: CalculatorInputsProps) {
   // Local state for crop type filter
   const [selectedCropType, setSelectedCropType] = useState<string>("all");
@@ -260,6 +264,13 @@ export function CalculatorInputs({
           description="Increase herb yield by 5% (herb patches only)"
           checked={farmingCape}
           onChange={(event) => setFarmingCape(event.currentTarget.checked)}
+        />
+
+        <Checkbox
+          label="Attas Seed"
+          description="Increase crop yield by 5% (all crop types, requires active Attas plant)"
+          checked={attasSeed}
+          onChange={(event) => setAttasSeed(event.currentTarget.checked)}
         />
 
         {/* Starting Resources */}

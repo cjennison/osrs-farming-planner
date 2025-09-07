@@ -13,6 +13,7 @@ These are the core instructions for the agent. They supercede any other instruct
 - The agent must never ask to build or run the application.
 - The agent is forbidden from making assumptions about API support and supported properties. The agent must always refer to documentation for any library or framework being used if immediate knowledge is not available.
 - Writing temporary test files is forbidden.
+- Running nodejs code without a file for testing is forbidden. For example, `node -e "console.log('test')"` is not allowed.
 
 ## Development
 

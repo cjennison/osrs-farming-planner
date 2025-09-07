@@ -39,6 +39,7 @@ export function FarmingCalculator() {
   const [yieldStrategy, setYieldStrategy] = useState<YieldStrategy>("average");
   const [magicSecateurs, setMagicSecateurs] = useState<boolean>(false);
   const [farmingCape, setFarmingCape] = useState<boolean>(false);
+  const [attasSeed, setAttasSeed] = useState<boolean>(false);
   const [startingResources, setStartingResources] = useState<
     Record<string, number>
   >({});
@@ -76,6 +77,7 @@ export function FarmingCalculator() {
         yieldStrategy,
         magicSecateurs,
         farmingCape,
+        attasSeed,
       );
       setResult(calculationResult);
       setError("");
@@ -92,6 +94,7 @@ export function FarmingCalculator() {
     yieldStrategy,
     magicSecateurs,
     farmingCape,
+    attasSeed,
     canCalculate,
   ]);
 
@@ -191,6 +194,8 @@ export function FarmingCalculator() {
               setMagicSecateurs={setMagicSecateurs}
               farmingCape={farmingCape}
               setFarmingCape={setFarmingCape}
+              attasSeed={attasSeed}
+              setAttasSeed={setAttasSeed}
             />
           </Grid.Col>
 

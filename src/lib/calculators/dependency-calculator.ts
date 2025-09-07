@@ -150,6 +150,7 @@ export function calculateYield(
   compostType: "none" | "compost" | "supercompost" | "ultracompost" = "none",
   magicSecateurs: boolean = false,
   farmingCape: boolean = false,
+  attasSeed: boolean = false,
 ): { min: number; max: number; average: number } {
   const cropData = getCropData(crop);
   if (!cropData) throw new Error(`Unknown crop: ${crop}`);
@@ -246,6 +247,17 @@ export function calculateYield(
     };
   }
 
+  // Apply Attas Seed bonus (5% increase to yield, all crop types)
+  // According to OSRS Wiki: "the attas plant will increase the yield of
+  // player's farming patches worldwide, by increasing the chance to save a life by 5%"
+  // This affects all crop types when an active Attas plant is growing
+  if (attasSeed) {
+    adjustedConstants = {
+      low: Math.floor(adjustedConstants.low * 1.05),
+      high: Math.floor(adjustedConstants.high * 1.05),
+    };
+  }
+
   // Calculate chance to save using OSRS formula
   // Chance = (1 + floor(CTSlow * (99-F)/98 + CTShigh * (F-1)/98 + 0.5)) / 256
   const farmingLevelClamped = Math.max(1, Math.min(99, farmingLevel));
@@ -296,6 +308,7 @@ export function calculateDependencies(
   yieldStrategy: YieldStrategy = "average",
   magicSecateurs: boolean = false,
   farmingCape: boolean = false,
+  attasSeed: boolean = false,
 ): CalculationResult {
   const cropData = getCropData(targetCrop);
   if (!cropData) {
@@ -348,6 +361,7 @@ export function calculateDependencies(
       compostType,
       magicSecateurs,
       farmingCape,
+      attasSeed,
     );
 
     // Calculate patches needed based on yield strategy
