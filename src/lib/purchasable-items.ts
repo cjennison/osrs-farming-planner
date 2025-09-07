@@ -113,8 +113,13 @@ export function getPurchasableItemsByCategory(
 }
 
 /**
- * Check if an item name refers to a purchasable item
+ * Check if an item name or ID refers to a purchasable item
  */
-export function isPurchasableItem(itemName: string): boolean {
-  return getPurchasableItemByName(itemName) !== undefined;
+export function isPurchasableItem(itemNameOrId: string): boolean {
+  // Check by ID first
+  if (getPurchasableItemById(itemNameOrId) !== undefined) {
+    return true;
+  }
+  // Then check by name
+  return getPurchasableItemByName(itemNameOrId) !== undefined;
 }

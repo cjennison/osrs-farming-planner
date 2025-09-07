@@ -18,6 +18,8 @@ interface OptimizationInputsProps {
   onExcludeFlowersChange: (value: boolean) => void;
   excludeHerbs: boolean;
   onExcludeHerbsChange: (value: boolean) => void;
+  excludeBushes: boolean;
+  onExcludeBushesChange: (value: boolean) => void;
 }
 
 const COMPOST_OPTIONS = [
@@ -47,6 +49,8 @@ export function OptimizationInputs({
   onExcludeFlowersChange,
   excludeHerbs,
   onExcludeHerbsChange,
+  excludeBushes,
+  onExcludeBushesChange,
 }: OptimizationInputsProps) {
   return (
     <Stack gap="md">
@@ -110,6 +114,15 @@ export function OptimizationInputs({
           checked={excludeHerbs}
           onChange={(event) =>
             onExcludeHerbsChange(event.currentTarget.checked)
+          }
+        />
+
+        <Checkbox
+          label="Exclude Bushes"
+          description="Skip all bush crops in optimization"
+          checked={excludeBushes}
+          onChange={(event) =>
+            onExcludeBushesChange(event.currentTarget.checked)
           }
         />
       </Group>

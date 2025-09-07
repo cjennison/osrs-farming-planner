@@ -148,28 +148,6 @@
       },
       "uses": ["Watermelon protection payment"]
     },
-    "jangerberry": {
-      "id": "jangerberry",
-      "name": "Jangerberry",
-      "itemId": 247,
-      "wikiUrl": "https://oldschool.runescape.wiki/w/Jangerberry",
-      "category": "berries",
-      "type": "purchasable",
-      "images": {
-        "item": "https://oldschool.runescape.wiki/images/4/41/Jangerberry.png"
-      },
-      "shopInfo": {
-        "available": true,
-        "locations": [
-          {
-            "shop": "Grand Exchange",
-            "price": "varies",
-            "stock": "unlimited"
-          }
-        ]
-      },
-      "uses": ["Snape grass protection payment"]
-    },
     "barley_malt": {
       "id": "barley_malt",
       "name": "Barley malt",
@@ -276,6 +254,33 @@
         "emptyContainer": "empty_basket"
       },
       "uses": ["Crop protection payments"]
+    },
+    "bittercap_mushroom": {
+      "id": "bittercap_mushroom",
+      "name": "Bittercap mushroom",
+      "itemId": 6004,
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Bittercap_mushroom",
+      "category": "mushrooms",
+      "type": "purchasable",
+      "images": {
+        "item": "https://oldschool.runescape.wiki/images/Mushroom.png"
+      },
+      "shopInfo": {
+        "available": true,
+        "locations": [
+          {
+            "shop": "Grand Exchange",
+            "price": "varies",
+            "stock": "unlimited"
+          },
+          {
+            "shop": "Farming shops",
+            "price": 150,
+            "stock": "10"
+          }
+        ]
+      },
+      "uses": ["Whiteberry bush protection payment"]
     }
   }
 }

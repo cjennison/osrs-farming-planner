@@ -17,7 +17,7 @@ export interface CropPayment {
 export interface CropData {
   id: string;
   name: string;
-  type: "allotment" | "flower" | "hops" | "herb";
+  type: "allotment" | "flower" | "hops" | "herb" | "bush";
   farmingLevel: number;
   protection?: CropPayment;
   baseYield: number;
@@ -110,7 +110,7 @@ function convertToCropData(crop: any): CropData {
   return {
     id: crop.id,
     name: crop.name,
-    type: crop.type as "allotment" | "flower" | "hops" | "herb",
+    type: crop.type as "allotment" | "flower" | "hops" | "herb" | "bush",
     farmingLevel: crop.farmingLevel || 1,
     baseYield: crop.baseYield || 3,
     seedsPerPatch: crop.seedsPerPatch || 3,
@@ -136,7 +136,21 @@ function getCropData(cropId: string): CropData | undefined {
   // First try direct crop lookup
   let crop = getCropById(cropId);
 
-  // If not found, check if it's a purchasable item that maps to a crop container
+  // If not found, check if it's a crop product that maps to a source crop
+  if (!crop) {
+    // Map crop products to their source crops
+    const productToCropMap: Record<string, string> = {
+      jute_fibre: "jute", // Jute fibre comes from Jute hops
+      // Add more mappings as needed
+    };
+
+    const sourceCropId = productToCropMap[cropId];
+    if (sourceCropId) {
+      crop = getCropById(sourceCropId);
+    }
+  }
+
+  // If still not found, check if it's a purchasable item that maps to a crop container
   if (!crop) {
     const purchasableItem = getPurchasableItemByName(cropId);
     if (purchasableItem?.containerInfo?.isContainer) {

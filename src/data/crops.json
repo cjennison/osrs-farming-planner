@@ -151,9 +151,9 @@
       },
       "baseYield": 3,
       "protection": {
-        "type": "item",
+        "type": "crop",
         "quantity": 10,
-        "item": "jute fibre",
+        "item": "jute_fibre",
         "itemDescription": "jute fibres"
       }
     },
@@ -213,7 +213,7 @@
       "protection": {
         "type": "item",
         "quantity": 10,
-        "item": "curry leaf",
+        "item": "curry_leaf",
         "itemDescription": "curry leaves"
       }
     },
@@ -236,11 +236,11 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Snape_grass_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/d/d0/Snape_grass.png"
+        "crop": "https://oldschool.runescape.wiki/images/Snape_grass.png"
       },
       "baseYield": 4,
       "protection": {
-        "type": "item",
+        "type": "crop",
         "quantity": 5,
         "item": "jangerberry",
         "itemDescription": "jangerberries"
@@ -470,7 +470,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Asgarnian_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/6/64/Asgarnian_hops.png"
+        "crop": "https://oldschool.runescape.wiki/images/Asgarnian_hops.png"
       },
       "baseYield": 3,
       "protection": {
@@ -502,13 +502,13 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Jute_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/c/c1/Jute_fibre.png"
+        "crop": "https://oldschool.runescape.wiki/images/Jute_fibre.png"
       },
       "baseYield": 3,
       "protection": {
         "type": "item",
         "quantity": 6,
-        "item": "barley malt",
+        "item": "barley_malt",
         "itemDescription": "barley malt"
       }
     },
@@ -531,7 +531,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Yanillian_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/c/c6/Yanillian_hops.png"
+        "crop": "https://oldschool.runescape.wiki/images/Yanillian_hops.png"
       },
       "baseYield": 3,
       "protection": {
@@ -563,7 +563,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Krandorian_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/0/07/Krandorian_hops.png"
+        "crop": "https://oldschool.runescape.wiki/images/Krandorian_hops.png"
       },
       "baseYield": 3,
       "protection": {
@@ -595,7 +595,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Wildblood_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/1/1f/Wildblood_hops.png"
+        "crop": "https://oldschool.runescape.wiki/images/Wildblood_hops.png"
       },
       "baseYield": 3,
       "protection": {
@@ -626,7 +626,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Guam_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/3/34/Grimy_guam_leaf.png"
+        "crop": "https://oldschool.runescape.wiki/images/Grimy_guam_leaf.png"
       },
       "baseYield": 3,
       "protection": null
@@ -650,7 +650,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Marrentill_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/c/cb/Grimy_marrentill.png"
+        "crop": "https://oldschool.runescape.wiki/images/Grimy_marrentill.png"
       },
       "baseYield": 3,
       "protection": null
@@ -674,7 +674,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Tarromin_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/1/19/Grimy_tarromin.png"
+        "crop": "https://oldschool.runescape.wiki/images/Grimy_tarromin.png"
       },
       "baseYield": 3,
       "protection": null
@@ -698,7 +698,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Harralander_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/3/32/Grimy_harralander.png"
+        "crop": "https://oldschool.runescape.wiki/images/Grimy_harralander.png"
       },
       "baseYield": 3,
       "protection": null
@@ -721,8 +721,8 @@
         "harvest": 45.0
       },
       "images": {
-        "seed": "https://oldschool.runescape.wiki/images/Gout_tuber_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/4/46/Goutweed.png"
+        "seed": "https://oldschool.runescape.wiki/images/Gout_tuber.png",
+        "crop": "https://oldschool.runescape.wiki/images/Goutweed.png"
       },
       "baseYield": 3,
       "protection": null
@@ -746,7 +746,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Ranarr_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/0/05/Grimy_ranarr_weed.png"
+        "crop": "https://oldschool.runescape.wiki/images/Grimy_ranarr_weed.png"
       },
       "baseYield": 3,
       "protection": null
@@ -770,7 +770,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Toadflax_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/3/36/Grimy_toadflax.png"
+        "crop": "https://oldschool.runescape.wiki/images/Grimy_toadflax.png"
       },
       "baseYield": 3,
       "protection": null
@@ -794,7 +794,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Irit_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/9/97/Grimy_irit_leaf.png"
+        "crop": "https://oldschool.runescape.wiki/images/Grimy_irit_leaf.png"
       },
       "baseYield": 3,
       "protection": null
@@ -818,7 +818,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Avantoe_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/2/2a/Grimy_avantoe.png"
+        "crop": "https://oldschool.runescape.wiki/images/Grimy_avantoe.png"
       },
       "baseYield": 3,
       "protection": null
@@ -842,7 +842,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Kwuarm_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/a/ab/Grimy_kwuarm.png"
+        "crop": "https://oldschool.runescape.wiki/images/Grimy_kwuarm.png"
       },
       "baseYield": 3,
       "protection": null
@@ -866,7 +866,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Snapdragon_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/3/30/Grimy_snapdragon.png"
+        "crop": "https://oldschool.runescape.wiki/images/Grimy_snapdragon.png"
       },
       "baseYield": 3,
       "protection": null
@@ -890,7 +890,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Huasca_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/f/f4/Grimy_huasca.png"
+        "crop": "https://oldschool.runescape.wiki/images/Grimy_huasca.png"
       },
       "baseYield": 3,
       "protection": null
@@ -914,7 +914,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Cadantine_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/4/42/Grimy_cadantine.png"
+        "crop": "https://oldschool.runescape.wiki/images/Grimy_cadantine.png"
       },
       "baseYield": 3,
       "protection": null
@@ -938,7 +938,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Lantadyme_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/2/2b/Grimy_lantadyme.png"
+        "crop": "https://oldschool.runescape.wiki/images/Grimy_lantadyme.png"
       },
       "baseYield": 3,
       "protection": null
@@ -962,7 +962,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Dwarf_weed_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/3/3c/Grimy_dwarf_weed.png"
+        "crop": "https://oldschool.runescape.wiki/images/Grimy_dwarf_weed.png"
       },
       "baseYield": 3,
       "protection": null
@@ -989,6 +989,177 @@
         "crop": "https://oldschool.runescape.wiki/images/1/16/Grimy_torstol.png"
       },
       "baseYield": 3,
+      "protection": null
+    }
+  ],
+  "bushes": [
+    {
+      "id": "redberry",
+      "name": "Redberry",
+      "type": "bush",
+      "seedId": 5101,
+      "seedName": "Redberry seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Redberry_seed",
+      "lastUpdated": "2025-09-07T18:30:00.000Z",
+      "farmingLevel": 10,
+      "growthTime": 100,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 75.5,
+      "expBreakdown": {
+        "planting": 11.5,
+        "checkHealth": 0,
+        "harvest": 64.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Redberry_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/Redberries.png"
+      },
+      "baseYield": 4,
+      "protection": {
+        "type": "crop",
+        "quantity": 4,
+        "item": "cabbage",
+        "itemDescription": "4 sacks of cabbages (10 cabbages per sack)"
+      }
+    },
+    {
+      "id": "cadavaberry",
+      "name": "Cadavaberry",
+      "type": "bush",
+      "seedId": 5102,
+      "seedName": "Cadavaberry seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Cadavaberry_seed",
+      "lastUpdated": "2025-09-07T18:30:00.000Z",
+      "farmingLevel": 22,
+      "growthTime": 120,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 120.5,
+      "expBreakdown": {
+        "planting": 18.0,
+        "checkHealth": 0,
+        "harvest": 102.5
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Cadavaberry_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/Cadava_berries.png"
+      },
+      "baseYield": 4,
+      "protection": {
+        "type": "crop",
+        "quantity": 3,
+        "item": "tomato",
+        "itemDescription": "3 baskets of tomatoes (5 tomatoes per basket)"
+      }
+    },
+    {
+      "id": "dwellberry",
+      "name": "Dwellberry",
+      "type": "bush",
+      "seedId": 5103,
+      "seedName": "Dwellberry seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Dwellberry_seed",
+      "lastUpdated": "2025-09-07T18:30:00.000Z",
+      "farmingLevel": 36,
+      "growthTime": 140,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 208.5,
+      "expBreakdown": {
+        "planting": 31.5,
+        "checkHealth": 0,
+        "harvest": 177.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Dwellberry_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/Dwellberries.png"
+      },
+      "baseYield": 4,
+      "protection": {
+        "type": "crop",
+        "quantity": 3,
+        "item": "strawberry",
+        "itemDescription": "3 baskets of strawberries (5 strawberries per basket)"
+      }
+    },
+    {
+      "id": "jangerberry",
+      "name": "Jangerberry",
+      "type": "bush",
+      "seedId": 5104,
+      "seedName": "Jangerberry seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Jangerberry_seed",
+      "lastUpdated": "2025-09-07T18:30:00.000Z",
+      "farmingLevel": 48,
+      "growthTime": 160,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 335.0,
+      "expBreakdown": {
+        "planting": 50.5,
+        "checkHealth": 0,
+        "harvest": 284.5
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Jangerberry_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/Jangerberries.png"
+      },
+      "baseYield": 4,
+      "protection": {
+        "type": "crop",
+        "quantity": 6,
+        "item": "watermelon",
+        "itemDescription": "6 watermelons"
+      }
+    },
+    {
+      "id": "whiteberry",
+      "name": "Whiteberry",
+      "type": "bush",
+      "seedId": 5105,
+      "seedName": "Whiteberry seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Whiteberry_seed",
+      "lastUpdated": "2025-09-07T18:30:00.000Z",
+      "farmingLevel": 59,
+      "growthTime": 160,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 515.5,
+      "expBreakdown": {
+        "planting": 78.0,
+        "checkHealth": 0,
+        "harvest": 437.5
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Whiteberry_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/White_berries.png"
+      },
+      "baseYield": 4,
+      "protection": {
+        "type": "item",
+        "quantity": 8,
+        "item": "bittercap_mushroom",
+        "itemDescription": "8 bittercap mushrooms"
+      }
+    },
+    {
+      "id": "poison_ivy",
+      "name": "Poison ivy",
+      "type": "bush",
+      "seedId": 5106,
+      "seedName": "Poison ivy seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Poison_ivy_seed",
+      "lastUpdated": "2025-09-07T18:30:00.000Z",
+      "farmingLevel": 70,
+      "growthTime": 160,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 795.0,
+      "expBreakdown": {
+        "planting": 120.0,
+        "checkHealth": 0,
+        "harvest": 675.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Poison_ivy_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/Poison_ivy_berries.png"
+      },
+      "baseYield": 4,
       "protection": null
     }
   ]

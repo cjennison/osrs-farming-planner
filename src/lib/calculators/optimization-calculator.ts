@@ -25,6 +25,7 @@ export interface CalculationOptions {
   yieldStrategy?: YieldStrategy;
   excludeFlowers?: boolean;
   excludeHerbs?: boolean;
+  excludeBushes?: boolean;
 }
 
 export interface CropInfo {
@@ -165,6 +166,10 @@ function findOptimalCropForLevel(
     availableCrops = availableCrops.filter((crop) => crop.type !== "herb");
   }
 
+  if (options.excludeBushes) {
+    availableCrops = availableCrops.filter((crop) => crop.type !== "bush");
+  }
+
   if (availableCrops.length === 0) {
     return null;
   }
@@ -262,23 +267,43 @@ function calculateStepDependencies(
 
   // Extract inputs from breakdown - for each step, calculate seeds needed
   result.breakdown.forEach((step) => {
-    const crop = getCropById(step.crop);
+    // Skip purchasable items - they're handled separately
+    if (step.crop.includes("(purchasable)")) {
+      // Add purchasable items (compost, etc.)
+      if (step.purchaseQuantity && step.purchaseQuantity > 0) {
+        const itemId = step.crop.replace(/\s*\(purchasable\)\s*$/i, "").trim();
+        inputs.purchasables[itemId] =
+          (inputs.purchasables[itemId] || 0) + step.purchaseQuantity;
+      }
+      return;
+    }
+
+    // For crop steps, find the crop data and add seeds
+    const cropName = step.crop;
+    const crop = getCropById(cropName) || getCropById(cropName.toLowerCase());
+
     if (crop && step.patchesNeeded) {
       // Use crop's seedId if available, otherwise use crop id
       const seedId = crop.seedId?.toString() || crop.id;
       const patchesForThisStep =
         step.patchesNeeded.average || step.patchesNeeded.min || 1;
-      const seedsNeeded = patchesForThisStep * crop.seedsPerPatch;
+      const seedsNeeded = patchesForThisStep * (crop.seedsPerPatch || 1);
 
       inputs.seeds[seedId] = (inputs.seeds[seedId] || 0) + seedsNeeded;
     }
+  });
 
-    // Add purchasable items (compost, etc.)
-    if (step.purchaseQuantity && step.purchaseQuantity > 0) {
-      // The step.crop for purchasables might have " (purchasable)" suffix
-      const itemId = step.crop.replace(/\s*\(purchasable\)\s*$/i, "").trim();
-      inputs.purchasables[itemId] =
-        (inputs.purchasables[itemId] || 0) + step.purchaseQuantity;
+  // Also add seeds for all crops in requirements (in case breakdown missed any)
+  Object.entries(result.requirements).forEach(([cropId, req]) => {
+    const crop = getCropById(cropId);
+    if (crop) {
+      const seedId = crop.seedId?.toString() || crop.id;
+      const seedsNeeded = req.patches * (crop.seedsPerPatch || 1);
+
+      // Only add if not already included
+      if (!inputs.seeds[seedId]) {
+        inputs.seeds[seedId] = seedsNeeded;
+      }
     }
   });
 

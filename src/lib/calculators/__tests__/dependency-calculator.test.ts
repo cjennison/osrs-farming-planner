@@ -8,7 +8,48 @@ import {
   hasProtection,
 } from "../dependency-calculator";
 
-describe("OSRS Farming Dependency Calculator", () => {
+  });
+
+  test("should calculate dependencies for crops requiring bush protection", () => {
+    // Test snape grass which requires jangerberry (a bush crop)
+    const result = calculateDependencies(
+      "snape_grass",
+      1,
+      61,
+      {},
+      "average",
+      "none",
+      "none",
+    );
+
+    // Should include snape grass itself
+    expect(result.requirements.snape_grass).toBeDefined();
+
+    // Should include jangerberry as a requirement (bush crop)
+    expect(result.requirements.jangerberry).toBeDefined();
+    expect(result.requirements.jangerberry.reason).toContain("Payment for");
+  });
+
+  test("should map product names to crop IDs for bush products", () => {
+    // Test that the CROP_PRODUCT_MAP correctly maps jangerberry to jangerberry crop
+    const result = calculateDependencies(
+      "snape_grass",
+      1,
+      61,
+      {},
+      "average",
+      "none", 
+      "none",
+    );
+
+    // The requirements should include jangerberry (the bush crop) not an unknown item
+    const requirements = Object.keys(result.requirements);
+    expect(requirements).toContain("jangerberry");
+    expect(result.requirements.jangerberry.reason).toContain("Snape grass");
+  });
+});
+
+describe("OSRS Farming Dependency Calculator - XP Calculations", () => {
   describe("Basic crop data validation", () => {
     test("should have correct crop protection data", () => {
       // Potato now has compost protection (updated from OSRS Wiki)
@@ -1255,6 +1296,26 @@ describe("OSRS Farming Dependency Calculator", () => {
 
       // Should meet or exceed target XP
       expect(result.totalXpGained).toBeGreaterThanOrEqual(targetXp);
+    });
+  });
+
+  describe("Crop product mapping", () => {
+    test("should handle jute_fibre protection (sweetcorn)", () => {
+      // Sweetcorn requires jute_fibre, which comes from jute hops
+      const result = calculateDependencies("sweetcorn", 1, 20, "none");
+      
+      // Should include jute in the requirements (since jute_fibre maps to jute)
+      expect(result.requirements).toHaveProperty("jute");
+      expect(result.requirements.jute.reason).toContain("Payment for Sweetcorn");
+    });
+
+    test("should handle jangerberry protection (snape_grass)", () => {
+      // Snape grass requires jangerberries, which come from jangerberry bushes
+      const result = calculateDependencies("snape_grass", 1, 61, "none");
+      
+      // Should include jangerberry in the requirements
+      expect(result.requirements).toHaveProperty("jangerberry");
+      expect(result.requirements.jangerberry.reason).toContain("Payment for Snape grass");
     });
   });
 });

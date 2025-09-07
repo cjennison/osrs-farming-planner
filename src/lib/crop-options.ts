@@ -53,5 +53,6 @@ export function getCropCounts() {
     flower: getCropsByType("flower").length,
     herb: getCropsByType("herb").length,
     hops: getCropsByType("hops").length,
+    bush: getCropsByType("bush").length,
   };
 }

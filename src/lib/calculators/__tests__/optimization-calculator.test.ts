@@ -61,4 +61,17 @@ describe("Optimization Calculator", () => {
       );
     }
   });
+
+  it("should exclude bushes when excludeBushes is true", () => {
+    const result = calculateOptimalProgression({
+      excludeBushes: true,
+    });
+
+    for (const step of result.steps) {
+      // Check that no bush crops are selected
+      expect(step.optimalCrop.id).not.toMatch(
+        /^(redberry|cadavaberry|dwellberry|jangerberry|whiteberry|poison_ivy)$/,
+      );
+    }
+  });
 });

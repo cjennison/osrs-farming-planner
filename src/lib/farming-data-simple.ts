@@ -1,3 +1,4 @@
+// biome-ignore lint/suspicious/noExplicitAny: Legacy data access patterns
 /**
  * Data loading utilities for OSRS Farming data
  *
@@ -38,7 +39,14 @@ export function getHerbCrops(): any[] {
 }
 
 /**
- * Get all crops (allotments + flowers + hops + herbs)
+ * Get all supported bush crops
+ */
+export function getBushCrops(): any[] {
+  return cropsData.bushes;
+}
+
+/**
+ * Get all crops (allotments + flowers + hops + herbs + bushes)
  */
 export function getAllCrops(): any[] {
   return [
@@ -46,6 +54,7 @@ export function getAllCrops(): any[] {
     ...getFlowerCrops(),
     ...getHopsCrops(),
     ...getHerbCrops(),
+    ...getBushCrops(),
   ];
 }
 
@@ -60,12 +69,13 @@ export function getCropById(id: string): any | undefined {
  * Get crops by type
  */
 export function getCropsByType(
-  type: "allotment" | "flower" | "hops" | "herb",
+  type: "allotment" | "flower" | "hops" | "herb" | "bush",
 ): any[] {
   if (type === "allotment") return getAllotmentCrops();
   if (type === "flower") return getFlowerCrops();
   if (type === "hops") return getHopsCrops();
   if (type === "herb") return getHerbCrops();
+  if (type === "bush") return getBushCrops();
   return [];
 }
 

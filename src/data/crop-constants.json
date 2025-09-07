@@ -39,6 +39,14 @@
       "lantadyme": { "low": 173, "high": 180, "level": 73 },
       "dwarf_weed": { "low": 179, "high": 180, "level": 79 },
       "torstol": { "low": 185, "high": 190, "level": 85 }
+    },
+    "bushes": {
+      "redberry": { "low": 110, "high": 180, "level": 10 },
+      "cadavaberry": { "low": 122, "high": 180, "level": 22 },
+      "dwellberry": { "low": 136, "high": 180, "level": 36 },
+      "jangerberry": { "low": 148, "high": 180, "level": 48 },
+      "whiteberry": { "low": 159, "high": 180, "level": 59 },
+      "poison_ivy": { "low": 170, "high": 180, "level": 70 }
     }
   },
   "defaults": {
