@@ -8,8 +8,7 @@ import {
   hasProtection,
 } from "../dependency-calculator";
 
-  });
-
+describe("OSRS Farming Dependency Calculator - Bush Crops", () => {
   test("should calculate dependencies for crops requiring bush protection", () => {
     // Test snape grass which requires jangerberry (a bush crop)
     const result = calculateDependencies(
@@ -1306,7 +1305,9 @@ describe("OSRS Farming Dependency Calculator - XP Calculations", () => {
 
       // Should include jute in the requirements (since jute_fibre maps to jute)
       expect(result.requirements).toHaveProperty("jute");
-      expect(result.requirements.jute.reason).toContain("Payment for Sweetcorn");
+      expect(result.requirements.jute.reason).toContain(
+        "Payment for Sweetcorn",
+      );
     });
 
     test("should handle jangerberry protection (snape_grass)", () => {
@@ -1315,7 +1316,9 @@ describe("OSRS Farming Dependency Calculator - XP Calculations", () => {
 
       // Should include jangerberry in the requirements
       expect(result.requirements).toHaveProperty("jangerberry");
-      expect(result.requirements.jangerberry.reason).toContain("Payment for Snape grass");
+      expect(result.requirements.jangerberry.reason).toContain(
+        "Payment for Snape grass",
+      );
     });
   });
 });

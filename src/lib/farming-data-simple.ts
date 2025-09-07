@@ -46,7 +46,14 @@ export function getBushCrops(): any[] {
 }
 
 /**
- * Get all crops (allotments + flowers + hops + herbs + bushes)
+ * Get all supported fruit tree crops
+ */
+export function getFruitTreeCrops(): any[] {
+  return cropsData.fruit_trees;
+}
+
+/**
+ * Get all crops (allotments + flowers + hops + herbs + bushes + fruit_trees)
  */
 export function getAllCrops(): any[] {
   return [
@@ -55,6 +62,7 @@ export function getAllCrops(): any[] {
     ...getHopsCrops(),
     ...getHerbCrops(),
     ...getBushCrops(),
+    ...getFruitTreeCrops(),
   ];
 }
 
@@ -69,13 +77,14 @@ export function getCropById(id: string): any | undefined {
  * Get crops by type
  */
 export function getCropsByType(
-  type: "allotment" | "flower" | "hops" | "herb" | "bush",
+  type: "allotment" | "flower" | "hops" | "herb" | "bush" | "fruit_tree",
 ): any[] {
   if (type === "allotment") return getAllotmentCrops();
   if (type === "flower") return getFlowerCrops();
   if (type === "hops") return getHopsCrops();
   if (type === "herb") return getHerbCrops();
   if (type === "bush") return getBushCrops();
+  if (type === "fruit_tree") return getFruitTreeCrops();
   return [];
 }
 

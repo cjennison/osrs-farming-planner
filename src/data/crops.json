@@ -213,7 +213,7 @@
       "protection": {
         "type": "item",
         "quantity": 10,
-        "item": "curry_leaf",
+        "item": "curry leaf",
         "itemDescription": "curry leaves"
       }
     },
@@ -1161,6 +1161,252 @@
       },
       "baseYield": 4,
       "protection": null
+    }
+  ],
+  "fruit_trees": [
+    {
+      "id": "apple",
+      "name": "Apple",
+      "type": "fruit_tree",
+      "seedId": 5283,
+      "seedName": "Apple tree seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Apple_tree_seed",
+      "lastUpdated": "2025-09-07T18:30:00.000Z",
+      "farmingLevel": 27,
+      "growthTime": 960,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 1272.5,
+      "expBreakdown": {
+        "planting": 22.0,
+        "checkHealth": 1199.5,
+        "harvest": 51.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Apple_tree_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/Cooking_apple.png"
+      },
+      "baseYield": 6,
+      "isFixedYield": true,
+      "harvestName": "cooking apple",
+      "protection": {
+        "type": "crop",
+        "quantity": 9,
+        "item": "sweetcorn",
+        "itemDescription": "9 sweetcorn"
+      }
+    },
+    {
+      "id": "banana",
+      "name": "Banana",
+      "type": "fruit_tree",
+      "seedId": 5284,
+      "seedName": "Banana tree seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Banana_tree_seed",
+      "lastUpdated": "2025-09-07T18:30:00.000Z",
+      "farmingLevel": 33,
+      "growthTime": 960,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 1750.5,
+      "expBreakdown": {
+        "planting": 28.0,
+        "checkHealth": 1656.5,
+        "harvest": 66.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Banana_tree_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/Banana.png"
+      },
+      "baseYield": 6,
+      "isFixedYield": true,
+      "protection": {
+        "type": "crop",
+        "quantity": 4,
+        "item": "apple",
+        "itemDescription": "4 apples"
+      }
+    },
+    {
+      "id": "orange",
+      "name": "Orange",
+      "type": "fruit_tree",
+      "seedId": 5285,
+      "seedName": "Orange tree seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Orange_tree_seed",
+      "lastUpdated": "2025-09-07T18:30:00.000Z",
+      "farmingLevel": 39,
+      "growthTime": 960,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 2470.5,
+      "expBreakdown": {
+        "planting": 35.5,
+        "checkHealth": 2352.5,
+        "harvest": 82.5
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Orange_tree_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/Orange.png"
+      },
+      "baseYield": 6,
+      "isFixedYield": true,
+      "protection": {
+        "type": "crop",
+        "quantity": 3,
+        "item": "strawberry",
+        "itemDescription": "3 strawberries"
+      }
+    },
+    {
+      "id": "curry",
+      "name": "Curry",
+      "type": "fruit_tree",
+      "seedId": 5286,
+      "seedName": "Curry tree seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Curry_tree_seed",
+      "lastUpdated": "2025-09-07T18:30:00.000Z",
+      "farmingLevel": 42,
+      "growthTime": 960,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 2907.5,
+      "expBreakdown": {
+        "planting": 40.0,
+        "checkHealth": 2768.5,
+        "harvest": 99.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Curry_tree_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/Curry_leaf.png"
+      },
+      "baseYield": 6,
+      "isFixedYield": true,
+      "harvestName": "curry leaf",
+      "protection": {
+        "type": "crop",
+        "quantity": 5,
+        "item": "banana",
+        "itemDescription": "5 bananas"
+      }
+    },
+    {
+      "id": "pineapple",
+      "name": "Pineapple",
+      "type": "fruit_tree",
+      "seedId": 5287,
+      "seedName": "Pineapple tree seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Pineapple_tree_seed",
+      "lastUpdated": "2025-09-07T18:30:00.000Z",
+      "farmingLevel": 51,
+      "growthTime": 960,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 4791.5,
+      "expBreakdown": {
+        "planting": 57.0,
+        "checkHealth": 4605.5,
+        "harvest": 129.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Pineapple_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/Pineapple.png"
+      },
+      "baseYield": 6,
+      "isFixedYield": true,
+      "protection": {
+        "type": "crop",
+        "quantity": 10,
+        "item": "watermelon",
+        "itemDescription": "10 watermelons"
+      }
+    },
+    {
+      "id": "papaya",
+      "name": "Papaya",
+      "type": "fruit_tree",
+      "seedId": 5288,
+      "seedName": "Papaya tree seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Papaya_tree_seed",
+      "lastUpdated": "2025-09-07T18:30:00.000Z",
+      "farmingLevel": 57,
+      "growthTime": 960,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 6146.5,
+      "expBreakdown": {
+        "planting": 72.0,
+        "checkHealth": 5974.5,
+        "harvest": 100.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Papaya_tree_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/Papaya_fruit.png"
+      },
+      "baseYield": 6,
+      "isFixedYield": true,
+      "harvestName": "papaya fruit",
+      "protection": {
+        "type": "crop",
+        "quantity": 10,
+        "item": "pineapple",
+        "itemDescription": "10 pineapples"
+      }
+    },
+    {
+      "id": "palm",
+      "name": "Palm",
+      "type": "fruit_tree",
+      "seedId": 5289,
+      "seedName": "Palm tree seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Palm_tree_seed",
+      "lastUpdated": "2025-09-07T18:30:00.000Z",
+      "farmingLevel": 68,
+      "growthTime": 960,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 10150.0,
+      "expBreakdown": {
+        "planting": 110.5,
+        "checkHealth": 9889.5,
+        "harvest": 150.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Palm_tree_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/Coconut.png"
+      },
+      "baseYield": 6,
+      "isFixedYield": true,
+      "harvestName": "coconut",
+      "protection": {
+        "type": "crop",
+        "quantity": 15,
+        "item": "papaya",
+        "itemDescription": "15 papayas"
+      }
+    },
+    {
+      "id": "dragonfruit",
+      "name": "Dragonfruit",
+      "type": "fruit_tree",
+      "seedId": 22877,
+      "seedName": "Dragonfruit tree seed",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Dragonfruit_tree_seed",
+      "lastUpdated": "2025-09-07T18:30:00.000Z",
+      "farmingLevel": 81,
+      "growthTime": 960,
+      "seedsPerPatch": 1,
+      "expPerHarvest": 17335.5,
+      "expBreakdown": {
+        "planting": 140.0,
+        "checkHealth": 17010.5,
+        "harvest": 185.0
+      },
+      "images": {
+        "seed": "https://oldschool.runescape.wiki/images/Dragonfruit_tree_seed_5.png",
+        "crop": "https://oldschool.runescape.wiki/images/Dragonfruit.png"
+      },
+      "baseYield": 6,
+      "isFixedYield": true,
+      "protection": {
+        "type": "crop",
+        "quantity": 15,
+        "item": "coconut",
+        "itemDescription": "15 coconuts"
+      }
     }
   ]
 }

@@ -115,6 +115,12 @@ const CROP_TYPE_FILTERS = [
   { value: "herb", label: "Herbs", icon: "🌿", count: CROP_COUNTS.herb },
   { value: "hops", label: "Hops", icon: "🍺", count: CROP_COUNTS.hops },
   { value: "bush", label: "Bushes", icon: "🫐", count: CROP_COUNTS.bush },
+  {
+    value: "fruit_tree",
+    label: "Fruit Trees",
+    icon: "🍎",
+    count: CROP_COUNTS.fruit_tree,
+  },
 ];
 
 const COMPOST_OPTIONS = [

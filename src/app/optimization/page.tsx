@@ -36,6 +36,7 @@ export default function OptimizedLevelingPage() {
     excludeFlowers: true, // Default to true as requested
     excludeHerbs: false, // Default to false as requested
     excludeBushes: false, // Default to false for bushes
+    excludeFruitTrees: false, // Default to false for fruit trees
   });
 
   const [showInputs, setShowInputs] = useState(true);
@@ -102,17 +103,21 @@ export default function OptimizedLevelingPage() {
                 onKandarinDiaryChange={(value) =>
                   handleOptionsChange({ kandarinDiary: value })
                 }
-                excludeFlowers={options.excludeFlowers || true}
+                excludeFlowers={options.excludeFlowers ?? true}
                 onExcludeFlowersChange={(value) =>
                   handleOptionsChange({ excludeFlowers: value })
                 }
-                excludeHerbs={options.excludeHerbs || false}
+                excludeHerbs={options.excludeHerbs ?? false}
                 onExcludeHerbsChange={(value) =>
                   handleOptionsChange({ excludeHerbs: value })
                 }
-                excludeBushes={options.excludeBushes || false}
+                excludeBushes={options.excludeBushes ?? false}
                 onExcludeBushesChange={(value) =>
                   handleOptionsChange({ excludeBushes: value })
+                }
+                excludeFruitTrees={options.excludeFruitTrees ?? false}
+                onExcludeFruitTreesChange={(value) =>
+                  handleOptionsChange({ excludeFruitTrees: value })
                 }
               />
             </Collapse>
@@ -245,9 +250,7 @@ export default function OptimizedLevelingPage() {
                                       imageType="crop"
                                       size={16}
                                     />
-                                    <Text size="xs">
-                                      {requirement.patches}
-                                    </Text>
+                                    <Text size="xs">{requirement.patches}</Text>
                                   </Group>
                                 ))}
                             </Group>

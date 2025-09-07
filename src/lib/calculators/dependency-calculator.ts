@@ -17,7 +17,7 @@ export interface CropPayment {
 export interface CropData {
   id: string;
   name: string;
-  type: "allotment" | "flower" | "hops" | "herb" | "bush";
+  type: "allotment" | "flower" | "hops" | "herb" | "bush" | "fruit_tree";
   farmingLevel: number;
   protection?: CropPayment;
   baseYield: number;
@@ -110,7 +110,13 @@ function convertToCropData(crop: any): CropData {
   return {
     id: crop.id,
     name: crop.name,
-    type: crop.type as "allotment" | "flower" | "hops" | "herb" | "bush",
+    type: crop.type as
+      | "allotment"
+      | "flower"
+      | "hops"
+      | "herb"
+      | "bush"
+      | "fruit_tree",
     farmingLevel: crop.farmingLevel || 1,
     baseYield: crop.baseYield || 3,
     seedsPerPatch: crop.seedsPerPatch || 3,
@@ -135,6 +141,14 @@ function convertToCropData(crop: any): CropData {
 function getCropData(cropId: string): CropData | undefined {
   // First try direct crop lookup
   let crop = getCropById(cropId);
+
+  // If not found, check if any crop has this as their harvestName
+  if (!crop) {
+    const allCrops = getAllCrops();
+    crop = allCrops.find(
+      (c) => c.harvestName?.toLowerCase() === cropId.toLowerCase(),
+    );
+  }
 
   // If not found, check if it's a crop product that maps to a source crop
   if (!crop) {

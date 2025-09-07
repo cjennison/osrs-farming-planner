@@ -8,7 +8,14 @@
 export interface Crop {
   id: string;
   name: string;
-  type: "allotment" | "flower" | "tree" | "herb" | "hops";
+  type:
+    | "allotment"
+    | "flower"
+    | "tree"
+    | "herb"
+    | "hops"
+    | "bush"
+    | "fruit_tree";
   seedId: number;
   seedName: string;
 
@@ -31,6 +38,7 @@ export interface Crop {
   baseYield?: number;
   yieldRange?: [number, number];
   isFixedYield?: boolean; // If true, use baseYield instead of algorithm
+  harvestName?: string; // Alternative name for the harvested product (e.g., "curry leaf" for curry tree)
 
   // Experience
   plantingXP?: number;
@@ -46,7 +54,14 @@ export interface FarmingPatch {
   id: string;
   name: string;
   location: string;
-  type: "allotment" | "flower" | "tree" | "herb" | "hops";
+  type:
+    | "allotment"
+    | "flower"
+    | "tree"
+    | "herb"
+    | "hops"
+    | "bush"
+    | "fruit_tree";
   coordinates: [number, number];
 
   // Accessibility

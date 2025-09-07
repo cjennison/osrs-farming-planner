@@ -87,67 +87,6 @@
       },
       "uses": ["Sweetcorn protection payment"]
     },
-    "apple": {
-      "id": "apple",
-      "name": "Cooking apple",
-      "itemId": 1955,
-      "wikiUrl": "https://oldschool.runescape.wiki/w/Cooking_apple",
-      "category": "food",
-      "type": "purchasable",
-      "aliases": ["apple", "cooking apple"],
-      "images": {
-        "item": "https://oldschool.runescape.wiki/images/4/43/Cooking_apple.png"
-      },
-      "shopInfo": {
-        "available": true,
-        "locations": [
-          {
-            "shop": "Food shops",
-            "price": 1,
-            "stock": "10"
-          },
-          {
-            "shop": "Grand Exchange",
-            "price": "varies",
-            "stock": "unlimited"
-          }
-        ]
-      },
-      "containerInfo": {
-        "isContainer": true,
-        "containerName": "basket of apples",
-        "containerSize": 5,
-        "containerItemId": 5386
-      },
-      "uses": ["Strawberry protection payment"]
-    },
-    "curry_leaf": {
-      "id": "curry_leaf",
-      "name": "Curry leaf",
-      "itemId": 5970,
-      "wikiUrl": "https://oldschool.runescape.wiki/w/Curry_leaf",
-      "category": "herbs",
-      "type": "purchasable",
-      "images": {
-        "item": "https://oldschool.runescape.wiki/images/c/cd/Curry_leaf.png"
-      },
-      "shopInfo": {
-        "available": true,
-        "locations": [
-          {
-            "shop": "Spice shops",
-            "price": 20,
-            "stock": "10"
-          },
-          {
-            "shop": "Grand Exchange",
-            "price": "varies",
-            "stock": "unlimited"
-          }
-        ]
-      },
-      "uses": ["Watermelon protection payment"]
-    },
     "barley_malt": {
       "id": "barley_malt",
       "name": "Barley malt",
@@ -233,23 +172,6 @@
       },
       "containerInfo": {
         "contains": "tomato",
-        "quantity": 5,
-        "emptyContainer": "empty_basket"
-      },
-      "uses": ["Crop protection payments"]
-    },
-    "basket_of_apples": {
-      "id": "basket_of_apples",
-      "name": "Basket of Apples",
-      "itemId": 1955,
-      "wikiUrl": "https://oldschool.runescape.wiki/w/Basket_of_apples",
-      "category": "containers",
-      "type": "container",
-      "images": {
-        "item": "https://oldschool.runescape.wiki/images/Basket_of_apples_detail.png"
-      },
-      "containerInfo": {
-        "contains": "apple",
         "quantity": 5,
         "emptyContainer": "empty_basket"
       },

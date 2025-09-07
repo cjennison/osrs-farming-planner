@@ -28,6 +28,7 @@ export interface CalculationOptions {
   excludeFlowers?: boolean;
   excludeHerbs?: boolean;
   excludeBushes?: boolean;
+  excludeFruitTrees?: boolean;
 }
 
 export interface OptimizationStep {
@@ -245,6 +246,12 @@ function findOptimalCropForLevel(
 
   if (options.excludeBushes) {
     availableCrops = availableCrops.filter((crop) => crop.type !== "bush");
+  }
+
+  if (options.excludeFruitTrees) {
+    availableCrops = availableCrops.filter(
+      (crop) => crop.type !== "fruit_tree",
+    );
   }
 
   if (availableCrops.length === 0) {
