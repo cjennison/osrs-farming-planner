@@ -1,8 +1,11 @@
+import { getXpForLevel, getXpNeeded } from "../../farming-data-utils";
 import {
   calculateDependencies,
   calculateLevelDependencies,
-  getXpForLevel,
-  getXpNeeded,
+  calculateYield,
+  getAvailableCrops,
+  getDependencyChain,
+  hasProtection,
 } from "../dependency-calculator";
 
 describe("OSRS Farming Dependency Calculator", () => {

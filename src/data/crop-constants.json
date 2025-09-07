@@ -1,0 +1,49 @@
+{
+  "description": "OSRS Crop Constants for Chance-to-Save (CTS) calculations",
+  "source": "Official values from Mod Easty via Twitter DMs, documented on OSRS Wiki",
+  "note": "These constants are used in the harvest lives system to calculate crop yields",
+  "constants": {
+    "allotments": {
+      "potato": { "low": 101, "high": 180, "level": 1 },
+      "onion": { "low": 105, "high": 180, "level": 5 },
+      "cabbage": { "low": 107, "high": 180, "level": 7 },
+      "tomato": { "low": 112, "high": 180, "level": 12 },
+      "sweetcorn": { "low": 88, "high": 180, "level": 20 },
+      "strawberry": { "low": 103, "high": 180, "level": 31 },
+      "watermelon": { "low": 126, "high": 180, "level": 47 },
+      "snape_grass": { "low": 148, "high": 195, "level": 61 }
+    },
+    "hops": {
+      "barley": { "low": 105, "high": 180, "level": 3 },
+      "hammerstone": { "low": 104, "high": 180, "level": 4 },
+      "asgarnian": { "low": 110, "high": 180, "level": 8 },
+      "jute": { "low": 115, "high": 180, "level": 13 },
+      "yanillian": { "low": 118, "high": 180, "level": 16 },
+      "krandorian": { "low": 125, "high": 180, "level": 21 },
+      "wildblood": { "low": 135, "high": 180, "level": 28 }
+    },
+    "herbs": {
+      "guam": { "low": 109, "high": 180, "level": 9 },
+      "marrentill": { "low": 114, "high": 180, "level": 14 },
+      "tarromin": { "low": 119, "high": 180, "level": 19 },
+      "harralander": { "low": 126, "high": 180, "level": 26 },
+      "gout_tuber": { "low": 129, "high": 180, "level": 29 },
+      "ranarr": { "low": 132, "high": 180, "level": 32 },
+      "toadflax": { "low": 138, "high": 180, "level": 38 },
+      "irit": { "low": 144, "high": 180, "level": 44 },
+      "avantoe": { "low": 150, "high": 180, "level": 50 },
+      "kwuarm": { "low": 156, "high": 180, "level": 56 },
+      "snapdragon": { "low": 162, "high": 180, "level": 62 },
+      "huasca": { "low": 165, "high": 180, "level": 65 },
+      "cadantine": { "low": 167, "high": 180, "level": 67 },
+      "lantadyme": { "low": 173, "high": 180, "level": 73 },
+      "dwarf_weed": { "low": 179, "high": 180, "level": 79 },
+      "torstol": { "low": 185, "high": 190, "level": 85 }
+    }
+  },
+  "defaults": {
+    "low": 100,
+    "high": 180,
+    "note": "Default values used for crops not specifically listed"
+  }
+}

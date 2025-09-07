@@ -2,6 +2,7 @@
 // Based on official OSRS Wiki protection payment requirements
 
 import { getAllCrops, getCropById } from "../farming-data-simple";
+import { getCropConstants, getXpNeeded } from "../farming-data-utils";
 import {
   getPurchasableItemByName,
   isPurchasableItem,
@@ -98,50 +99,6 @@ export interface LevelTargetCalculationResult extends CalculationResult {
       patches: number;
     };
   };
-}
-
-/**
- * OSRS Farming XP table - XP required for each level
- * Source: https://oldschool.runescape.wiki/w/Experience_table
- */
-const FARMING_XP_TABLE = [
-  0, 0, 83, 174, 276, 388, 512, 650, 801, 969, 1154, 1358, 1584, 1833, 2107,
-  2411, 2746, 3115, 3523, 3973, 4470, 5018, 5624, 6291, 7028, 7842, 8740, 9730,
-  10824, 12031, 13363, 14833, 16456, 18247, 20224, 22406, 24815, 27473, 30408,
-  33648, 37224, 41171, 45529, 50339, 55649, 61512, 67983, 75127, 83014, 91721,
-  101333, 111945, 123660, 136594, 150872, 166636, 184040, 203254, 224466,
-  247886, 273742, 302288, 333804, 368599, 407015, 449428, 496254, 547953,
-  605032, 668051, 737627, 814445, 899257, 992895, 1096278, 1210421, 1336443,
-  1475581, 1629200, 1798808, 1986068, 2192818, 2421087, 2673114, 2951373,
-  3258594, 3597792, 3972294, 4385776, 4842295, 5346332, 5902831, 6517253,
-  7195629, 7944614, 8771558, 9684577, 10692629, 11805606, 13034431,
-];
-
-/**
- * Calculate total XP required to reach a level from level 1
- */
-export function getXpForLevel(level: number): number {
-  if (level < 1 || level > 99) return 0;
-  return FARMING_XP_TABLE[level];
-}
-
-/**
- * Calculate XP needed to go from current level to target level
- */
-export function getXpNeeded(currentLevel: number, targetLevel: number): number {
-  return getXpForLevel(targetLevel) - getXpForLevel(currentLevel);
-}
-
-/**
- * Calculate current level from total XP
- */
-export function getLevelFromXp(totalXp: number): number {
-  for (let level = 99; level >= 1; level--) {
-    if (totalXp >= FARMING_XP_TABLE[level]) {
-      return level;
-    }
-  }
-  return 1;
 }
 
 /**
@@ -247,46 +204,7 @@ export function calculateYield(
 
   // Chance to save harvest life constants (CTS values from OSRS Wiki Talk page)
   // These are official values from Mod Easty via Twitter DMs
-  const cropConstants: Record<string, { low: number; high: number }> = {
-    // Allotments
-    potato: { low: 101, high: 180 }, // Level 1 crop
-    onion: { low: 105, high: 180 }, // Level 5 crop
-    cabbage: { low: 107, high: 180 }, // Level 7 crop
-    tomato: { low: 112, high: 180 }, // Level 12 crop
-    sweetcorn: { low: 88, high: 180 }, // Level 20 crop
-    strawberry: { low: 103, high: 180 }, // Level 31 crop
-    watermelon: { low: 126, high: 180 }, // Level 47 crop
-    snape_grass: { low: 148, high: 195 }, // Level 61 crop
-
-    // Hops - Using similar CTS values as allotments (estimated based on average yields)
-    barley: { low: 105, high: 180 }, // Level 3 crop
-    hammerstone: { low: 104, high: 180 }, // Level 4 crop
-    asgarnian: { low: 110, high: 180 }, // Level 8 crop
-    jute: { low: 115, high: 180 }, // Level 13 crop
-    yanillian: { low: 118, high: 180 }, // Level 16 crop
-    krandorian: { low: 125, high: 180 }, // Level 21 crop
-    wildblood: { low: 135, high: 180 }, // Level 28 crop
-
-    // Herbs - Base yield of 3, similar CTS values to allotments
-    guam: { low: 109, high: 180 }, // Level 9 crop
-    marrentill: { low: 114, high: 180 }, // Level 14 crop
-    tarromin: { low: 119, high: 180 }, // Level 19 crop
-    harralander: { low: 126, high: 180 }, // Level 26 crop
-    gout_tuber: { low: 129, high: 180 }, // Level 29 crop (goutweed)
-    ranarr: { low: 132, high: 180 }, // Level 32 crop
-    toadflax: { low: 138, high: 180 }, // Level 38 crop
-    irit: { low: 144, high: 180 }, // Level 44 crop
-    avantoe: { low: 150, high: 180 }, // Level 50 crop
-    kwuarm: { low: 156, high: 180 }, // Level 56 crop
-    snapdragon: { low: 162, high: 180 }, // Level 62 crop
-    huasca: { low: 165, high: 180 }, // Level 65 crop
-    cadantine: { low: 167, high: 180 }, // Level 67 crop
-    lantadyme: { low: 173, high: 180 }, // Level 73 crop
-    dwarf_weed: { low: 179, high: 180 }, // Level 79 crop
-    torstol: { low: 185, high: 190 }, // Level 85 crop
-  };
-
-  const constants = cropConstants[crop] || { low: 100, high: 180 };
+  const constants = getCropConstants(crop);
 
   // Apply Magic Secateurs bonus (10% increase to CTS constants)
   // According to OSRS Wiki: https://oldschool.runescape.wiki/w/Farming#Variable_crop_yield
