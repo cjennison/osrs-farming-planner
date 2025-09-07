@@ -8,6 +8,7 @@ import type {
 } from "@/lib/calculators/dependency-calculator";
 import { getCropById } from "@/lib/farming-data-simple";
 import { getPurchasableItemById } from "@/lib/purchasable-items";
+import { OSRSImage } from "./OSRSImage";
 import { SectionHeader } from "./SectionHeader";
 
 interface GrowthBreakdownProps {
@@ -65,6 +66,12 @@ export function GrowthBreakdown({
                     <Badge variant="filled" color="sage" size="lg">
                       {result.breakdown.length - step.level}
                     </Badge>
+                    <OSRSImage
+                      itemId={isPurchasable ? step.crop.replace(" (purchasable)", "").trim() : step.crop}
+                      isPurchasable={isPurchasable}
+                      imageType="crop"
+                      size={40}
+                    />
                     <Stack gap="xs" flex={1}>
                       <Group gap="xs">
                         <Text fw={500}>

@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  Badge,
-  Collapse,
-  Group,
-  Image,
-  Paper,
-  Stack,
-  Text,
-} from "@mantine/core";
+import { Badge, Collapse, Group, Paper, Stack, Text } from "@mantine/core";
 import {
   IconExternalLink,
   IconSeeding,
@@ -21,13 +13,14 @@ import type {
 } from "@/lib/calculators/dependency-calculator";
 import { getCropById } from "@/lib/farming-data-simple";
 import { getPurchasableItemByName } from "@/lib/purchasable-items";
+import { OSRSImage } from "./OSRSImage";
 import { SectionHeader } from "./SectionHeader";
 
 interface InputItem {
   type: "seed" | "purchase";
   name: string;
   quantity: number;
-  image: string;
+  itemId: string; // The crop ID or purchasable item ID for OSRSImage
   crop?: string;
   purpose?: string;
   link?: string;
@@ -54,9 +47,7 @@ export function InputsBreakdown({ result }: InputsBreakdownProps) {
           type: "seed",
           name: cropData.seedName || `${cropData.name} seed`,
           quantity: seedsNeeded,
-          image:
-            cropData.images?.seed ||
-            "https://oldschool.runescape.wiki/images/0/0a/Seed_placeholder.png",
+          itemId: cropId, // Use the crop ID for OSRSImage
           crop: cropData.name,
           link: cropData.wikiUrl,
         });
@@ -76,16 +67,13 @@ export function InputsBreakdown({ result }: InputsBreakdownProps) {
       const itemName =
         purchasableItem?.name ||
         cleanCropName.charAt(0).toUpperCase() + cleanCropName.slice(1);
-      const itemImage =
-        purchasableItem?.images?.item ||
-        "https://oldschool.runescape.wiki/images/0/0a/Placeholder_item.png";
       const itemLink = purchasableItem?.wikiUrl;
 
       requiredInputs.push({
         type: "purchase",
         name: itemName,
         quantity: step.purchaseQuantity,
-        image: itemImage,
+        itemId: cleanCropName, // Use the clean item ID for OSRSImage
         purpose: step.purpose,
         link: itemLink,
       });
@@ -124,13 +112,11 @@ export function InputsBreakdown({ result }: InputsBreakdownProps) {
 
             const content = (
               <Group gap="md" align="center">
-                <Image
-                  src={input.image}
-                  alt={input.name}
-                  w={32}
-                  h={32}
-                  fit="contain"
-                  fallbackSrc="https://oldschool.runescape.wiki/images/0/0a/Placeholder_item.png"
+                <OSRSImage
+                  itemId={input.itemId}
+                  isPurchasable={input.type === "purchase"}
+                  imageType={input.type === "seed" ? "seed" : "crop"}
+                  size={32}
                 />
                 <Stack gap={2} flex={1}>
                   <Group gap="xs">
