@@ -5,6 +5,7 @@ import {
   IconExternalLink,
   IconSeeding,
   IconShoppingCart,
+  IconTool,
 } from "@tabler/icons-react";
 import { useState } from "react";
 import type {
@@ -24,6 +25,7 @@ interface InputItem {
   crop?: string;
   purpose?: string;
   link?: string;
+  specialInstructions?: string; // Special processing instructions
 }
 
 interface InputsBreakdownProps {
@@ -43,6 +45,13 @@ export function InputsBreakdown({ result }: InputsBreakdownProps) {
       const cropData = getCropById(cropId);
       if (cropData) {
         const seedsNeeded = requirement.patches * (cropData.seedsPerPatch || 1);
+
+        // Check if this crop produces something that needs special processing
+        let specialInstructions: string | undefined;
+        if (cropData.harvestName && cropData.specialInstructions) {
+          specialInstructions = cropData.specialInstructions;
+        }
+
         requiredInputs.push({
           type: "seed",
           name: cropData.seedName || `${cropData.name} seed`,
@@ -50,6 +59,7 @@ export function InputsBreakdown({ result }: InputsBreakdownProps) {
           itemId: cropId, // Use the crop ID for OSRSImage
           crop: cropData.name,
           link: cropData.wikiUrl,
+          specialInstructions,
         });
       }
     }
@@ -162,6 +172,21 @@ export function InputsBreakdown({ result }: InputsBreakdownProps) {
                     <Text size="xs" c="dimmed">
                       {input.purpose}
                     </Text>
+                  )}
+                  {input.specialInstructions && (
+                    <Group gap="xs" align="flex-start">
+                      <IconTool
+                        size={12}
+                        style={{
+                          color: "var(--mantine-color-orange-6)",
+                          marginTop: 2,
+                          flexShrink: 0,
+                        }}
+                      />
+                      <Text size="xs" c="orange.6" fw={500}>
+                        {input.specialInstructions}
+                      </Text>
+                    </Group>
                   )}
                 </Stack>
               </Group>

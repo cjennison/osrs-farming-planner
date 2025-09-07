@@ -39,6 +39,7 @@ export interface Crop {
   yieldRange?: [number, number];
   isFixedYield?: boolean; // If true, use baseYield instead of algorithm
   harvestName?: string; // Alternative name for the harvested product (e.g., "curry leaf" for curry tree)
+  specialInstructions?: string; // Special instructions for processing the harvest (e.g., cooking requirements)
 
   // Experience
   plantingXP?: number;

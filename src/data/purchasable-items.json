@@ -65,28 +65,6 @@
       },
       "uses": ["Premium allotment patch protection"]
     },
-    "barley_malt": {
-      "id": "barley_malt",
-      "name": "Barley malt",
-      "itemId": 6006,
-      "wikiUrl": "https://oldschool.runescape.wiki/w/Barley_malt",
-      "category": "brewing",
-      "type": "purchasable",
-      "images": {
-        "item": "https://oldschool.runescape.wiki/images/8/89/Barley_malt.png"
-      },
-      "shopInfo": {
-        "available": true,
-        "locations": [
-          {
-            "shop": "Farming shops",
-            "price": 30,
-            "stock": "unlimited"
-          }
-        ]
-      },
-      "uses": ["Jute protection payment"]
-    },
     "sack_of_potatoes": {
       "id": "sack_of_potatoes",
       "name": "Sack of Potatoes",

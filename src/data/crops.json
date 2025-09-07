@@ -415,6 +415,8 @@
         "crop": "https://oldschool.runescape.wiki/images/Barley.png"
       },
       "baseYield": 3,
+      "harvestName": "barley malt",
+      "specialInstructions": "Raw barley must be cooked to create barley malt. Use raw barley on a range or fire to convert it.",
       "protection": {
         "type": "item",
         "quantity": 3,

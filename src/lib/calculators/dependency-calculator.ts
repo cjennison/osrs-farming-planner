@@ -165,6 +165,7 @@ function getCropData(cropId: string): CropData | undefined {
   if (!crop) {
     // Map crop products to their source crops
     const productToCropMap: Record<string, string> = {
+      barley_malt: "barley", // Barley malt comes from Barley hops (requires cooking step)
       // Add more mappings as needed
     };
 
@@ -389,8 +390,11 @@ export function calculateDependencies(
     const data = getCropData(crop);
     if (!data) throw new Error(`Unknown crop: ${crop}`);
 
+    // Use the actual crop ID from the data (handles mappings like barley_malt -> barley)
+    const actualCropId = data.id;
+
     // Check if we have starting resources
-    const available = startingResources[crop] || 0;
+    const available = startingResources[actualCropId] || 0;
     const stillNeeded = Math.max(0, neededQuantity - available);
 
     if (stillNeeded === 0) {
@@ -441,7 +445,7 @@ export function calculateDependencies(
           : patchesNeededAverage;
 
     // Store requirement
-    requirements[crop] = {
+    requirements[actualCropId] = {
       patches: patchesNeeded,
       reason: purpose,
       totalYield: {
@@ -509,34 +513,37 @@ export function calculateDependencies(
       }
 
       // Add payment information to the payment crop's requirement (only for actual crops)
-      if (
-        !isPurchasableItem(data.protection.crop) &&
-        requirements[data.protection.crop]
-      ) {
-        const originalCrop = getCropById(crop);
-        if (originalCrop?.protection?.itemDescription) {
-          const totalItemsNeeded = patchesNeeded * data.protection.quantity;
+      if (!isPurchasableItem(data.protection.crop)) {
+        // Get the actual crop ID for the protection item (handles mappings)
+        const protectionCropData = getCropData(data.protection.crop);
+        const protectionCropId = protectionCropData?.id;
 
-          if (
-            originalCrop.protection.isContainer &&
-            originalCrop.protection.containerSize
-          ) {
-            // Calculate containers needed
-            const containersNeeded = Math.ceil(
-              totalItemsNeeded / originalCrop.protection.containerSize,
-            );
-            requirements[data.protection.crop].paymentInfo = {
-              containerDescription: originalCrop.protection.itemDescription,
-              containerQuantity: containersNeeded,
-              totalCropsNeeded: totalItemsNeeded,
-            };
-          } else {
-            // Individual items (no containers)
-            requirements[data.protection.crop].paymentInfo = {
-              containerDescription: originalCrop.protection.itemDescription,
-              containerQuantity: totalItemsNeeded,
-              totalCropsNeeded: totalItemsNeeded,
-            };
+        if (protectionCropId && requirements[protectionCropId]) {
+          const originalCrop = getCropById(actualCropId);
+          if (originalCrop?.protection?.itemDescription) {
+            const totalItemsNeeded = patchesNeeded * data.protection.quantity;
+
+            if (
+              originalCrop.protection.isContainer &&
+              originalCrop.protection.containerSize
+            ) {
+              // Calculate containers needed
+              const containersNeeded = Math.ceil(
+                totalItemsNeeded / originalCrop.protection.containerSize,
+              );
+              requirements[protectionCropId].paymentInfo = {
+                containerDescription: originalCrop.protection.itemDescription,
+                containerQuantity: containersNeeded,
+                totalCropsNeeded: totalItemsNeeded,
+              };
+            } else {
+              // Individual items (no containers)
+              requirements[protectionCropId].paymentInfo = {
+                containerDescription: originalCrop.protection.itemDescription,
+                containerQuantity: totalItemsNeeded,
+                totalCropsNeeded: totalItemsNeeded,
+              };
+            }
           }
         }
       }
