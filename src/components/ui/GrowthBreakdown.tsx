@@ -1,16 +1,12 @@
 "use client";
 
-import { ActionIcon, Badge, Collapse, Group, Stack, Text } from "@mantine/core";
-import {
-  IconArrowUp,
-  IconChevronDown,
-  IconChevronRight,
-  IconShield,
-} from "@tabler/icons-react";
+import { Badge, Collapse, Group, Stack, Text } from "@mantine/core";
+import { IconArrowUp, IconShield } from "@tabler/icons-react";
 import type {
   CalculationResult,
   YieldStrategy,
 } from "@/lib/calculators/dependency-calculator";
+import { SectionHeader } from "./SectionHeader";
 
 interface GrowthBreakdownProps {
   result: CalculationResult;
@@ -29,18 +25,12 @@ export function GrowthBreakdown({
 }: GrowthBreakdownProps) {
   return (
     <Stack gap="xs">
-      <Group gap="xs" justify="space-between">
-        <Text fw={500} c="sage.7">
-          Growth Breakdown
-        </Text>
-        <ActionIcon variant="subtle" onClick={() => toggleSection("growth")}>
-          {expandedSections.growth ? (
-            <IconChevronDown size={16} />
-          ) : (
-            <IconChevronRight size={16} />
-          )}
-        </ActionIcon>
-      </Group>
+      <SectionHeader
+        title="Growth Breakdown"
+        expanded={expandedSections.growth}
+        onToggle={() => toggleSection("growth")}
+        gap="xs"
+      />
 
       <Collapse in={expandedSections.growth}>
         <Stack gap="xs">

@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  ActionIcon,
   Badge,
   Collapse,
   Group,
@@ -11,8 +10,6 @@ import {
   Text,
 } from "@mantine/core";
 import {
-  IconChevronDown,
-  IconChevronRight,
   IconExternalLink,
   IconSeeding,
   IconShoppingCart,
@@ -24,6 +21,7 @@ import type {
 } from "@/lib/calculators/dependency-calculator";
 import { getCropById } from "@/lib/farming-data-simple";
 import { getPurchasableItemByName } from "@/lib/purchasable-items";
+import { SectionHeader } from "./SectionHeader";
 
 interface InputItem {
   type: "seed" | "purchase";
@@ -42,6 +40,7 @@ interface InputsBreakdownProps {
 
 export function InputsBreakdown({ result }: InputsBreakdownProps) {
   const [opened, setOpened] = useState(true);
+
   // Calculate required inputs based on calculation result
   const requiredInputs: InputItem[] = [];
 
@@ -93,30 +92,27 @@ export function InputsBreakdown({ result }: InputsBreakdownProps) {
     }
   });
 
+  // Create helper text as right content for the header
+  const rightContent = (
+    <Text size="xs" c="dimmed" style={{ fontStyle: "italic" }}>
+      Click items with{" "}
+      <IconExternalLink
+        size={10}
+        style={{ display: "inline", verticalAlign: "middle" }}
+      />{" "}
+      to view on OSRS Wiki
+    </Text>
+  );
+
   return (
     <Stack gap="xs">
-      <Group gap="xs" justify="space-between">
-        <Stack gap={2}>
-          <Text fw={500} c="sage.7">
-            Required Inputs
-          </Text>
-          <Text size="xs" c="dimmed" style={{ fontStyle: "italic" }}>
-            Click items with{" "}
-            <IconExternalLink
-              size={10}
-              style={{ display: "inline", verticalAlign: "middle" }}
-            />{" "}
-            to view on OSRS Wiki
-          </Text>
-        </Stack>
-        <ActionIcon variant="subtle" onClick={() => setOpened(!opened)}>
-          {opened ? (
-            <IconChevronDown size={16} />
-          ) : (
-            <IconChevronRight size={16} />
-          )}
-        </ActionIcon>
-      </Group>
+      <SectionHeader
+        title="Required Inputs"
+        expanded={opened}
+        onToggle={() => setOpened(!opened)}
+        rightContent={rightContent}
+        gap="xs"
+      />
 
       <Collapse in={opened}>
         <Stack gap="xs">

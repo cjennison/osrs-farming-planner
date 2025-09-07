@@ -1,8 +1,8 @@
 "use client";
 
-import { ActionIcon, Badge, Collapse, Group, Stack, Text } from "@mantine/core";
-import { IconChevronDown, IconChevronRight } from "@tabler/icons-react";
+import { Badge, Collapse, Group, Stack, Text } from "@mantine/core";
 import type { CalculationResult } from "@/lib/calculators/dependency-calculator";
+import { SectionHeader } from "./SectionHeader";
 
 interface CropRequirementsProps {
   result: CalculationResult;
@@ -19,18 +19,12 @@ export function CropRequirements({
 }: CropRequirementsProps) {
   return (
     <Stack gap="xs">
-      <Group gap="xs" justify="space-between">
-        <Text fw={500} c="sage.7">
-          Crop Requirements
-        </Text>
-        <ActionIcon variant="subtle" onClick={() => toggleSection("breakdown")}>
-          {expandedSections.breakdown ? (
-            <IconChevronDown size={16} />
-          ) : (
-            <IconChevronRight size={16} />
-          )}
-        </ActionIcon>
-      </Group>
+      <SectionHeader
+        title="Crop Requirements"
+        expanded={expandedSections.breakdown}
+        onToggle={() => toggleSection("breakdown")}
+        gap="xs"
+      />
 
       <Collapse in={expandedSections.breakdown}>
         <Stack gap="xs">

@@ -1,19 +1,11 @@
 "use client";
 
-import {
-  ActionIcon,
-  Badge,
-  Collapse,
-  Group,
-  Paper,
-  Stack,
-  Text,
-} from "@mantine/core";
-import { IconChevronDown, IconChevronRight } from "@tabler/icons-react";
+import { Badge, Collapse, Group, Paper, Stack, Text } from "@mantine/core";
 import type {
   CalculationResult,
   YieldStrategy,
 } from "@/lib/calculators/dependency-calculator";
+import { SectionHeader } from "./SectionHeader";
 
 interface ExpectedYieldsProps {
   result: CalculationResult;
@@ -36,18 +28,12 @@ export function ExpectedYields({
 }: ExpectedYieldsProps) {
   return (
     <Stack gap="xs">
-      <Group gap="xs" justify="space-between">
-        <Text fw={500} c="sage.7">
-          Expected Yields
-        </Text>
-        <ActionIcon variant="subtle" onClick={() => toggleSection("yields")}>
-          {expandedSections.yields ? (
-            <IconChevronDown size={16} />
-          ) : (
-            <IconChevronRight size={16} />
-          )}
-        </ActionIcon>
-      </Group>
+      <SectionHeader
+        title="Expected Yields"
+        expanded={expandedSections.yields}
+        onToggle={() => toggleSection("yields")}
+        gap="xs"
+      />
 
       <Collapse in={expandedSections.yields}>
         <Stack gap="xs">

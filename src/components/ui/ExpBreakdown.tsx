@@ -2,7 +2,6 @@
 
 import {
   Badge,
-  Box,
   Card,
   Collapse,
   Grid,
@@ -10,15 +9,15 @@ import {
   NumberFormatter,
   Stack,
   Text,
-  Title,
 } from "@mantine/core";
-import { IconChevronDown, IconSeeding, IconStar } from "@tabler/icons-react";
+import { IconSeeding, IconStar } from "@tabler/icons-react";
 import { useState } from "react";
 import type {
   CalculationResult,
   YieldStrategy,
 } from "@/lib/calculators/dependency-calculator";
 import { getCropById } from "@/lib/farming-data-simple";
+import { SectionHeader } from "./SectionHeader";
 
 interface ExpBreakdownProps {
   result: CalculationResult;
@@ -83,43 +82,28 @@ export function ExpBreakdown({ result, yieldStrategy }: ExpBreakdownProps) {
   // Sort by total exp descending
   cropExpData.sort((a, b) => b.totalExp - a.totalExp);
 
+  // Create the badge content for the header
+  const rightContent = (
+    <Badge color="green" variant="light">
+      <NumberFormatter value={Math.floor(grandTotal)} thousandSeparator="," />{" "}
+      XP
+    </Badge>
+  );
+
   return (
-    <Card bg="var(--mantine-color-body)" p="md" radius="md" shadow="sm">
-      <Group
-        justify="space-between"
-        style={{ cursor: "pointer" }}
-        onClick={() => setOpened(!opened)}
-      >
-        <Group gap="sm">
-          <IconStar
-            size={20}
-            style={{ color: "var(--mantine-color-yellow-6)" }}
-          />
-          <Title order={4} c="var(--mantine-color-text)">
-            Experience Breakdown
-          </Title>
-          <Badge color="green" variant="light">
-            <NumberFormatter
-              value={Math.floor(grandTotal)}
-              thousandSeparator=","
-            />{" "}
-            XP
-          </Badge>
-        </Group>
-        <IconChevronDown
-          size={20}
-          style={{
-            transform: opened ? "rotate(180deg)" : "rotate(0deg)",
-            transition: "transform 200ms ease",
-            color: "var(--mantine-color-text)",
-          }}
-        />
-      </Group>
+    <Stack gap="xs">
+      <SectionHeader
+        title="Experience Breakdown"
+        expanded={opened}
+        onToggle={() => setOpened(!opened)}
+        rightContent={rightContent}
+        gap="sm"
+      />
 
       <Collapse in={opened}>
-        <Box mt="md">
+        <Stack gap="md" mt="md">
           {/* Summary Cards */}
-          <Grid mb="md">
+          <Grid>
             <Grid.Col span={4}>
               <Card bg="var(--mantine-color-blue-0)" p="sm" radius="sm">
                 <Group gap="xs">
@@ -254,8 +238,8 @@ export function ExpBreakdown({ result, yieldStrategy }: ExpBreakdownProps) {
               No experience data available for selected crops
             </Text>
           )}
-        </Box>
+        </Stack>
       </Collapse>
-    </Card>
+    </Stack>
   );
 }

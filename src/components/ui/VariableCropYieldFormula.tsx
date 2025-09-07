@@ -10,16 +10,12 @@ import {
   Group,
   Stack,
   Text,
-  Title,
   Tooltip,
 } from "@mantine/core";
-import {
-  IconChevronDown,
-  IconChevronRight,
-  IconInfoCircle,
-} from "@tabler/icons-react";
+import { IconInfoCircle } from "@tabler/icons-react";
 import { useState } from "react";
 import { getCropConstants } from "@/lib/farming-data-utils";
+import { SectionHeader } from "./SectionHeader";
 
 interface VariableCropYieldFormulaProps {
   farmingLevel: number;
@@ -102,35 +98,30 @@ export function VariableCropYieldFormula({
   const harvestLives = getHarvestLives(compostType);
   const expectedHarvest = harvestLives / (1 - chanceToSave);
 
+  // Create header content with tooltip and badge
+  const rightContent = (
+    <>
+      <Tooltip label="Click to explore the OSRS farming mechanics">
+        <IconInfoCircle
+          size={16}
+          style={{ color: "var(--mantine-color-gray-6)" }}
+        />
+      </Tooltip>
+      <Badge variant="light" color="blue">
+        {chanceToSavePercent}% CHANCE TO SAVE
+      </Badge>
+    </>
+  );
+
   return (
-    <Card
-      p="md"
-      radius="md"
-      style={{ border: "1px solid var(--mantine-color-blue-2)" }}
-    >
-      <Group
-        justify="space-between"
-        style={{ cursor: "pointer" }}
-        onClick={() => setIsExpanded(!isExpanded)}
-      >
-        <Group gap="xs">
-          {isExpanded ? (
-            <IconChevronDown size={20} />
-          ) : (
-            <IconChevronRight size={20} />
-          )}
-          <Title order={4}>Variable Crop Yield Formula</Title>
-          <Tooltip label="Click to explore the OSRS farming mechanics">
-            <IconInfoCircle
-              size={16}
-              style={{ color: "var(--mantine-color-gray-6)" }}
-            />
-          </Tooltip>
-        </Group>
-        <Badge variant="light" color="blue">
-          {chanceToSavePercent}% Chance to Save
-        </Badge>
-      </Group>
+    <Stack gap="xs">
+      <SectionHeader
+        title="Variable Crop Yield Formula"
+        expanded={isExpanded}
+        onToggle={() => setIsExpanded(!isExpanded)}
+        rightContent={rightContent}
+        gap="xs"
+      />
 
       <Collapse in={isExpanded}>
         <Stack gap="md" mt="md">
@@ -349,6 +340,6 @@ export function VariableCropYieldFormula({
           </Alert>
         </Stack>
       </Collapse>
-    </Card>
+    </Stack>
   );
 }
