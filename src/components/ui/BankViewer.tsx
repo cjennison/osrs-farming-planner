@@ -3,6 +3,7 @@
 import { Box, Grid, Modal, Paper, Text, Tooltip } from "@mantine/core";
 import type { ResourceBank } from "../../lib/calculators/optimization-calculator";
 import { getCropById } from "../../lib/farming-data-simple";
+import { OSRSImage } from "./OSRSImage";
 
 interface BankViewerProps {
   opened: boolean;
@@ -43,11 +44,12 @@ export function BankViewer({
             {bankEntries.map(([cropId, quantity]) => {
               const crop = getCropById(cropId);
               const displayName = crop?.name || cropId;
+              const roundedQuantity = Math.round(quantity);
 
               return (
                 <Grid.Col span={2} key={cropId}>
                   <Tooltip
-                    label={`${displayName} (${quantity})`}
+                    label={`${displayName} (${roundedQuantity})`}
                     position="top"
                   >
                     <Paper
@@ -66,23 +68,13 @@ export function BankViewer({
                         alignItems: "center",
                       }}
                     >
-                      {/* Item icon placeholder - in OSRS this would be the item sprite */}
-                      <Box
-                        style={{
-                          width: "32px",
-                          height: "32px",
-                          backgroundColor: "var(--mantine-color-green-2)",
-                          borderRadius: "4px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          marginBottom: "4px",
-                        }}
-                      >
-                        <Text size="xs" fw={600} c="green.8">
-                          {displayName.charAt(0).toUpperCase()}
-                        </Text>
-                      </Box>
+                      {/* OSRS Item Image */}
+                      <OSRSImage
+                        itemId={cropId}
+                        imageType="crop"
+                        size={32}
+                        style={{ marginBottom: "4px" }}
+                      />
 
                       {/* Quantity badge - positioned like OSRS */}
                       <Box
@@ -101,7 +93,7 @@ export function BankViewer({
                           textAlign: "center",
                         }}
                       >
-                        {quantity}
+                        {roundedQuantity}
                       </Box>
                     </Paper>
                   </Tooltip>

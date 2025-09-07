@@ -122,7 +122,11 @@ export function calculateOptimalProgression(
 
     // Calculate what resources are banked (overflow after subtracting what was used)
     const resourcesBanked = options.useResourceBanking
-      ? calculateResourcesBanked(resourcesProduced, resourcesUsedFromBank)
+      ? calculateResourcesBanked(
+          resourcesProduced,
+          resourcesUsedFromBank,
+          calculationResult,
+        )
       : {};
 
     // Update the resource bank for next step only if banking is enabled
@@ -368,6 +372,7 @@ function calculateResourcesProduced(
 function calculateResourcesBanked(
   resourcesProduced: ResourceBank,
   resourcesUsedFromBank: ResourceBank,
+  calculationResult?: CalculationResult,
 ): ResourceBank {
   const resourcesBanked: ResourceBank = {};
 
@@ -381,6 +386,19 @@ function calculateResourcesBanked(
     if (resourcesBanked[cropId]) {
       resourcesBanked[cropId] = Math.max(0, resourcesBanked[cropId] - used);
     }
+  }
+
+  // Subtract what was consumed as payments for protection in this step
+  if (calculationResult) {
+    Object.entries(calculationResult.requirements).forEach(([cropId, req]) => {
+      if (req.paymentInfo && resourcesBanked[cropId]) {
+        const paymentConsumed = req.paymentInfo.totalCropsNeeded;
+        resourcesBanked[cropId] = Math.max(
+          0,
+          resourcesBanked[cropId] - paymentConsumed,
+        );
+      }
+    });
   }
 
   // Remove zero values to keep the bank clean

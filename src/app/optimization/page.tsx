@@ -305,7 +305,7 @@ export default function OptimizedLevelingPage() {
                                 ([cropId, quantity]) => (
                                   <Tooltip
                                     key={`used-${cropId}`}
-                                    label={`Used ${quantity} ${getCropById(cropId)?.name || cropId} from bank`}
+                                    label={`Used ${Math.round(quantity)} ${getCropById(cropId)?.name || cropId} from bank`}
                                   >
                                     <Group gap={2}>
                                       <OSRSImage
@@ -314,7 +314,7 @@ export default function OptimizedLevelingPage() {
                                         size={16}
                                       />
                                       <Text size="xs" c="blue">
-                                        -{quantity}
+                                        -{Math.round(quantity)}
                                       </Text>
                                     </Group>
                                   </Tooltip>
@@ -333,7 +333,7 @@ export default function OptimizedLevelingPage() {
                                 ([cropId, quantity]) => (
                                   <Tooltip
                                     key={`banked-${cropId}`}
-                                    label={`${quantity} ${getCropById(cropId)?.name || cropId} stored for future use`}
+                                    label={`${Math.round(quantity)} ${getCropById(cropId)?.name || cropId} stored for future use`}
                                   >
                                     <Group gap={2}>
                                       <OSRSImage
@@ -342,7 +342,7 @@ export default function OptimizedLevelingPage() {
                                         size={16}
                                       />
                                       <Text size="xs" c="green">
-                                        +{quantity}
+                                        +{Math.round(quantity)}
                                       </Text>
                                     </Group>
                                   </Tooltip>
