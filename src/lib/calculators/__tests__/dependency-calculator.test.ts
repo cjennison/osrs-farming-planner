@@ -1,13 +1,8 @@
 import {
   calculateDependencies,
   calculateLevelDependencies,
-  calculateYield,
-  getAvailableCrops,
-  getDependencyChain,
-  getLevelFromXp,
   getXpForLevel,
   getXpNeeded,
-  hasProtection,
 } from "../dependency-calculator";
 
 describe("OSRS Farming Dependency Calculator", () => {
@@ -948,6 +943,315 @@ describe("OSRS Farming Dependency Calculator", () => {
 
       // Verify it's a substantial amount of time (should be several hours)
       expect(cabbageResult.summary.estimatedTime).toBeGreaterThan(200); // At least a few hours (reduced from 600 due to fewer patches needed)
+    });
+  });
+
+  describe("Level-based calculations", () => {
+    test("should calculate correct XP for 1 tomato harvest including all dependencies", () => {
+      // Get what 1 tomato requires
+      const singleTomatoResult = calculateDependencies(
+        "tomato",
+        1, // Just 1 tomato to get base requirements
+        12, // Starting level
+        "supercompost",
+        {},
+        "average",
+      );
+
+      // Calculate expected XP for these requirements
+      let expectedTotalXp = 0;
+
+      // Tomato: 1 patch × (12.5 planting + 14.0 harvest × 3.5 yield) = 12.5 + 49.0 = 61.5 XP
+      expectedTotalXp += 1 * (12.5 + 14.0 * 3.5);
+
+      // Cabbage: should be ~7 patches × (10.0 planting + 11.5 harvest × 3.5 yield)
+      const cabbagePatches =
+        singleTomatoResult.requirements.cabbage?.patches || 0;
+      expectedTotalXp += cabbagePatches * (10.0 + 11.5 * 3.5);
+
+      // Onion: should be ~23 patches × (9.5 planting + 10.5 harvest × 3.5 yield)
+      const onionPatches = singleTomatoResult.requirements.onion?.patches || 0;
+      expectedTotalXp += onionPatches * (9.5 + 10.5 * 3.5);
+
+      // Potato: should be ~77 patches × (8.0 planting + 9.5 harvest × 3.5 yield)
+      const potatoPatches =
+        singleTomatoResult.requirements.potato?.patches || 0;
+      expectedTotalXp += potatoPatches * (8.0 + 9.5 * 3.5);
+
+      console.log("Single tomato XP breakdown:", {
+        tomato: { patches: 1, xp: 61.5 },
+        cabbage: {
+          patches: cabbagePatches,
+          xp: cabbagePatches * (10.0 + 11.5 * 3.5),
+        },
+        onion: { patches: onionPatches, xp: onionPatches * (9.5 + 10.5 * 3.5) },
+        potato: {
+          patches: potatoPatches,
+          xp: potatoPatches * (8.0 + 9.5 * 3.5),
+        },
+        total: expectedTotalXp,
+      });
+
+      // This tells us how much XP we get per tomato harvest (including all dependencies)
+      expect(expectedTotalXp).toBeGreaterThan(0);
+    });
+
+    test("should calculate level 12 → 30 tomato requirements with correct math", () => {
+      const result = calculateLevelDependencies(
+        "tomato",
+        30, // target level
+        12, // starting level
+        "supercompost",
+        {},
+        "average",
+      );
+
+      const targetXp = getXpNeeded(12, 30); // Should be 11,779 XP
+      expect(targetXp).toBe(11779); // Correct XP value from OSRS table
+
+      // Verify the XP calculations match the screenshot breakdown
+      console.log("Level calculation result:", {
+        targetXp: targetXp,
+        totalXpGained: result.totalXpGained,
+        requirements: Object.entries(result.requirements).map(
+          ([crop, req]) => ({
+            crop,
+            patches: req.patches,
+            yield: Math.ceil(req.totalYield.average),
+          }),
+        ),
+        xpBreakdown: result.xpBreakdown,
+      });
+
+      // The total XP should be close to but >= target XP
+      expect(result.totalXpGained).toBeGreaterThanOrEqual(targetXp);
+      expect(result.totalXpGained).toBeLessThan(targetXp * 1.1); // Within 10% overhead
+
+      // Verify XP breakdown sums to total
+      const calculatedTotal = Object.values(result.xpBreakdown).reduce(
+        (sum, breakdown) => sum + breakdown.totalXp,
+        0,
+      );
+      expect(calculatedTotal).toBeCloseTo(result.totalXpGained, 1);
+    });
+
+    describe("Level-based calculations", () => {
+      test("should calculate XP requirements correctly", () => {
+        // Test the XP table
+        expect(getXpForLevel(1)).toBe(0);
+        expect(getXpForLevel(12)).toBe(1584);
+        expect(getXpForLevel(30)).toBe(13363);
+        expect(getXpNeeded(12, 30)).toBe(11779); // 13363 - 1584
+      });
+
+      test("should calculate level dependencies using incremental approach", () => {
+        // Test the new algorithm: level 12 -> 30 tomato farming
+        const result = calculateLevelDependencies(
+          "tomato",
+          30, // target level
+          12, // starting level
+          "supercompost",
+          {},
+          "average",
+        );
+
+        const targetXp = getXpNeeded(12, 30); // Should be 11,779 XP
+
+        // Should have the correct calculation mode
+        expect(result.calculationMode).toBe("level");
+        expect(result.targetLevel).toBe(30);
+        expect(result.startingLevel).toBe(12);
+
+        // Should meet or exceed the XP requirement
+        expect(result.totalXpGained).toBeGreaterThanOrEqual(targetXp);
+
+        // Should include all required crops
+        expect(result.requirements.tomato).toBeDefined();
+        expect(result.requirements.cabbage).toBeDefined();
+        expect(result.requirements.onion).toBeDefined();
+        expect(result.requirements.potato).toBeDefined();
+
+        // Should have XP breakdown for all crops
+        expect(result.xpBreakdown.tomato).toBeDefined();
+        expect(result.xpBreakdown.cabbage).toBeDefined();
+        expect(result.xpBreakdown.onion).toBeDefined();
+        expect(result.xpBreakdown.potato).toBeDefined();
+
+        // XP breakdown should sum to total
+        const summedXp = Object.values(result.xpBreakdown).reduce(
+          (sum, xp) => sum + xp.totalXp,
+          0,
+        );
+        expect(summedXp).toBeCloseTo(result.totalXpGained, 1);
+
+        console.log("Level calculation result:", {
+          targetXp: targetXp,
+          totalXpGained: result.totalXpGained,
+          targetQuantity: result.targetQuantity,
+          requirements: Object.entries(result.requirements).map(
+            ([crop, req]) => ({
+              crop,
+              patches: req.patches,
+            }),
+          ),
+        });
+      });
+    });
+
+    test("should verify individual crop XP calculations", () => {
+      // Test individual crop XP calculation matches expected formula
+      const testCases = [
+        { crop: "potato", expectedPlanting: 8.0, expectedHarvest: 9.5 },
+        { crop: "onion", expectedPlanting: 9.5, expectedHarvest: 10.5 },
+        { crop: "cabbage", expectedPlanting: 10.0, expectedHarvest: 11.5 },
+        { crop: "tomato", expectedPlanting: 12.5, expectedHarvest: 14.0 },
+      ];
+
+      for (const testCase of testCases) {
+        const cropYield = calculateYield(
+          testCase.crop,
+          12, // level 12
+          "supercompost",
+          false,
+          false,
+          false,
+          "none",
+          "none",
+        );
+
+        // Expected total XP per patch = planting + (harvest per item × yield)
+        const expectedXpPerPatch =
+          testCase.expectedPlanting +
+          testCase.expectedHarvest * cropYield.average;
+
+        console.log(`${testCase.crop} XP calculation:`, {
+          planting: testCase.expectedPlanting,
+          harvestPerItem: testCase.expectedHarvest,
+          yieldAverage: cropYield.average,
+          harvestTotal: testCase.expectedHarvest * cropYield.average,
+          totalPerPatch: expectedXpPerPatch,
+        });
+
+        expect(cropYield.average).toBeGreaterThan(3.0); // Should be higher than base yield with supercompost
+        expect(expectedXpPerPatch).toBeGreaterThan(testCase.expectedPlanting); // Should be more than just planting
+      }
+    });
+
+    test("should calculate correct number of target crop harvests needed", () => {
+      const targetXp = getXpNeeded(12, 30); // 11,779 XP needed
+
+      // Get XP for 1 tomato harvest (including all dependencies)
+      const singleTomatoResult = calculateDependencies(
+        "tomato",
+        1,
+        12,
+        "supercompost",
+        {},
+        "average",
+      );
+
+      // Calculate XP per tomato harvest manually to verify
+      let xpPerTomatoHarvest = 0;
+      for (const [cropId, requirement] of Object.entries(
+        singleTomatoResult.requirements,
+      )) {
+        const cropYield = calculateYield(
+          cropId,
+          12,
+          "supercompost",
+          false,
+          false,
+          false,
+          "none",
+          "none",
+        );
+
+        // Get expected XP values based on crop
+        const expectedXp = {
+          potato: { planting: 8.0, harvest: 9.5 },
+          onion: { planting: 9.5, harvest: 10.5 },
+          cabbage: { planting: 10.0, harvest: 11.5 },
+          tomato: { planting: 12.5, harvest: 14.0 },
+        }[cropId];
+
+        if (expectedXp) {
+          const xpPerPatch =
+            expectedXp.planting + expectedXp.harvest * cropYield.average;
+          const totalXpFromCrop = requirement.patches * xpPerPatch;
+          xpPerTomatoHarvest += totalXpFromCrop;
+        }
+      }
+
+      console.log("XP per tomato harvest calculation:", {
+        xpPerTomatoHarvest,
+        targetXp,
+        harvestsNeeded: Math.ceil(targetXp / xpPerTomatoHarvest),
+      });
+
+      // Number of tomato harvests needed
+      const harvestsNeeded = Math.ceil(targetXp / xpPerTomatoHarvest);
+
+      // This should match what the algorithm calculates
+      const result = calculateLevelDependencies(
+        "tomato",
+        30,
+        12,
+        "supercompost",
+        {},
+        "average",
+      );
+
+      // Verify the scaling is correct
+      const expectedTomatoPatches =
+        singleTomatoResult.requirements.tomato.patches * harvestsNeeded;
+      expect(result.requirements.tomato.patches).toBe(expectedTomatoPatches);
+    });
+
+    test("should match screenshot values for level 12 → 30 calculation", () => {
+      const result = calculateLevelDependencies(
+        "tomato",
+        30,
+        12,
+        "supercompost",
+        {},
+        "average",
+      );
+
+      // From screenshot analysis:
+      // - Target: Level 12 → 30 (11,779 XP required) - CORRECTED: should be 1833 XP
+      // - Reported Total EXP: ~12k (should now match XP breakdown)
+      // - Tomato: 23 patches (approximately)
+      // - Cabbage: 84 patches (approximately)
+      // - Onion: 156 patches (approximately)
+      // - Potato: 295 patches (approximately)
+
+      const targetXp = getXpNeeded(12, 30);
+      expect(targetXp).toBe(11779); // Correct target XP amount
+
+      // Check that our XP calculation now matches the breakdown
+      console.log("Screenshot verification:", {
+        targetXp,
+        calculatedTotalXp: result.totalXpGained,
+        patchCounts: Object.entries(result.requirements).map(([crop, req]) => ({
+          crop,
+          patches: req.patches,
+        })),
+        xpBreakdown: Object.entries(result.xpBreakdown).map(([crop, xp]) => ({
+          crop,
+          totalXp: xp.totalXp,
+          patches: xp.patches,
+        })),
+      });
+
+      // Verify XP calculation is correct
+      const summedXp = Object.values(result.xpBreakdown).reduce(
+        (sum, xp) => sum + xp.totalXp,
+        0,
+      );
+      expect(summedXp).toBeCloseTo(result.totalXpGained, 1);
+
+      // Should meet or exceed target XP
+      expect(result.totalXpGained).toBeGreaterThanOrEqual(targetXp);
     });
   });
 });

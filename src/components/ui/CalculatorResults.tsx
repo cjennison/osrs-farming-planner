@@ -54,24 +54,29 @@ export function CalculatorResults({
 }: CalculatorResultsProps) {
   // Helper function to calculate total experience
   const calculateTotalExperience = (result: CalculationResult): number => {
-    let totalPlantingExp = 0;
-    let totalHarvestingExp = 0;
+    // For level-based calculations, use the pre-calculated total
+    if ("totalXpGained" in result && typeof result.totalXpGained === "number") {
+      return result.totalXpGained;
+    }
+
+    // For quantity-based calculations, calculate from requirements
+    let totalExp = 0;
 
     for (const [cropId, requirement] of Object.entries(result.requirements)) {
       const cropData = getCropById(cropId);
       if (!cropData || requirement.patches === 0) continue;
 
-      const quantity = requirement.patches;
+      const plantingExpPerPatch = cropData.expBreakdown?.planting || 0;
+      const harvestExpPerItem = cropData.expBreakdown?.harvest || 0;
 
-      // XP is only based on patches planted/harvested, not yield multipliers
-      const plantingExp = cropData.expBreakdown?.planting || 0;
-      const harvestExp = cropData.expBreakdown?.harvest || 0;
+      // Calculate total XP: planting XP + (harvest XP per item × average yield per patch)
+      const plantingExp = plantingExpPerPatch * requirement.patches;
+      const harvestExp = harvestExpPerItem * requirement.totalYield.average;
 
-      totalPlantingExp += plantingExp * quantity;
-      totalHarvestingExp += harvestExp * quantity; // XP per patch, not per item yield
+      totalExp += plantingExp + harvestExp;
     }
 
-    return totalPlantingExp + totalHarvestingExp;
+    return totalExp;
   };
 
   if (!result) {

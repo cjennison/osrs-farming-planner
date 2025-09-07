@@ -51,18 +51,8 @@ export function ExpBreakdown({ result, yieldStrategy }: ExpBreakdownProps) {
 
     const quantity = requirement.patches;
 
-    // Expected harvests based on yield strategy
-    let totalHarvests = quantity;
-    if (yieldStrategy === "min") {
-      // Minimum yield usually means 1 harvest per patch
-      totalHarvests = quantity;
-    } else if (yieldStrategy === "average") {
-      // Average yield typically 3-4 harvests for most crops
-      totalHarvests = quantity * 3.5;
-    } else {
-      // Maximum yield can be 6+ harvests
-      totalHarvests = quantity * 6;
-    }
+    // Use the actual calculated total yield from the requirement, based on yield strategy
+    const totalHarvests = requirement.totalYield[yieldStrategy];
 
     const plantingExp = cropData.expBreakdown?.planting || 0;
     const harvestExp = cropData.expBreakdown?.harvest || 0;
