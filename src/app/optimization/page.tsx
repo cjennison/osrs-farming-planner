@@ -17,11 +17,13 @@ import {
 import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
 import { useState } from "react";
 import { AppHeader } from "@/components/layout/AppHeader";
+import { BankViewer } from "@/components/ui/BankViewer";
 import { OptimizationInputs } from "@/components/ui/OptimizationInputs";
 import { OSRSImage } from "@/components/ui/OSRSImage";
 import {
   type CalculationOptions,
   calculateOptimalProgression,
+  type ResourceBank,
 } from "@/lib/calculators/optimization-calculator";
 import { getAllCrops, getCropById } from "@/lib/farming-data-simple";
 import { getPurchasableItemById } from "@/lib/purchasable-items";
@@ -34,6 +36,7 @@ export default function OptimizedLevelingPage() {
     kandarinDiary: "none",
     yieldStrategy: "average",
     xpStrategy: "no-rollover", // Default to no rollover
+    useResourceBanking: false, // Default to disabled
     excludeFlowers: true, // Default to true as requested
     excludeHerbs: false, // Default to false as requested
     excludeBushes: false, // Default to false for bushes
@@ -41,6 +44,11 @@ export default function OptimizedLevelingPage() {
   });
 
   const [showInputs, setShowInputs] = useState(true);
+  const [bankViewerOpened, setBankViewerOpened] = useState(false);
+  const [selectedBank, setSelectedBank] = useState<{
+    bank: ResourceBank;
+    stepNumber: number;
+  } | null>(null);
 
   // Calculate the optimal progression
   const progression = calculateOptimalProgression(options);
@@ -107,6 +115,10 @@ export default function OptimizedLevelingPage() {
                 xpStrategy={options.xpStrategy || "no-rollover"}
                 onXpStrategyChange={(value) =>
                   handleOptionsChange({ xpStrategy: value })
+                }
+                useResourceBanking={options.useResourceBanking || false}
+                onResourceBankingChange={(value) =>
+                  handleOptionsChange({ useResourceBanking: value })
                 }
                 excludeFlowers={options.excludeFlowers ?? true}
                 onExcludeFlowersChange={(value) =>
@@ -190,6 +202,7 @@ export default function OptimizedLevelingPage() {
                     <Table.Th>EXP Required</Table.Th>
                     <Table.Th>Optimal Crop</Table.Th>
                     <Table.Th>Patches</Table.Th>
+                    <Table.Th>Resource Banking</Table.Th>
                     <Table.Th>Inputs Required</Table.Th>
                     <Table.Th>EXP Gained</Table.Th>
                   </Table.Tr>
@@ -248,7 +261,7 @@ export default function OptimizedLevelingPage() {
                             </Text>
                           </Tooltip>
                           <Badge size="xs" variant="light" color="blue">
-                            {step.optimalCrop.expPerPatch} XP
+                            {step.optimalCrop.expPerHarvest || 0} XP
                           </Badge>
                         </Group>
                       </Table.Td>
@@ -278,6 +291,94 @@ export default function OptimizedLevelingPage() {
                             {step.calculationResult.summary.totalPatches}
                           </Badge>
                         </Tooltip>
+                      </Table.Td>
+                      <Table.Td>
+                        <Stack gap={4}>
+                          {/* Resources Used from Bank */}
+                          {Object.keys(step.resourcesUsedFromBank).length >
+                            0 && (
+                            <Group gap={4}>
+                              <Text size="xs" c="dimmed">
+                                Used:
+                              </Text>
+                              {Object.entries(step.resourcesUsedFromBank).map(
+                                ([cropId, quantity]) => (
+                                  <Tooltip
+                                    key={`used-${cropId}`}
+                                    label={`Used ${quantity} ${getCropById(cropId)?.name || cropId} from bank`}
+                                  >
+                                    <Group gap={2}>
+                                      <OSRSImage
+                                        itemId={cropId}
+                                        imageType="crop"
+                                        size={16}
+                                      />
+                                      <Text size="xs" c="blue">
+                                        -{quantity}
+                                      </Text>
+                                    </Group>
+                                  </Tooltip>
+                                ),
+                              )}
+                            </Group>
+                          )}
+
+                          {/* Resources Banked */}
+                          {Object.keys(step.resourcesBanked).length > 0 && (
+                            <Group gap={4}>
+                              <Text size="xs" c="dimmed">
+                                Banked:
+                              </Text>
+                              {Object.entries(step.resourcesBanked).map(
+                                ([cropId, quantity]) => (
+                                  <Tooltip
+                                    key={`banked-${cropId}`}
+                                    label={`${quantity} ${getCropById(cropId)?.name || cropId} stored for future use`}
+                                  >
+                                    <Group gap={2}>
+                                      <OSRSImage
+                                        itemId={cropId}
+                                        imageType="crop"
+                                        size={16}
+                                      />
+                                      <Text size="xs" c="green">
+                                        +{quantity}
+                                      </Text>
+                                    </Group>
+                                  </Tooltip>
+                                ),
+                              )}
+                            </Group>
+                          )}
+
+                          {/* Show if no banking activity */}
+                          {Object.keys(step.resourcesUsedFromBank).length ===
+                            0 &&
+                            Object.keys(step.resourcesBanked).length === 0 && (
+                              <Text size="xs" c="dimmed">
+                                No banking
+                              </Text>
+                            )}
+
+                          {/* View Bank Button - only show if banking is enabled and there's a cumulative bank */}
+                          {options.useResourceBanking &&
+                            Object.keys(step.cumulativeBank).length > 0 && (
+                              <Button
+                                size="xs"
+                                variant="subtle"
+                                color="blue"
+                                onClick={() => {
+                                  setSelectedBank({
+                                    bank: step.cumulativeBank,
+                                    stepNumber: step.toLevel,
+                                  });
+                                  setBankViewerOpened(true);
+                                }}
+                              >
+                                View Bank
+                              </Button>
+                            )}
+                        </Stack>
                       </Table.Td>
                       <Table.Td>
                         <Group gap={4}>
@@ -480,6 +581,19 @@ export default function OptimizedLevelingPage() {
           </Paper>
         </Stack>
       </Container>
+
+      {/* Bank Viewer Modal */}
+      {selectedBank && (
+        <BankViewer
+          opened={bankViewerOpened}
+          onClose={() => {
+            setBankViewerOpened(false);
+            setSelectedBank(null);
+          }}
+          bank={selectedBank.bank}
+          stepNumber={selectedBank.stepNumber}
+        />
+      )}
     </AppHeader>
   );
 }

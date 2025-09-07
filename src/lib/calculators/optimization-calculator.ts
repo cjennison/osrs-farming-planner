@@ -10,6 +10,7 @@
  * 6. Repeat for every level step until 99
  */
 
+import type { Crop } from "../../types/farming";
 import { getAllCrops, getCropById } from "../farming-data-simple";
 import { getXpNeeded } from "../farming-data-utils";
 import {
@@ -28,27 +29,30 @@ export interface CalculationOptions {
   kandarinDiary?: KandarinDiaryLevel;
   yieldStrategy?: YieldStrategy;
   xpStrategy?: XpStrategy;
+  useResourceBanking?: boolean; // New option for resource banking
   excludeFlowers?: boolean;
   excludeHerbs?: boolean;
   excludeBushes?: boolean;
   excludeFruitTrees?: boolean;
 }
 
+export interface ResourceBank {
+  [cropId: string]: number;
+}
+
 export interface OptimizationStep {
   fromLevel: number;
   toLevel: number;
   expRequired: number;
-  expGained: number; // Total XP gained from this step (may be more than required)
-  expRollover: number; // XP that carries over to next step (only for rollover strategy)
-  optimalCrop: {
-    id: string;
-    name: string;
-    expPerPatch: number;
-    farmingLevel: number;
-  };
-  // ALL data comes from dependency calculator result
+  expGained: number;
+  expRollover: number;
+  optimalCrop: Crop;
   targetQuantity: number;
   calculationResult: CalculationResult;
+  resourcesUsedFromBank: ResourceBank; // Resources consumed from previous steps
+  resourcesProduced: ResourceBank; // Resources produced in this step
+  resourcesBanked: ResourceBank; // Overflow resources stored for future use
+  cumulativeBank: ResourceBank; // Total bank state after this step (for debugging)
 }
 
 export interface OptimizationResult {
@@ -72,6 +76,9 @@ export function calculateOptimalProgression(
   // Track XP rollover for the rollover strategy
   let rolloverXp = 0;
 
+  // Track resource bank for overflow resources
+  const resourceBank: ResourceBank = {};
+
   // Process each level from 1 to 98 (can't go beyond 99)
   for (let currentLevel = 1; currentLevel < 99; currentLevel++) {
     const nextLevel = currentLevel + 1;
@@ -94,14 +101,37 @@ export function calculateOptimalProgression(
       continue; // Skip if no crop available (shouldn't happen)
     }
 
-    // Find the quantity needed to reach the XP target
-    const { targetQuantity, calculationResult, actualExpGained } =
-      findQuantityForXPTarget(
-        optimalCrop.id,
-        actualExpRequired,
-        currentLevel,
-        options,
-      );
+    // Find the quantity needed to reach the XP target, using banked resources if enabled
+    const {
+      targetQuantity,
+      calculationResult,
+      actualExpGained,
+      resourcesUsedFromBank,
+    } = findQuantityForXPTarget(
+      optimalCrop.id,
+      actualExpRequired,
+      currentLevel,
+      options,
+      options.useResourceBanking ? resourceBank : {}, // Only use bank if enabled
+    );
+
+    // Calculate resources produced from all crops in this step
+    const resourcesProduced = options.useResourceBanking
+      ? calculateResourcesProduced(calculationResult)
+      : {};
+
+    // Calculate what resources are banked (overflow after subtracting what was used)
+    const resourcesBanked = options.useResourceBanking
+      ? calculateResourcesBanked(resourcesProduced, resourcesUsedFromBank)
+      : {};
+
+    // Update the resource bank for next step only if banking is enabled
+    if (options.useResourceBanking) {
+      // Merge the newly banked resources with the existing bank
+      Object.entries(resourcesBanked).forEach(([cropId, amount]) => {
+        resourceBank[cropId] = (resourceBank[cropId] || 0) + amount;
+      });
+    }
 
     // Calculate rollover for next step
     const newRolloverXp =
@@ -109,15 +139,24 @@ export function calculateOptimalProgression(
         ? Math.max(0, actualExpGained - actualExpRequired)
         : 0;
 
+    const fullCrop = getCropById(optimalCrop.id);
+    if (!fullCrop) {
+      throw new Error(`Crop not found: ${optimalCrop.id}`);
+    }
+
     const step: OptimizationStep = {
       fromLevel: currentLevel,
       toLevel: nextLevel,
       expRequired: actualExpRequired,
       expGained: actualExpGained,
       expRollover: newRolloverXp,
-      optimalCrop,
+      optimalCrop: fullCrop,
       targetQuantity,
       calculationResult,
+      resourcesUsedFromBank,
+      resourcesProduced,
+      resourcesBanked,
+      cumulativeBank: { ...resourceBank }, // Store the current bank state for debugging
     };
 
     steps.push(step);
@@ -190,14 +229,17 @@ function findQuantityForXPTarget(
   targetXP: number,
   farmingLevel: number,
   options: CalculationOptions,
+  resourceBank: ResourceBank = {},
 ): {
   targetQuantity: number;
   calculationResult: CalculationResult;
   actualExpGained: number;
+  resourcesUsedFromBank: ResourceBank;
 } {
   let quantity = 1;
   let result: CalculationResult;
   let finalTotalXP = 0;
+  const resourcesUsedFromBank: ResourceBank = {};
 
   // If targetXP is 0 (fully covered by rollover), return minimal result
   if (targetXP <= 0) {
@@ -206,7 +248,7 @@ function findQuantityForXPTarget(
       1,
       farmingLevel,
       options.compostType || "none",
-      {}, // startingResources
+      resourceBank, // Use banked resources as starting resources
       options.yieldStrategy || "average",
       options.hasSecateurs || false,
       false, // farmingCape
@@ -224,6 +266,7 @@ function findQuantityForXPTarget(
         summary: { totalPatches: 0, totalSeeds: 0, estimatedTime: 0 },
       },
       actualExpGained: 0,
+      resourcesUsedFromBank: {},
     };
   }
 
@@ -234,7 +277,7 @@ function findQuantityForXPTarget(
       quantity,
       farmingLevel,
       options.compostType || "none",
-      {}, // startingResources
+      resourceBank, // Use banked resources as starting resources
       options.yieldStrategy || "average",
       options.hasSecateurs || false,
       false, // farmingCape
@@ -242,6 +285,21 @@ function findQuantityForXPTarget(
       options.kandarinDiary || "none",
       "none", // kourendDiary
     );
+
+    // Track which banked resources were actually used
+    for (const [cropId, bankAmount] of Object.entries(resourceBank)) {
+      // Check if this crop appears in the breakdown with a note about starting resources
+      const breakdownStep = result.breakdown.find(
+        (step) =>
+          getCropById(step.crop)?.id === cropId &&
+          step.purpose.includes("starting resources"),
+      );
+
+      if (breakdownStep && bankAmount > 0) {
+        resourcesUsedFromBank[cropId] =
+          (resourcesUsedFromBank[cropId] || 0) + Math.min(bankAmount, quantity);
+      }
+    }
 
     // Calculate total XP from all crops in the result
     let totalXP = 0;
@@ -268,6 +326,7 @@ function findQuantityForXPTarget(
         targetQuantity: quantity,
         calculationResult: result,
         actualExpGained: finalTotalXP,
+        resourcesUsedFromBank,
       };
     }
 
@@ -280,6 +339,58 @@ function findQuantityForXPTarget(
       );
     }
   }
+}
+
+/**
+ * Calculate resources produced from all crops in a calculation result
+ */
+function calculateResourcesProduced(
+  calculationResult: CalculationResult,
+): ResourceBank {
+  const resourcesProduced: ResourceBank = {};
+
+  // Calculate yield for each crop requirement
+  Object.entries(calculationResult.requirements).forEach(([cropId, req]) => {
+    const crop = getCropById(cropId);
+    if (crop) {
+      // Use the average yield from the requirement data
+      const totalYield = req.totalYield.average;
+      resourcesProduced[cropId] = (resourcesProduced[cropId] || 0) + totalYield;
+    }
+  });
+
+  return resourcesProduced;
+}
+
+/**
+ * Calculate resources that should be banked after subtracting what was used
+ */
+function calculateResourcesBanked(
+  resourcesProduced: ResourceBank,
+  resourcesUsedFromBank: ResourceBank,
+): ResourceBank {
+  const resourcesBanked: ResourceBank = {};
+
+  // Start with all produced resources
+  for (const [cropId, produced] of Object.entries(resourcesProduced)) {
+    resourcesBanked[cropId] = produced;
+  }
+
+  // Subtract what was already consumed from the bank in this step
+  for (const [cropId, used] of Object.entries(resourcesUsedFromBank)) {
+    if (resourcesBanked[cropId]) {
+      resourcesBanked[cropId] = Math.max(0, resourcesBanked[cropId] - used);
+    }
+  }
+
+  // Remove zero values to keep the bank clean
+  Object.keys(resourcesBanked).forEach((cropId) => {
+    if (resourcesBanked[cropId] <= 0) {
+      delete resourcesBanked[cropId];
+    }
+  });
+
+  return resourcesBanked;
 }
 
 /**

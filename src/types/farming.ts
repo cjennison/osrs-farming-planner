@@ -44,6 +44,10 @@ export interface Crop {
   // Experience
   plantingXP?: number;
   harvestXP?: number;
+  expPerHarvest?: number; // Total XP per patch (planting + harvest)
+
+  // Seeds and patches
+  seedsPerPatch?: number; // Seeds needed per patch
 
   // Wiki integration
   wikiUrl: string;

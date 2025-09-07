@@ -17,6 +17,8 @@ interface OptimizationInputsProps {
   onKandarinDiaryChange: (value: KandarinDiaryLevel) => void;
   xpStrategy: XpStrategy;
   onXpStrategyChange: (value: XpStrategy) => void;
+  useResourceBanking: boolean;
+  onResourceBankingChange: (value: boolean) => void;
   excludeFlowers: boolean;
   onExcludeFlowersChange: (value: boolean) => void;
   excludeHerbs: boolean;
@@ -63,6 +65,8 @@ export function OptimizationInputs({
   onKandarinDiaryChange,
   xpStrategy,
   onXpStrategyChange,
+  useResourceBanking,
+  onResourceBankingChange,
   excludeFlowers,
   onExcludeFlowersChange,
   excludeHerbs,
@@ -128,6 +132,15 @@ export function OptimizationInputs({
         value={xpStrategy}
         onChange={(value) => onXpStrategyChange(value as XpStrategy)}
         data={XP_STRATEGY_OPTIONS}
+      />
+
+      <Checkbox
+        label="Resource Banking"
+        description="Bank excess crops from each step to reduce future requirements. More realistic but may complicate planning."
+        checked={useResourceBanking}
+        onChange={(event) =>
+          onResourceBankingChange(event.currentTarget.checked)
+        }
       />
 
       <Title order={4} c="sage.7" mt="md">
