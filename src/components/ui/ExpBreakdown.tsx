@@ -29,9 +29,11 @@ interface CropExpData {
   name: string;
   quantity: number;
   plantingExp: number;
+  checkHealthExp: number;
   harvestExp: number;
   totalHarvests: number;
   totalPlantingExp: number;
+  totalCheckHealthExp: number;
   totalHarvestExp: number;
   totalExp: number;
 }
@@ -42,6 +44,7 @@ export function ExpBreakdown({ result, yieldStrategy }: ExpBreakdownProps) {
   // Calculate experience for each crop
   const cropExpData: CropExpData[] = [];
   let totalPlantingExp = 0;
+  let totalCheckHealthExp = 0;
   let totalHarvestingExp = 0;
 
   for (const [cropId, requirement] of Object.entries(result.requirements)) {
@@ -54,30 +57,39 @@ export function ExpBreakdown({ result, yieldStrategy }: ExpBreakdownProps) {
     const totalHarvests = requirement.totalYield[yieldStrategy];
 
     const plantingExp = cropData.expBreakdown?.planting || 0;
+    const checkHealthExp = cropData.expBreakdown?.checkHealth || 0;
     const harvestExp = cropData.expBreakdown?.harvest || 0;
 
     const totalPlantingExpForCrop = plantingExp * quantity;
+    const totalCheckHealthExpForCrop = checkHealthExp * quantity;
     const totalHarvestExpForCrop = harvestExp * totalHarvests;
-    const totalExp = totalPlantingExpForCrop + totalHarvestExpForCrop;
+    const totalExp =
+      totalPlantingExpForCrop +
+      totalCheckHealthExpForCrop +
+      totalHarvestExpForCrop;
 
     cropExpData.push({
       cropId,
       name: cropData.name,
       quantity,
       plantingExp,
+      checkHealthExp,
       harvestExp,
       totalHarvests: Math.round(totalHarvests),
       totalPlantingExp: totalPlantingExpForCrop,
+      totalCheckHealthExp: totalCheckHealthExpForCrop,
       totalHarvestExp: totalHarvestExpForCrop,
       totalExp,
     });
 
     totalPlantingExp += totalPlantingExpForCrop;
+    totalCheckHealthExp += totalCheckHealthExpForCrop;
     totalHarvestingExp += totalHarvestExpForCrop;
   }
 
   // Calculate the totals (keep raw values for accuracy)
-  const grandTotal = totalPlantingExp + totalHarvestingExp;
+  const grandTotal =
+    totalPlantingExp + totalCheckHealthExp + totalHarvestingExp;
 
   // Sort by total exp descending
   cropExpData.sort((a, b) => b.totalExp - a.totalExp);
@@ -165,7 +177,8 @@ export function ExpBreakdown({ result, yieldStrategy }: ExpBreakdownProps) {
 
           <Text size="sm" c="dimmed" mb="md">
             Experience calculations based on {yieldStrategy} yield expectations.
-            Harvesting XP includes all expected harvests per patch.
+            Total XP includes planting, checking health, and harvesting
+            experience.
           </Text>
 
           {/* Per-Crop Breakdown */}
@@ -196,7 +209,7 @@ export function ExpBreakdown({ result, yieldStrategy }: ExpBreakdownProps) {
                 </Group>
 
                 <Grid>
-                  <Grid.Col span={4}>
+                  <Grid.Col span={3}>
                     <Text size="xs" c="dimmed">
                       Planting
                     </Text>
@@ -208,7 +221,25 @@ export function ExpBreakdown({ result, yieldStrategy }: ExpBreakdownProps) {
                       />
                     </Text>
                   </Grid.Col>
-                  <Grid.Col span={4}>
+                  <Grid.Col span={3}>
+                    <Text size="xs" c="dimmed">
+                      Checking Health
+                    </Text>
+                    {crop.checkHealthExp > 0 ? (
+                      <Text size="sm" fw={500} c="orange.6">
+                        {crop.checkHealthExp} × {crop.quantity} ={" "}
+                        <NumberFormatter
+                          value={Math.floor(crop.totalCheckHealthExp)}
+                          thousandSeparator=","
+                        />
+                      </Text>
+                    ) : (
+                      <Text size="sm" c="dimmed">
+                        —
+                      </Text>
+                    )}
+                  </Grid.Col>
+                  <Grid.Col span={3}>
                     <Text size="xs" c="dimmed">
                       Harvesting
                     </Text>
@@ -220,7 +251,7 @@ export function ExpBreakdown({ result, yieldStrategy }: ExpBreakdownProps) {
                       />
                     </Text>
                   </Grid.Col>
-                  <Grid.Col span={4}>
+                  <Grid.Col span={3}>
                     <Text size="xs" c="dimmed">
                       Expected Harvests
                     </Text>

@@ -82,13 +82,15 @@ export function CalculatorResults({
       if (!cropData || requirement.patches === 0) continue;
 
       const plantingExpPerPatch = cropData.expBreakdown?.planting || 0;
+      const checkHealthExpPerPatch = cropData.expBreakdown?.checkHealth || 0;
       const harvestExpPerItem = cropData.expBreakdown?.harvest || 0;
 
-      // Calculate total XP: planting XP + (harvest XP per item × average yield per patch)
+      // Calculate total XP: planting XP + checking XP + (harvest XP per item × average yield per patch)
       const plantingExp = plantingExpPerPatch * requirement.patches;
+      const checkHealthExp = checkHealthExpPerPatch * requirement.patches;
       const harvestExp = harvestExpPerItem * requirement.totalYield.average;
 
-      totalExp += plantingExp + harvestExp;
+      totalExp += plantingExp + checkHealthExp + harvestExp;
     }
 
     return totalExp; // Return raw calculation value

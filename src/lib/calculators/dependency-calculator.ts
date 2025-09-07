@@ -94,6 +94,7 @@ export interface LevelTargetCalculationResult extends CalculationResult {
   xpBreakdown: {
     [cropId: string]: {
       plantingXp: number;
+      checkHealthXp: number;
       harvestXp: number;
       totalXp: number;
       patches: number;
@@ -594,6 +595,7 @@ function calculateTotalExperienceFromResult(
     if (!cropData?.expBreakdown) continue;
 
     const plantingXpPerPatch = cropData.expBreakdown.planting;
+    const checkHealthXpPerPatch = cropData.expBreakdown.checkHealth || 0; // Add checking XP
     const harvestXpPerItem = cropData.expBreakdown.harvest;
 
     // Calculate yield for this crop
@@ -610,7 +612,9 @@ function calculateTotalExperienceFromResult(
 
     const expectedYield = cropYield.average;
     const harvestXpPerPatch = harvestXpPerItem * expectedYield;
-    const totalXpPerPatch = plantingXpPerPatch + harvestXpPerPatch;
+    // Include all three XP sources: planting + checkHealth + harvest
+    const totalXpPerPatch =
+      plantingXpPerPatch + checkHealthXpPerPatch + harvestXpPerPatch;
     const cropTotalXp = requirement.patches * totalXpPerPatch;
 
     totalXp += cropTotalXp;
@@ -697,6 +701,7 @@ export function calculateLevelDependencies(
   const xpBreakdown: {
     [cropId: string]: {
       plantingXp: number;
+      checkHealthXp: number;
       harvestXp: number;
       totalXp: number;
       patches: number;
@@ -708,6 +713,7 @@ export function calculateLevelDependencies(
     if (!cropData?.expBreakdown) continue;
 
     const plantingXpPerPatch = cropData.expBreakdown.planting;
+    const checkHealthXpPerPatch = cropData.expBreakdown.checkHealth || 0; // Add checking XP
     const harvestXpPerItem = cropData.expBreakdown.harvest;
 
     // Calculate yield for this crop
@@ -724,13 +730,15 @@ export function calculateLevelDependencies(
 
     const expectedYield = cropYield.average;
     const totalPlantingXp = requirement.patches * plantingXpPerPatch;
+    const totalCheckHealthXp = requirement.patches * checkHealthXpPerPatch;
     const totalHarvestXp =
       requirement.patches * harvestXpPerItem * expectedYield;
 
     xpBreakdown[cropId] = {
       plantingXp: totalPlantingXp,
+      checkHealthXp: totalCheckHealthXp,
       harvestXp: totalHarvestXp,
-      totalXp: totalPlantingXp + totalHarvestXp,
+      totalXp: totalPlantingXp + totalCheckHealthXp + totalHarvestXp,
       patches: requirement.patches,
     };
   }

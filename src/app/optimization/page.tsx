@@ -225,7 +225,23 @@ export default function OptimizedLevelingPage() {
                             imageType="crop"
                             size={24}
                           />
-                          <Tooltip label={step.optimalCrop.name}>
+                          <Tooltip
+                            label={
+                              <Stack gap={2}>
+                                <Text size="sm" fw={500}>
+                                  {step.optimalCrop.name}
+                                </Text>
+                                <Text size="xs" c="dimmed">
+                                  Target: {step.targetQuantity}{" "}
+                                  {step.optimalCrop.name.toLowerCase()}s needed
+                                </Text>
+                                <Text size="xs" c="dimmed">
+                                  Level {step.fromLevel} → {step.toLevel}
+                                </Text>
+                              </Stack>
+                            }
+                            multiline
+                          >
                             <Text size="sm" fw={500}>
                               {step.optimalCrop.name}
                             </Text>
