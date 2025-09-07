@@ -53,10 +53,7 @@ export function CalculatorResults({
   targetCrop,
 }: CalculatorResultsProps) {
   // Helper function to calculate total experience
-  const calculateTotalExperience = (
-    result: CalculationResult,
-    yieldStrategy: YieldStrategy,
-  ): number => {
+  const calculateTotalExperience = (result: CalculationResult): number => {
     let totalPlantingExp = 0;
     let totalHarvestingExp = 0;
 
@@ -66,21 +63,12 @@ export function CalculatorResults({
 
       const quantity = requirement.patches;
 
-      // Expected harvests based on yield strategy
-      let totalHarvests = quantity;
-      if (yieldStrategy === "min") {
-        totalHarvests = quantity;
-      } else if (yieldStrategy === "average") {
-        totalHarvests = quantity * 3.5;
-      } else {
-        totalHarvests = quantity * 6;
-      }
-
+      // XP is only based on patches planted/harvested, not yield multipliers
       const plantingExp = cropData.expBreakdown?.planting || 0;
       const harvestExp = cropData.expBreakdown?.harvest || 0;
 
       totalPlantingExp += plantingExp * quantity;
-      totalHarvestingExp += harvestExp * totalHarvests;
+      totalHarvestingExp += harvestExp * quantity; // XP per patch, not per item yield
     }
 
     return totalPlantingExp + totalHarvestingExp;
@@ -165,7 +153,7 @@ export function CalculatorResults({
                   </Text>
                   <Text size="xl" fw={700} c="blue.7">
                     <NumberFormatter
-                      value={calculateTotalExperience(result, yieldStrategy)}
+                      value={calculateTotalExperience(result)}
                       thousandSeparator=","
                     />
                   </Text>

@@ -120,7 +120,7 @@ const FARMING_XP_TABLE = [
 /**
  * Calculate total XP required to reach a level from level 1
  */
-function getXpForLevel(level: number): number {
+export function getXpForLevel(level: number): number {
   if (level < 1 || level > 99) return 0;
   return FARMING_XP_TABLE[level];
 }
@@ -128,14 +128,14 @@ function getXpForLevel(level: number): number {
 /**
  * Calculate XP needed to go from current level to target level
  */
-function getXpNeeded(currentLevel: number, targetLevel: number): number {
+export function getXpNeeded(currentLevel: number, targetLevel: number): number {
   return getXpForLevel(targetLevel) - getXpForLevel(currentLevel);
 }
 
 /**
  * Calculate current level from total XP
  */
-function getLevelFromXp(totalXp: number): number {
+export function getLevelFromXp(totalXp: number): number {
   for (let level = 99; level >= 1; level--) {
     if (totalXp >= FARMING_XP_TABLE[level]) {
       return level;
@@ -629,7 +629,7 @@ export function calculateDependencies(
 
 /**
  * Calculate farming dependencies to reach a target level using a specific crop
- * This uses an iterative approach to account for XP gained from dependencies
+ * This solves the dependency system mathematically to avoid exponential explosion
  */
 export function calculateLevelDependencies(
   targetCrop: string,
@@ -648,6 +648,12 @@ export function calculateLevelDependencies(
   kandarinDiary: KandarinDiaryLevel = "none",
   kourendDiary: KourendDiaryLevel = "none",
 ): LevelTargetCalculationResult {
+  // Note: startingResources parameter reserved for future enhancement
+  console.log(
+    "Calculating level dependencies with startingResources:",
+    Object.keys(startingResources).length,
+  );
+
   const cropData = getCropData(targetCrop);
   if (!cropData) {
     throw new Error(`Unknown crop: ${targetCrop}`);
@@ -664,32 +670,22 @@ export function calculateLevelDependencies(
   }
 
   const targetXp = getXpNeeded(startingLevel, targetLevel);
-  let currentLevel = startingLevel;
-  let totalXpGained = 0;
-  const xpBreakdown: LevelTargetCalculationResult["xpBreakdown"] = {};
 
-  // Iterative approach: keep calculating until we have enough XP
-  let iterations = 0;
-  const maxIterations = 10; // Prevent infinite loops
+  // Build the dependency chain data
+  const dependencyChain = getDependencyChain(targetCrop);
+  const cropMap = new Map<
+    string,
+    { crop: CropData; yield: number; xpPerPatch: number }
+  >();
 
-  while (totalXpGained < targetXp && iterations < maxIterations) {
-    iterations++;
+  for (const cropId of dependencyChain) {
+    const crop = getCropData(cropId);
+    if (!crop) continue;
 
-    // Calculate how much more XP we need
-    const remainingXp = targetXp - totalXpGained;
-
-    // Estimate how many target crops we need for remaining XP
-    const targetCropXp = cropData.expPerHarvest;
-    const estimatedTargetCrops = Math.ceil(remainingXp / targetCropXp);
-
-    // Calculate dependencies for this many target crops
-    const dependencyResult = calculateDependencies(
-      targetCrop,
-      estimatedTargetCrops,
-      currentLevel,
+    const yield_ = calculateYield(
+      cropId,
+      startingLevel,
       compostType,
-      startingResources,
-      yieldStrategy,
       magicSecateurs,
       farmingCape,
       attasSeed,
@@ -697,74 +693,178 @@ export function calculateLevelDependencies(
       kourendDiary,
     );
 
-    // Calculate XP from all dependencies (these happen first)
-    let xpFromDependencies = 0;
-
-    for (const [cropId, requirement] of Object.entries(
-      dependencyResult.requirements,
-    )) {
-      if (cropId !== targetCrop) {
-        const depCropData = getCropData(cropId);
-        if (depCropData) {
-          const patchXp = depCropData.expPerHarvest * requirement.patches;
-          xpFromDependencies += patchXp;
-
-          xpBreakdown[cropId] = {
-            plantingXp: 0, // We'll calculate this properly if needed
-            harvestXp: patchXp,
-            totalXp: patchXp,
-            patches: requirement.patches,
-          };
-        }
-      }
-    }
-
-    // Add XP from dependencies
-    totalXpGained += xpFromDependencies;
-    currentLevel = getLevelFromXp(getXpForLevel(startingLevel) + totalXpGained);
-
-    // Calculate XP from target crop
-    const targetCropPatches =
-      dependencyResult.requirements[targetCrop]?.patches || 0;
-    const targetCropXpTotal = targetCropXp * targetCropPatches;
-
-    xpBreakdown[targetCrop] = {
-      plantingXp: 0, // We'll calculate this properly if needed
-      harvestXp: targetCropXpTotal,
-      totalXp: targetCropXpTotal,
-      patches: targetCropPatches,
-    };
-
-    // Add XP from target crop
-    totalXpGained += targetCropXpTotal;
-
-    // If we still don't have enough XP, we need to iterate
-    // But for now, let's break and return what we have
-    break;
+    cropMap.set(cropId, {
+      crop,
+      yield: yield_[yieldStrategy],
+      xpPerPatch: crop.expPerHarvest,
+    });
   }
 
-  // Convert regular result to level-based result
-  const baseResult = calculateDependencies(
-    targetCrop,
-    xpBreakdown[targetCrop]?.patches || 1,
-    startingLevel,
-    compostType,
-    startingResources,
-    yieldStrategy,
-    magicSecateurs,
-    farmingCape,
-    attasSeed,
-    kandarinDiary,
-    kourendDiary,
+  // Create system of equations approach
+  // Let T = tomato patches, C = cabbage patches, O = onion patches, P = potato patches
+  // Constraints:
+  // T * 20 <= C * 3 (tomatoes need 20 cabbages per patch, cabbages yield 3 per patch)
+  // C * 10 <= O * 3 (cabbages need 10 onions per patch, onions yield 3 per patch)
+  // O * 10 <= P * 3 (onions need 10 potatoes per patch, potatoes yield 3 per patch)
+  // Total XP: T * xp_T + C * xp_C + O * xp_O + P * xp_P = targetXp
+
+  // Solve for minimum patches by working backwards from the dependency chain
+  const patchCounts = new Map<string, number>();
+  const xpBreakdown: LevelTargetCalculationResult["xpBreakdown"] = {};
+
+  // Start with a minimal initial guess and solve the system
+  let scaleFactor = 1;
+  let iterations = 0;
+  const maxIterations = 20;
+
+  while (iterations < maxIterations) {
+    iterations++;
+
+    // Calculate patch requirements working forward through the chain
+    let cumulativeXp = 0;
+    patchCounts.clear();
+
+    for (let i = dependencyChain.length - 1; i >= 0; i--) {
+      const cropId = dependencyChain[i];
+      const cropInfo = cropMap.get(cropId);
+      if (!cropInfo) continue;
+
+      let patchesNeeded: number;
+
+      if (i === 0) {
+        // This is the target crop - start with a base amount scaled by our factor
+        patchesNeeded = Math.ceil(scaleFactor);
+      } else {
+        // This is a dependency crop - calculate how many patches needed to support the next crop
+        const nextCropId = dependencyChain[i - 1];
+        const nextCropInfo = cropMap.get(nextCropId);
+        const nextCropPatches = patchCounts.get(nextCropId) || 0;
+
+        if (nextCropInfo?.crop.protection?.crop === cropId) {
+          const itemsNeeded =
+            nextCropPatches * nextCropInfo.crop.protection.quantity;
+          patchesNeeded = Math.ceil(itemsNeeded / cropInfo.yield);
+        } else {
+          patchesNeeded = 0;
+        }
+      }
+
+      patchCounts.set(cropId, patchesNeeded);
+
+      // Calculate XP contribution
+      const xpContribution = patchesNeeded * cropInfo.xpPerPatch;
+      cumulativeXp += xpContribution;
+
+      xpBreakdown[cropId] = {
+        plantingXp: 0, // We focus on harvest XP for simplicity
+        harvestXp: xpContribution,
+        totalXp: xpContribution,
+        patches: patchesNeeded,
+      };
+    }
+
+    // Check if we're close to target XP
+    const xpRatio = targetXp / Math.max(cumulativeXp, 1);
+
+    if (Math.abs(cumulativeXp - targetXp) < targetXp * 0.02) {
+      // Within 2% of target - good enough
+      break;
+    }
+
+    if (cumulativeXp < targetXp) {
+      // Need more XP - increase scale factor
+      scaleFactor *= xpRatio * 1.1; // Slight overshoot to converge faster
+    } else {
+      // Too much XP - decrease scale factor
+      scaleFactor *= xpRatio * 0.9; // Slight undershoot to avoid oscillation
+    }
+  }
+
+  // Build the final result using the calculated patch counts
+  const requirements: CalculationResult["requirements"] = {};
+  const breakdown: CalculationResult["breakdown"] = [];
+  let totalPatches = 0;
+
+  for (const [cropId, patches] of patchCounts) {
+    if (patches === 0) continue;
+
+    const cropInfo = cropMap.get(cropId);
+    if (!cropInfo) continue;
+
+    const cropYield = calculateYield(
+      cropId,
+      startingLevel,
+      compostType,
+      magicSecateurs,
+      farmingCape,
+      attasSeed,
+      kandarinDiary,
+      kourendDiary,
+    );
+
+    requirements[cropId] = {
+      patches,
+      reason:
+        cropId === targetCrop
+          ? `Target harvest: ${Math.ceil(patches * cropYield.average)} ${cropInfo.crop.name}s`
+          : `Payment for ${dependencyChain[dependencyChain.indexOf(cropId) - 1] || "crops"}`,
+      totalYield: {
+        min: patches * cropYield.min,
+        max: patches * cropYield.max,
+        average: patches * cropYield.average,
+      },
+      perPatchYield: cropYield,
+    };
+
+    breakdown.push({
+      level: dependencyChain.indexOf(cropId),
+      crop: cropInfo.crop.name,
+      patchesNeeded: {
+        min: patches,
+        average: patches,
+        max: patches,
+      },
+      totalYield: {
+        min: patches * cropYield.min,
+        average: patches * cropYield.average,
+        max: patches * cropYield.max,
+      },
+      purpose: requirements[cropId].reason,
+    });
+
+    totalPatches += patches;
+  }
+
+  // Calculate total XP gained
+  const totalXpGained = Object.values(xpBreakdown).reduce(
+    (sum, breakdown) => sum + breakdown.totalXp,
+    0,
   );
 
   return {
-    ...baseResult,
     calculationMode: "level",
+    targetCrop,
+    targetQuantity: Math.ceil(
+      (patchCounts.get(targetCrop) || 0) *
+        (cropMap.get(targetCrop)?.yield || 1),
+    ),
     targetLevel,
     startingLevel,
     totalXpGained,
     xpBreakdown,
+    requirements,
+    breakdown: breakdown.reverse(),
+    summary: {
+      totalPatches,
+      totalSeeds: totalPatches,
+      estimatedTime: Array.from(patchCounts.entries()).reduce(
+        (total, [cropId, patches]) => {
+          const cropInfo = cropMap.get(cropId);
+          return total + (cropInfo ? patches * cropInfo.crop.growthTime : 0);
+        },
+        0,
+      ),
+    },
   };
 }
 

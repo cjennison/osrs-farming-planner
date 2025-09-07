@@ -24,6 +24,7 @@ import type {
   KourendDiaryLevel,
   YieldStrategy,
 } from "@/lib/calculators/dependency-calculator";
+import { getXpNeeded } from "@/lib/calculators/dependency-calculator";
 import type { CropOption } from "@/lib/crop-options";
 import { getCropCounts, getCropSelectData } from "@/lib/crop-options";
 
@@ -342,6 +343,30 @@ export function CalculatorInputs({
               max={99}
               description="The farming level you want to achieve using this crop"
             />
+            {/* XP Needed Display */}
+            {startingLevel < targetLevel && (
+              <Alert
+                icon={<IconLeaf size={16} />}
+                color="blue"
+                variant="light"
+                styles={{
+                  root: { borderLeft: "3px solid var(--mantine-color-blue-5)" },
+                }}
+              >
+                <Group justify="space-between" align="center">
+                  <Text size="sm" fw={500}>
+                    Experience Required
+                  </Text>
+                  <Badge size="lg" variant="filled" color="blue">
+                    {getXpNeeded(startingLevel, targetLevel).toLocaleString()}{" "}
+                    XP
+                  </Badge>
+                </Group>
+                <Text size="xs" c="dimmed" mt={4}>
+                  Level {startingLevel} → {targetLevel}
+                </Text>
+              </Alert>
+            )}
           </Stack>
         )}
 
