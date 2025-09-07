@@ -4,8 +4,10 @@ import { Container, Grid, Stack, Text, Title } from "@mantine/core";
 import { IconCalculator } from "@tabler/icons-react";
 import { useCallback, useEffect, useState } from "react";
 import {
+  type CalculationMode,
   type CalculationResult,
   calculateDependencies,
+  calculateLevelDependencies,
   type KandarinDiaryLevel,
   type KourendDiaryLevel,
   type YieldStrategy,
@@ -45,6 +47,13 @@ export function FarmingCalculator() {
   const [kandarinDiary, setKandarinDiary] =
     useState<KandarinDiaryLevel>("none");
   const [kourendDiary, setKourendDiary] = useState<KourendDiaryLevel>("none");
+
+  // New state for level-based calculation
+  const [calculationMode, setCalculationMode] =
+    useState<CalculationMode>("quantity");
+  const [targetLevel, setTargetLevel] = useState<number>(30);
+  const [startingLevel, setStartingLevel] = useState<number>(1);
+
   const [startingResources, setStartingResources] = useState<
     Record<string, number>
   >({});
@@ -92,19 +101,40 @@ export function FarmingCalculator() {
     if (!canCalculate) return;
 
     try {
-      const calculationResult = calculateDependencies(
-        targetCrop,
-        quantity,
-        farmingLevel,
-        compostType as "none" | "compost" | "supercompost" | "ultracompost",
-        startingResources,
-        yieldStrategy,
-        magicSecateurs,
-        farmingCape,
-        attasSeed,
-        kandarinDiary,
-        kourendDiary,
-      );
+      let calculationResult: CalculationResult;
+
+      if (calculationMode === "level") {
+        // Use level-based calculation
+        calculationResult = calculateLevelDependencies(
+          targetCrop,
+          targetLevel,
+          startingLevel,
+          compostType as "none" | "compost" | "supercompost" | "ultracompost",
+          startingResources,
+          yieldStrategy,
+          magicSecateurs,
+          farmingCape,
+          attasSeed,
+          kandarinDiary,
+          kourendDiary,
+        );
+      } else {
+        // Use quantity-based calculation (existing)
+        calculationResult = calculateDependencies(
+          targetCrop,
+          quantity,
+          farmingLevel,
+          compostType as "none" | "compost" | "supercompost" | "ultracompost",
+          startingResources,
+          yieldStrategy,
+          magicSecateurs,
+          farmingCape,
+          attasSeed,
+          kandarinDiary,
+          kourendDiary,
+        );
+      }
+
       setResult(calculationResult);
       setError("");
     } catch (err) {
@@ -123,6 +153,9 @@ export function FarmingCalculator() {
     attasSeed,
     kandarinDiary,
     kourendDiary,
+    calculationMode,
+    startingLevel,
+    targetLevel,
     canCalculate,
   ]);
 
@@ -228,6 +261,12 @@ export function FarmingCalculator() {
               setKandarinDiary={handleKandarinDiaryChange}
               kourendDiary={kourendDiary}
               setKourendDiary={handleKourendDiaryChange}
+              calculationMode={calculationMode}
+              setCalculationMode={setCalculationMode}
+              targetLevel={targetLevel}
+              setTargetLevel={setTargetLevel}
+              startingLevel={startingLevel}
+              setStartingLevel={setStartingLevel}
             />
           </Grid.Col>
 

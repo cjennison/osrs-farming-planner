@@ -19,6 +19,7 @@ import {
 import { IconInfoCircle, IconLeaf, IconSeedling } from "@tabler/icons-react";
 import { useEffect, useMemo, useState } from "react";
 import type {
+  CalculationMode,
   KandarinDiaryLevel,
   KourendDiaryLevel,
   YieldStrategy,
@@ -143,6 +144,13 @@ interface CalculatorInputsProps {
   setKandarinDiary: (value: KandarinDiaryLevel) => void;
   kourendDiary: KourendDiaryLevel;
   setKourendDiary: (value: KourendDiaryLevel) => void;
+  // New props for level-based calculation
+  calculationMode: CalculationMode;
+  setCalculationMode: (value: CalculationMode) => void;
+  targetLevel: number;
+  setTargetLevel: (value: number) => void;
+  startingLevel: number;
+  setStartingLevel: (value: number) => void;
 }
 
 export function CalculatorInputs({
@@ -171,6 +179,13 @@ export function CalculatorInputs({
   setKandarinDiary,
   kourendDiary,
   setKourendDiary,
+  // New props
+  calculationMode,
+  setCalculationMode,
+  targetLevel,
+  setTargetLevel,
+  startingLevel,
+  setStartingLevel,
 }: CalculatorInputsProps) {
   // Local state for crop type filter
   const [selectedCropType, setSelectedCropType] = useState<string>("all");
@@ -247,6 +262,35 @@ export function CalculatorInputs({
           </Chip.Group>
         </Stack>
 
+        {/* Calculation Mode Toggle */}
+        <Stack gap="xs">
+          <Text size="sm" fw={500}>
+            Calculation Mode
+          </Text>
+          <Chip.Group
+            value={calculationMode}
+            onChange={(value) =>
+              setCalculationMode(
+                (Array.isArray(value) ? value[0] : value) as CalculationMode,
+              )
+            }
+          >
+            <Group gap="xs">
+              <Chip value="quantity" variant="outline">
+                Target Quantity
+              </Chip>
+              <Chip value="level" variant="outline">
+                Target Level
+              </Chip>
+            </Group>
+          </Chip.Group>
+          <Text size="xs" c="dimmed">
+            {calculationMode === "quantity"
+              ? "Calculate dependencies for a specific number of crops"
+              : "Calculate optimal crop quantity to reach a farming level (includes XP from dependencies)"}
+          </Text>
+        </Stack>
+
         <Select
           key={selectedCropType} // Force remount when filter changes
           label={
@@ -268,23 +312,50 @@ export function CalculatorInputs({
           searchable
         />
 
-        <NumberInput
-          label="Quantity Needed"
-          placeholder="How many do you need?"
-          value={quantity}
-          onChange={(value) => setQuantity(Number(value) || 1)}
-          min={1}
-          max={1000}
-        />
+        {/* Conditional inputs based on calculation mode */}
+        {calculationMode === "quantity" ? (
+          <NumberInput
+            label="Quantity Needed"
+            placeholder="How many do you need?"
+            value={quantity}
+            onChange={(value) => setQuantity(Number(value) || 1)}
+            min={1}
+            max={1000}
+          />
+        ) : (
+          <Stack gap="sm">
+            <NumberInput
+              label="Starting Farming Level"
+              placeholder="Your current farming level"
+              value={startingLevel}
+              onChange={(value) => setStartingLevel(Number(value) || 1)}
+              min={1}
+              max={98}
+              description="Your current farming level (must be high enough to grow the target crop)"
+            />
+            <NumberInput
+              label="Target Farming Level"
+              placeholder="Level you want to reach"
+              value={targetLevel}
+              onChange={(value) => setTargetLevel(Number(value) || 2)}
+              min={2}
+              max={99}
+              description="The farming level you want to achieve using this crop"
+            />
+          </Stack>
+        )}
 
-        <NumberInput
-          label="Farming Level"
-          placeholder="Your current farming level"
-          value={farmingLevel}
-          onChange={(value) => setFarmingLevel(Number(value) || 1)}
-          min={1}
-          max={99}
-        />
+        {/* Only show farming level for quantity mode since level mode has starting/target levels */}
+        {calculationMode === "quantity" && (
+          <NumberInput
+            label="Farming Level"
+            placeholder="Your current farming level"
+            value={farmingLevel}
+            onChange={(value) => setFarmingLevel(Number(value) || 1)}
+            min={1}
+            max={99}
+          />
+        )}
 
         <Select
           label="Compost Type"

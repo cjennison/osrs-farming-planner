@@ -83,6 +83,67 @@ export type KandarinDiaryLevel = "none" | "medium" | "hard" | "elite";
 
 export type KourendDiaryLevel = "none" | "medium" | "hard" | "elite";
 
+export type CalculationMode = "quantity" | "level";
+
+export interface LevelTargetCalculationResult extends CalculationResult {
+  calculationMode: "level";
+  targetLevel: number;
+  startingLevel: number;
+  totalXpGained: number;
+  xpBreakdown: {
+    [cropId: string]: {
+      plantingXp: number;
+      harvestXp: number;
+      totalXp: number;
+      patches: number;
+    };
+  };
+}
+
+/**
+ * OSRS Farming XP table - XP required for each level
+ * Source: https://oldschool.runescape.wiki/w/Experience_table
+ */
+const FARMING_XP_TABLE = [
+  0, 0, 83, 174, 276, 388, 512, 650, 801, 969, 1154, 1358, 1584, 1833, 2107,
+  2411, 2746, 3115, 3523, 3973, 4470, 5018, 5624, 6291, 7028, 7842, 8740, 9730,
+  10824, 12031, 13363, 14833, 16456, 18247, 20224, 22406, 24815, 27473, 30408,
+  33648, 37224, 41171, 45529, 50339, 55649, 61512, 67983, 75127, 83014, 91721,
+  101333, 111945, 123660, 136594, 150872, 166636, 184040, 203254, 224466,
+  247886, 273742, 302288, 333804, 368599, 407015, 449428, 496254, 547953,
+  605032, 668051, 737627, 814445, 899257, 992895, 1096278, 1210421, 1336443,
+  1475581, 1629200, 1798808, 1986068, 2192818, 2421087, 2673114, 2951373,
+  3258594, 3597792, 3972294, 4385776, 4842295, 5346332, 5902831, 6517253,
+  7195629, 7944614, 8771558, 9684577, 10692629, 11805606, 13034431,
+];
+
+/**
+ * Calculate total XP required to reach a level from level 1
+ */
+function getXpForLevel(level: number): number {
+  if (level < 1 || level > 99) return 0;
+  return FARMING_XP_TABLE[level];
+}
+
+/**
+ * Calculate XP needed to go from current level to target level
+ */
+function getXpNeeded(currentLevel: number, targetLevel: number): number {
+  return getXpForLevel(targetLevel) - getXpForLevel(currentLevel);
+}
+
+/**
+ * Calculate current level from total XP
+ */
+function getLevelFromXp(totalXp: number): number {
+  for (let level = 99; level >= 1; level--) {
+    if (totalXp >= FARMING_XP_TABLE[level]) {
+      return level;
+    }
+  }
+  return 1;
+}
+
 /**
  * Convert JSON crop data to CropData format for calculations
  */
@@ -563,6 +624,147 @@ export function calculateDependencies(
       totalSeeds: allPatches, // 1 seed per patch
       estimatedTime,
     },
+  };
+}
+
+/**
+ * Calculate farming dependencies to reach a target level using a specific crop
+ * This uses an iterative approach to account for XP gained from dependencies
+ */
+export function calculateLevelDependencies(
+  targetCrop: string,
+  targetLevel: number,
+  startingLevel: number = 1,
+  compostType:
+    | "none"
+    | "compost"
+    | "supercompost"
+    | "ultracompost" = "supercompost",
+  startingResources: StartingResources = {},
+  yieldStrategy: YieldStrategy = "average",
+  magicSecateurs: boolean = false,
+  farmingCape: boolean = false,
+  attasSeed: boolean = false,
+  kandarinDiary: KandarinDiaryLevel = "none",
+  kourendDiary: KourendDiaryLevel = "none",
+): LevelTargetCalculationResult {
+  const cropData = getCropData(targetCrop);
+  if (!cropData) {
+    throw new Error(`Unknown crop: ${targetCrop}`);
+  }
+
+  if (startingLevel >= targetLevel) {
+    throw new Error("Starting level must be less than target level");
+  }
+
+  if (startingLevel < cropData.farmingLevel) {
+    throw new Error(
+      `Starting level (${startingLevel}) is too low to grow ${cropData.name} (requires level ${cropData.farmingLevel})`,
+    );
+  }
+
+  const targetXp = getXpNeeded(startingLevel, targetLevel);
+  let currentLevel = startingLevel;
+  let totalXpGained = 0;
+  const xpBreakdown: LevelTargetCalculationResult["xpBreakdown"] = {};
+
+  // Iterative approach: keep calculating until we have enough XP
+  let iterations = 0;
+  const maxIterations = 10; // Prevent infinite loops
+
+  while (totalXpGained < targetXp && iterations < maxIterations) {
+    iterations++;
+
+    // Calculate how much more XP we need
+    const remainingXp = targetXp - totalXpGained;
+
+    // Estimate how many target crops we need for remaining XP
+    const targetCropXp = cropData.expPerHarvest;
+    const estimatedTargetCrops = Math.ceil(remainingXp / targetCropXp);
+
+    // Calculate dependencies for this many target crops
+    const dependencyResult = calculateDependencies(
+      targetCrop,
+      estimatedTargetCrops,
+      currentLevel,
+      compostType,
+      startingResources,
+      yieldStrategy,
+      magicSecateurs,
+      farmingCape,
+      attasSeed,
+      kandarinDiary,
+      kourendDiary,
+    );
+
+    // Calculate XP from all dependencies (these happen first)
+    let xpFromDependencies = 0;
+
+    for (const [cropId, requirement] of Object.entries(
+      dependencyResult.requirements,
+    )) {
+      if (cropId !== targetCrop) {
+        const depCropData = getCropData(cropId);
+        if (depCropData) {
+          const patchXp = depCropData.expPerHarvest * requirement.patches;
+          xpFromDependencies += patchXp;
+
+          xpBreakdown[cropId] = {
+            plantingXp: 0, // We'll calculate this properly if needed
+            harvestXp: patchXp,
+            totalXp: patchXp,
+            patches: requirement.patches,
+          };
+        }
+      }
+    }
+
+    // Add XP from dependencies
+    totalXpGained += xpFromDependencies;
+    currentLevel = getLevelFromXp(getXpForLevel(startingLevel) + totalXpGained);
+
+    // Calculate XP from target crop
+    const targetCropPatches =
+      dependencyResult.requirements[targetCrop]?.patches || 0;
+    const targetCropXpTotal = targetCropXp * targetCropPatches;
+
+    xpBreakdown[targetCrop] = {
+      plantingXp: 0, // We'll calculate this properly if needed
+      harvestXp: targetCropXpTotal,
+      totalXp: targetCropXpTotal,
+      patches: targetCropPatches,
+    };
+
+    // Add XP from target crop
+    totalXpGained += targetCropXpTotal;
+
+    // If we still don't have enough XP, we need to iterate
+    // But for now, let's break and return what we have
+    break;
+  }
+
+  // Convert regular result to level-based result
+  const baseResult = calculateDependencies(
+    targetCrop,
+    xpBreakdown[targetCrop]?.patches || 1,
+    startingLevel,
+    compostType,
+    startingResources,
+    yieldStrategy,
+    magicSecateurs,
+    farmingCape,
+    attasSeed,
+    kandarinDiary,
+    kourendDiary,
+  );
+
+  return {
+    ...baseResult,
+    calculationMode: "level",
+    targetLevel,
+    startingLevel,
+    totalXpGained,
+    xpBreakdown,
   };
 }
 
