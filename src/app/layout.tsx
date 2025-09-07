@@ -1,6 +1,7 @@
 import { ColorSchemeScript } from "@mantine/core";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { CharacterProvider } from "@/hooks/useCharacter";
 import { ThemeProvider } from "@/styles/ThemeProvider";
 import "./globals.css";
 
@@ -35,7 +36,9 @@ export default function RootLayout({
         <ColorSchemeScript />
       </head>
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <CharacterProvider>{children}</CharacterProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -15,8 +15,14 @@ import {
   Title,
   Tooltip,
 } from "@mantine/core";
-import { IconInfoCircle, IconLeaf, IconSeedling } from "@tabler/icons-react";
+import {
+  IconInfoCircle,
+  IconLeaf,
+  IconSeedling,
+  IconUser,
+} from "@tabler/icons-react";
 import { useEffect, useMemo, useState } from "react";
+import { useCharacter } from "@/hooks/useCharacter";
 import type {
   CalculationMode,
   KandarinDiaryLevel,
@@ -180,6 +186,8 @@ export function CalculatorInputs({
   targetLevel,
   setTargetLevel,
 }: CalculatorInputsProps) {
+  const { currentCharacter } = useCharacter();
+
   // Local state for crop type filter
   const [selectedCropType, setSelectedCropType] = useState<string>("all");
 
@@ -370,6 +378,23 @@ export function CalculatorInputs({
           />
         ) : (
           <Stack gap="sm">
+            {/* Character Info Display */}
+            {currentCharacter && (
+              <Alert icon={<IconUser size={16} />} color="blue" variant="light">
+                <Group justify="space-between">
+                  <Text size="sm">
+                    <Text component="span" fw={500}>
+                      {currentCharacter.username}
+                    </Text>{" "}
+                    (Farming Level: {currentCharacter.skills.farming.level})
+                  </Text>
+                  <Badge size="sm" variant="light" color="green">
+                    Auto-filled
+                  </Badge>
+                </Group>
+              </Alert>
+            )}
+
             <NumberInput
               label="Starting Farming Level"
               placeholder="Your current farming level"
@@ -377,7 +402,11 @@ export function CalculatorInputs({
               onChange={(value) => handleFarmingLevelChange(Number(value) || 1)}
               min={1}
               max={98}
-              description="Your current farming level (must be high enough to grow the target crop)"
+              description={
+                currentCharacter
+                  ? `Auto-filled from ${currentCharacter.username}'s stats. You can override this value.`
+                  : "Your current farming level (must be high enough to grow the target crop)"
+              }
             />
             <NumberInput
               label="Target Farming Level"

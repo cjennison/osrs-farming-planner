@@ -17,6 +17,7 @@ import {
   IconSun,
 } from "@tabler/icons-react";
 import Link from "next/link";
+import { CharacterSelector } from "@/components/ui/CharacterSelector";
 
 interface AppHeaderProps {
   children: React.ReactNode;
@@ -57,35 +58,41 @@ export function AppHeader({ children }: AppHeaderProps) {
               </Group>
             </Button>
 
-            {/* Navigation */}
-            <Group gap="xs" visibleFrom="sm">
-              <Button
-                component={Link}
-                href="/planner"
-                variant="subtle"
-                leftSection={<IconPlant size={16} />}
-                c="sage.7"
-              >
-                Planner
-              </Button>
-              <Button
-                component={Link}
-                href="/calculator"
-                variant="subtle"
-                leftSection={<IconCalculator size={16} />}
-                c="sage.7"
-              >
-                Calculator
-              </Button>
-              <Button
-                component={Link}
-                href="/patches"
-                variant="subtle"
-                leftSection={<IconMap size={16} />}
-                c="sage.7"
-              >
-                Patch Map
-              </Button>
+            {/* Navigation and Character */}
+            <Group gap="md">
+              {/* Navigation */}
+              <Group gap="xs" visibleFrom="sm">
+                <Button
+                  component={Link}
+                  href="/planner"
+                  variant="subtle"
+                  leftSection={<IconPlant size={16} />}
+                  c="sage.7"
+                >
+                  Planner
+                </Button>
+                <Button
+                  component={Link}
+                  href="/calculator"
+                  variant="subtle"
+                  leftSection={<IconCalculator size={16} />}
+                  c="sage.7"
+                >
+                  Calculator
+                </Button>
+                <Button
+                  component={Link}
+                  href="/patches"
+                  variant="subtle"
+                  leftSection={<IconMap size={16} />}
+                  c="sage.7"
+                >
+                  Patch Map
+                </Button>
+              </Group>
+
+              {/* Character Selector */}
+              <CharacterSelector compact />
             </Group>
 
             {/* Theme Toggle */}

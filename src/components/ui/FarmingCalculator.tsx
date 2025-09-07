@@ -3,6 +3,7 @@
 import { Container, Grid, Stack, Text, Title } from "@mantine/core";
 import { IconCalculator } from "@tabler/icons-react";
 import { useCallback, useEffect, useState } from "react";
+import { useCharacter } from "@/hooks/useCharacter";
 import {
   type CalculationMode,
   type CalculationResult,
@@ -36,6 +37,8 @@ const formatCompostText = (compostType: string): string => {
 };
 
 export function FarmingCalculator() {
+  const { currentCharacter } = useCharacter();
+
   const [targetCrop, setTargetCrop] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(1);
   const [farmingLevel, setFarmingLevel] = useState<number>(1);
@@ -65,6 +68,16 @@ export function FarmingCalculator() {
     growth: true, // GrowthBreakdown section
     yields: false, // ExpectedYields section - keep collapsed by default as requested
   });
+
+  // Auto-populate farming level when character is available
+  useEffect(() => {
+    if (
+      currentCharacter &&
+      currentCharacter.skills.farming.level > farmingLevel
+    ) {
+      setFarmingLevel(currentCharacter.skills.farming.level);
+    }
+  }, [currentCharacter, farmingLevel]);
 
   const selectedCrop = CROP_OPTIONS.find((crop) => crop.value === targetCrop);
   const canCalculate =
