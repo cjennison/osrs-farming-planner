@@ -1,8 +1,12 @@
 import {
   calculateDependencies,
+  calculateLevelDependencies,
   calculateYield,
   getAvailableCrops,
   getDependencyChain,
+  getLevelFromXp,
+  getXpForLevel,
+  getXpNeeded,
   hasProtection,
 } from "../dependency-calculator";
 
