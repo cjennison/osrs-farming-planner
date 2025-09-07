@@ -407,7 +407,7 @@ export function CalculatorInputs({
         />
 
         {/* Starting Resources */}
-        {targetCrop && (
+        {targetCrop && getDependencyChain(targetCrop).length > 0 && (
           <Card p="md" bg="gray.0" radius="md">
             <Stack gap="xs">
               <Group gap="xs">
