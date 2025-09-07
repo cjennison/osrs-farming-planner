@@ -672,7 +672,7 @@ export function calculateLevelDependencies(
     quantity++;
 
     // Safety check to prevent infinite loops
-    if (quantity > 10000) {
+    if (quantity > 100000) {
       throw new Error(
         `Unable to reach level ${targetLevel} with ${targetCrop} - quantity exceeded safety limit`,
       );

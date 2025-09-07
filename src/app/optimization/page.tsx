@@ -137,7 +137,11 @@ export default function OptimizedLevelingPage() {
                   Total Patches
                 </Text>
                 <Text fw={600} size="lg">
-                  {progression.totalPatchesUsed}
+                  {progression.steps.reduce(
+                    (total, step) =>
+                      total + step.calculationResult.summary.totalPatches,
+                    0,
+                  )}
                 </Text>
               </Stack>
               <Stack gap="xs">
@@ -145,7 +149,34 @@ export default function OptimizedLevelingPage() {
                   Total Experience
                 </Text>
                 <Text fw={600} size="lg">
-                  {progression.totalExpGained.toLocaleString()}
+                  {progression.steps
+                    .reduce((total, step) => {
+                      // Calculate total XP from all crops in each step
+                      let stepXP = 0;
+
+                      // Add XP from target crop
+                      const targetCrop = getCropById(step.optimalCrop.id);
+                      if (targetCrop) {
+                        const targetPatches = Math.ceil(
+                          step.targetQuantity / (targetCrop.baseYield || 3),
+                        );
+                        stepXP +=
+                          targetPatches * (targetCrop.expPerHarvest || 0);
+                      }
+
+                      // Add XP from dependency crops
+                      Object.entries(
+                        step.calculationResult.requirements,
+                      ).forEach(([depCropId, req]) => {
+                        const depCrop = getCropById(depCropId);
+                        if (depCrop) {
+                          stepXP += req.patches * (depCrop.expPerHarvest || 0);
+                        }
+                      });
+
+                      return total + stepXP;
+                    }, 0)
+                    .toLocaleString()}
                 </Text>
               </Stack>
             </Group>
@@ -200,16 +231,42 @@ export default function OptimizedLevelingPage() {
                         </Group>
                       </Table.Td>
                       <Table.Td>
-                        <Badge variant="filled" color="sage">
-                          {step.patchesNeeded}
-                        </Badge>
+                        <Tooltip
+                          label={
+                            <Group gap="xs">
+                              {/* Show ALL crops from calculation result - no manual calculation */}
+                              {step.calculationResult.requirements &&
+                                Object.entries(
+                                  step.calculationResult.requirements,
+                                ).map(([cropId, requirement]) => (
+                                  <Group key={cropId} gap={2}>
+                                    <OSRSImage
+                                      itemId={cropId}
+                                      imageType="crop"
+                                      size={16}
+                                    />
+                                    <Text size="xs">
+                                      {requirement.patches}
+                                    </Text>
+                                  </Group>
+                                ))}
+                            </Group>
+                          }
+                          multiline
+                        >
+                          <Badge variant="filled" color="sage">
+                            {step.calculationResult.summary.totalPatches}
+                          </Badge>
+                        </Tooltip>
                       </Table.Td>
                       <Table.Td>
                         <Group gap={4}>
                           {/* Seeds - sorted by dependency order */}
                           {(() => {
                             // Helper function to get dependency order
-                            const getDependencyOrder = (seedId: string): number => {
+                            const getDependencyOrder = (
+                              seedId: string,
+                            ): number => {
                               // First find the crop that has this seedId
                               let crop = getCropById(seedId);
                               if (!crop) {
@@ -218,22 +275,76 @@ export default function OptimizedLevelingPage() {
                                 if (!Number.isNaN(numericSeedId)) {
                                   const allCrops = getAllCrops();
                                   crop = allCrops.find(
-                                    (c) => (c as { seedId?: number }).seedId === numericSeedId,
+                                    (c) =>
+                                      (c as { seedId?: number }).seedId ===
+                                      numericSeedId,
                                   );
                                 }
                               }
 
                               // Special case for target crop - it should come first
                               if (crop?.id === step.optimalCrop.id) return 0;
-                              
+
                               // For dependency crops, order by farming level requirement (higher = earlier)
-                              return crop?.farmingLevel ? 100 - crop.farmingLevel : 999;
+                              return crop?.farmingLevel
+                                ? 100 - crop.farmingLevel
+                                : 999;
                             };
 
+                            // Extract seeds from calculation result breakdown
+                            const seedMap: { [seedId: string]: number } = {};
+
+                            step.calculationResult.breakdown.forEach(
+                              (breakdownStep) => {
+                                // Handle crop seeds
+                                if (
+                                  !breakdownStep.crop.includes(
+                                    "(purchasable)",
+                                  ) &&
+                                  breakdownStep.patchesNeeded
+                                ) {
+                                  const crop =
+                                    getCropById(breakdownStep.crop) ||
+                                    getCropById(
+                                      breakdownStep.crop.toLowerCase(),
+                                    );
+                                  if (crop) {
+                                    const seedId =
+                                      crop.seedId?.toString() || crop.id;
+                                    const patchesForThisStep =
+                                      breakdownStep.patchesNeeded.average ||
+                                      breakdownStep.patchesNeeded.min ||
+                                      1;
+                                    const seedsNeeded =
+                                      patchesForThisStep *
+                                      (crop.seedsPerPatch || 1);
+                                    seedMap[seedId] =
+                                      (seedMap[seedId] || 0) + seedsNeeded;
+                                  }
+                                }
+                              },
+                            );
+
+                            // Add seeds for requirements not in breakdown
+                            Object.entries(
+                              step.calculationResult.requirements,
+                            ).forEach(([cropId, req]) => {
+                              const crop = getCropById(cropId);
+                              if (crop) {
+                                const seedId =
+                                  crop.seedId?.toString() || crop.id;
+                                if (!seedMap[seedId]) {
+                                  seedMap[seedId] =
+                                    req.patches * (crop.seedsPerPatch || 1);
+                                }
+                              }
+                            });
+
                             // Sort seeds by dependency order
-                            const sortedSeeds = Object.entries(step.inputs.seeds).sort(
-                              ([seedIdA], [seedIdB]) => 
-                                getDependencyOrder(seedIdA) - getDependencyOrder(seedIdB)
+                            const sortedSeeds = Object.entries(seedMap).sort(
+                              ([seedIdA], [seedIdB]) =>
+                                getDependencyOrder(seedIdA) -
+                                getDependencyOrder(seedIdB),
                             );
 
                             return sortedSeeds.map(([seedId, quantity]) => {
@@ -282,31 +393,82 @@ export default function OptimizedLevelingPage() {
                           })()}
 
                           {/* Purchasables */}
-                          {Object.entries(step.inputs.purchasables).map(
-                            ([itemId, quantity]) => {
-                              const item = getPurchasableItemById(itemId);
-                              return (
-                                <Tooltip
-                                  key={itemId}
-                                  label={`${item?.name || itemId}: ${quantity}`}
-                                >
-                                  <Group gap={2}>
-                                    <OSRSImage
-                                      itemId={itemId}
-                                      isPurchasable={true}
-                                      size={20}
-                                    />
-                                    <Text size="xs">{quantity}</Text>
-                                  </Group>
-                                </Tooltip>
-                              );
-                            },
-                          )}
+                          {(() => {
+                            // Extract purchasables from calculation result breakdown
+                            const purchasableMap: { [itemId: string]: number } =
+                              {};
+
+                            step.calculationResult.breakdown.forEach(
+                              (breakdownStep) => {
+                                if (
+                                  breakdownStep.crop.includes(
+                                    "(purchasable)",
+                                  ) &&
+                                  breakdownStep.purchaseQuantity
+                                ) {
+                                  const itemId = breakdownStep.crop
+                                    .replace(/\s*\(purchasable\)\s*$/i, "")
+                                    .trim();
+                                  purchasableMap[itemId] =
+                                    (purchasableMap[itemId] || 0) +
+                                    breakdownStep.purchaseQuantity;
+                                }
+                              },
+                            );
+
+                            return Object.entries(purchasableMap).map(
+                              ([itemId, quantity]) => {
+                                const item = getPurchasableItemById(itemId);
+                                return (
+                                  <Tooltip
+                                    key={itemId}
+                                    label={`${item?.name || itemId}: ${quantity}`}
+                                  >
+                                    <Group gap={2}>
+                                      <OSRSImage
+                                        itemId={itemId}
+                                        isPurchasable={true}
+                                        size={20}
+                                      />
+                                      <Text size="xs">{quantity}</Text>
+                                    </Group>
+                                  </Tooltip>
+                                );
+                              },
+                            );
+                          })()}
                         </Group>
                       </Table.Td>
                       <Table.Td>
                         <Text size="sm" fw={500} c="green">
-                          +{step.totalExpGained.toLocaleString()}
+                          +{(() => {
+                            // Calculate total XP from all crops in the result
+                            let totalXP = 0;
+
+                            // Add XP from target crop
+                            const targetCrop = getCropById(step.optimalCrop.id);
+                            if (targetCrop) {
+                              const targetPatches = Math.ceil(
+                                step.targetQuantity /
+                                  (targetCrop.baseYield || 3),
+                              );
+                              totalXP +=
+                                targetPatches * (targetCrop.expPerHarvest || 0);
+                            }
+
+                            // Add XP from dependency crops
+                            Object.entries(
+                              step.calculationResult.requirements,
+                            ).forEach(([depCropId, req]) => {
+                              const depCrop = getCropById(depCropId);
+                              if (depCrop) {
+                                totalXP +=
+                                  req.patches * (depCrop.expPerHarvest || 0);
+                              }
+                            });
+
+                            return totalXP.toLocaleString();
+                          })()}
                         </Text>
                       </Table.Td>
                     </Table.Tr>

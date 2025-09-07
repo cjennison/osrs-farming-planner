@@ -1,17 +1,19 @@
 /**
- * OSRS Farming Optimization Calculator
- * Implements the "LEAST PATCH" algorithm for optimal 1-99 farming progression
+ * OSRS Farming Optimization Calculator - LEAST PATCH Algorithm
  *
- * Algorithm:
+ * Algorithm from MOST-OPTIMAL.md:
  * 1. For each level 1-99, check all available farming opportunities
  * 2. Find the highest EXP PER PATCH crop available at that level
- * 3. Calculate how many patches needed to reach the next level
- * 4. Repeat until level 99
+ * 3. Start with quantity = 1, use dependency calculator to get total XP
+ * 4. Increment quantity until XP target for next level is met
+ * 5. Use ALL data from dependency calculator result for display
+ * 6. Repeat for every level step until 99
  */
 
 import { getAllCrops, getCropById } from "../farming-data-simple";
 import { getXpNeeded } from "../farming-data-utils";
 import {
+  type CalculationResult,
   calculateDependencies,
   type KandarinDiaryLevel,
   type YieldStrategy,
@@ -28,15 +30,6 @@ export interface CalculationOptions {
   excludeBushes?: boolean;
 }
 
-export interface CropInfo {
-  id: string;
-  name: string;
-  farmingLevel: number;
-  expPerHarvest: number;
-  seedsPerPatch: number;
-  seedId?: number;
-}
-
 export interface OptimizationStep {
   fromLevel: number;
   toLevel: number;
@@ -47,25 +40,13 @@ export interface OptimizationStep {
     expPerPatch: number;
     farmingLevel: number;
   };
-  patchesNeeded: number;
-  totalExpGained: number;
-  dependencies?: {
-    [cropId: string]: {
-      patches: number;
-      seeds: number;
-      purpose: string;
-    };
-  };
-  inputs: {
-    seeds: { [seedId: string]: number };
-    purchasables: { [itemId: string]: number };
-  };
+  // ALL data comes from dependency calculator result
+  targetQuantity: number;
+  calculationResult: CalculationResult;
 }
 
 export interface OptimizationResult {
   steps: OptimizationStep[];
-  totalPatchesUsed: number;
-  totalExpGained: number;
   summary: {
     totalSeeds: { [seedId: string]: number };
     totalPurchasables: { [itemId: string]: number };
@@ -79,8 +60,6 @@ export function calculateOptimalProgression(
   options: CalculationOptions = {},
 ): OptimizationResult {
   const steps: OptimizationStep[] = [];
-  let totalPatchesUsed = 0;
-  let totalExpGained = 0;
   const totalSeeds: { [seedId: string]: number } = {};
   const totalPurchasables: { [itemId: string]: number } = {};
 
@@ -96,14 +75,11 @@ export function calculateOptimalProgression(
       continue; // Skip if no crop available (shouldn't happen)
     }
 
-    // Calculate how many patches needed
-    const patchesNeeded = Math.ceil(expRequired / optimalCrop.expPerPatch);
-    const actualExpGained = patchesNeeded * optimalCrop.expPerPatch;
-
-    // Calculate dependencies for this step
-    const dependencies = calculateStepDependencies(
+    // Find the quantity needed to reach the XP target
+    const { targetQuantity, calculationResult } = findQuantityForXPTarget(
       optimalCrop.id,
-      patchesNeeded,
+      expRequired,
+      currentLevel,
       options,
     );
 
@@ -112,36 +88,132 @@ export function calculateOptimalProgression(
       toLevel: nextLevel,
       expRequired,
       optimalCrop,
-      patchesNeeded,
-      totalExpGained: actualExpGained,
-      dependencies: dependencies.crops,
-      inputs: dependencies.inputs,
+      targetQuantity,
+      calculationResult,
     };
 
     steps.push(step);
-    totalPatchesUsed += patchesNeeded;
-    totalExpGained += actualExpGained;
 
-    // Accumulate totals
-    Object.entries(dependencies.inputs.seeds).forEach(([seedId, quantity]) => {
-      totalSeeds[seedId] = (totalSeeds[seedId] || 0) + quantity;
+    // Accumulate totals from the calculation result
+    calculationResult.breakdown.forEach((breakdownStep) => {
+      // Handle purchasable items
+      if (
+        breakdownStep.crop.includes("(purchasable)") &&
+        breakdownStep.purchaseQuantity
+      ) {
+        const itemId = breakdownStep.crop
+          .replace(/\s*\(purchasable\)\s*$/i, "")
+          .trim();
+        totalPurchasables[itemId] =
+          (totalPurchasables[itemId] || 0) + breakdownStep.purchaseQuantity;
+        return;
+      }
+
+      // Handle crop seeds
+      const crop =
+        getCropById(breakdownStep.crop) ||
+        getCropById(breakdownStep.crop.toLowerCase());
+      if (crop && breakdownStep.patchesNeeded) {
+        const seedId = crop.seedId?.toString() || crop.id;
+        const patchesForThisStep =
+          breakdownStep.patchesNeeded.average ||
+          breakdownStep.patchesNeeded.min ||
+          1;
+        const seedsNeeded = patchesForThisStep * (crop.seedsPerPatch || 1);
+        totalSeeds[seedId] = (totalSeeds[seedId] || 0) + seedsNeeded;
+      }
     });
-    Object.entries(dependencies.inputs.purchasables).forEach(
-      ([itemId, quantity]) => {
-        totalPurchasables[itemId] = (totalPurchasables[itemId] || 0) + quantity;
-      },
-    );
+
+    // Add seeds for requirements not in breakdown
+    Object.entries(calculationResult.requirements).forEach(([cropId, req]) => {
+      const crop = getCropById(cropId);
+      if (crop) {
+        const seedId = crop.seedId?.toString() || crop.id;
+        const seedsNeeded = req.patches * (crop.seedsPerPatch || 1);
+
+        // Only add if not already counted in breakdown
+        if (!totalSeeds[seedId]) {
+          totalSeeds[seedId] = seedsNeeded;
+        }
+      }
+    });
   }
 
   return {
     steps,
-    totalPatchesUsed,
-    totalExpGained,
     summary: {
       totalSeeds,
       totalPurchasables,
     },
   };
+}
+
+/**
+ * Find the quantity of target crop needed to reach XP target
+ * This is the core algorithm: increment quantity until XP target is met
+ */
+function findQuantityForXPTarget(
+  cropId: string,
+  targetXP: number,
+  farmingLevel: number,
+  options: CalculationOptions,
+): {
+  targetQuantity: number;
+  calculationResult: CalculationResult;
+} {
+  let quantity = 1;
+  let result: CalculationResult;
+
+  // Keep incrementing quantity until we meet or exceed the XP target
+  while (true) {
+    result = calculateDependencies(
+      cropId,
+      quantity,
+      farmingLevel,
+      options.compostType || "none",
+      {}, // startingResources
+      options.yieldStrategy || "average",
+      options.hasSecateurs || false,
+      false, // farmingCape
+      options.hasAltasSeed || false,
+      options.kandarinDiary || "none",
+      "none", // kourendDiary
+    );
+
+    // Calculate total XP from all crops in the result
+    let totalXP = 0;
+
+    // Add XP from target crop
+    const targetCrop = getCropById(cropId);
+    if (targetCrop) {
+      const targetPatches = Math.ceil(quantity / (targetCrop.baseYield || 3));
+      totalXP += targetPatches * (targetCrop.expPerHarvest || 0);
+    }
+
+    // Add XP from dependency crops
+    Object.entries(result.requirements).forEach(([depCropId, req]) => {
+      const depCrop = getCropById(depCropId);
+      if (depCrop) {
+        totalXP += req.patches * (depCrop.expPerHarvest || 0);
+      }
+    });
+
+    if (totalXP >= targetXP) {
+      return {
+        targetQuantity: quantity,
+        calculationResult: result,
+      };
+    }
+
+    quantity++;
+
+    // Safety check to prevent infinite loops
+    if (quantity > 100000) {
+      throw new Error(
+        `Unable to reach target XP ${targetXP} for crop ${cropId} at level ${farmingLevel}`,
+      );
+    }
+  }
 }
 
 /**
@@ -151,7 +223,12 @@ export function calculateOptimalProgression(
 function findOptimalCropForLevel(
   farmingLevel: number,
   options: CalculationOptions,
-): OptimizationStep["optimalCrop"] | null {
+): {
+  id: string;
+  name: string;
+  expPerPatch: number;
+  farmingLevel: number;
+} | null {
   const allCrops = getAllCrops();
   let availableCrops = allCrops.filter(
     (crop) => crop.farmingLevel <= farmingLevel,
@@ -174,12 +251,12 @@ function findOptimalCropForLevel(
     return null;
   }
 
-  // Calculate EXP per patch for each available crop
+  // Find crop with highest EXP per patch
   let bestCrop = null;
   let bestExpPerPatch = 0;
 
   for (const crop of availableCrops) {
-    const expPerPatch = calculateExpPerPatch(crop, options);
+    const expPerPatch = crop.expPerHarvest || 0;
 
     if (expPerPatch > bestExpPerPatch) {
       bestExpPerPatch = expPerPatch;
@@ -193,188 +270,4 @@ function findOptimalCropForLevel(
   }
 
   return bestCrop;
-}
-
-/**
- * Calculate experience per patch for a crop with given options
- */
-function calculateExpPerPatch(
-  crop: CropInfo,
-  _options: CalculationOptions,
-): number {
-  // Base experience from planting and harvesting
-  const expPerPatch = crop.expPerHarvest || 0;
-
-  // For now, we'll use the base experience
-  // TODO: Add modifiers based on compost, tools, etc.
-  // This would include:
-  // - Compost bonuses affecting yield and thus harvest exp
-  // - Magic secateurs CTS bonuses
-  // - Attas seed yield bonuses
-  // - Other modifiers from options
-
-  return expPerPatch;
-}
-
-/**
- * Calculate dependencies for a specific crop and patch count
- */
-function calculateStepDependencies(
-  cropId: string,
-  patchesNeeded: number,
-  options: CalculationOptions,
-): {
-  crops: {
-    [cropId: string]: { patches: number; seeds: number; purpose: string };
-  };
-  inputs: {
-    seeds: { [seedId: string]: number };
-    purchasables: { [itemId: string]: number };
-  };
-} {
-  // Use the existing dependency calculator
-  const result = calculateDependencies(
-    cropId,
-    patchesNeeded,
-    99, // Use max level for calculations
-    options.compostType || "none",
-    {}, // startingResources
-    options.yieldStrategy || "average",
-    options.hasSecateurs || false,
-    false, // farmingCape
-    options.hasAltasSeed || false,
-    options.kandarinDiary || "none",
-    "none", // kourendDiary
-  );
-
-  // Convert to our format
-  const crops: {
-    [cropId: string]: { patches: number; seeds: number; purpose: string };
-  } = {};
-  const inputs: {
-    seeds: { [seedId: string]: number };
-    purchasables: { [itemId: string]: number };
-  } = { seeds: {}, purchasables: {} };
-
-  // Process requirements
-  Object.entries(result.requirements).forEach(([crop, req]) => {
-    crops[crop] = {
-      patches: req.patches,
-      seeds: req.patches * (getCropById(crop)?.seedsPerPatch || 1),
-      purpose: req.reason,
-    };
-  });
-
-  // Extract inputs from breakdown - for each step, calculate seeds needed
-  result.breakdown.forEach((step) => {
-    // Skip purchasable items - they're handled separately
-    if (step.crop.includes("(purchasable)")) {
-      // Add purchasable items (compost, etc.)
-      if (step.purchaseQuantity && step.purchaseQuantity > 0) {
-        const itemId = step.crop.replace(/\s*\(purchasable\)\s*$/i, "").trim();
-        inputs.purchasables[itemId] =
-          (inputs.purchasables[itemId] || 0) + step.purchaseQuantity;
-      }
-      return;
-    }
-
-    // For crop steps, find the crop data and add seeds
-    const cropName = step.crop;
-    const crop = getCropById(cropName) || getCropById(cropName.toLowerCase());
-
-    if (crop && step.patchesNeeded) {
-      // Use crop's seedId if available, otherwise use crop id
-      const seedId = crop.seedId?.toString() || crop.id;
-      const patchesForThisStep =
-        step.patchesNeeded.average || step.patchesNeeded.min || 1;
-      const seedsNeeded = patchesForThisStep * (crop.seedsPerPatch || 1);
-
-      inputs.seeds[seedId] = (inputs.seeds[seedId] || 0) + seedsNeeded;
-    }
-  });
-
-  // Also add seeds for all crops in requirements (in case breakdown missed any)
-  Object.entries(result.requirements).forEach(([cropId, req]) => {
-    const crop = getCropById(cropId);
-    if (crop) {
-      const seedId = crop.seedId?.toString() || crop.id;
-      const seedsNeeded = req.patches * (crop.seedsPerPatch || 1);
-
-      // Only add if not already included
-      if (!inputs.seeds[seedId]) {
-        inputs.seeds[seedId] = seedsNeeded;
-      }
-    }
-  });
-
-  // For the main crop itself, make sure we include its seeds
-  const mainCrop = getCropById(cropId);
-  if (mainCrop) {
-    const mainSeedId = mainCrop.seedId?.toString() || mainCrop.id;
-    const mainSeedsNeeded = patchesNeeded * mainCrop.seedsPerPatch;
-    inputs.seeds[mainSeedId] =
-      (inputs.seeds[mainSeedId] || 0) + mainSeedsNeeded;
-  }
-
-  return { crops, inputs };
-}
-
-/**
- * Get a summary of level ranges and their optimal crops
- */
-export function getOptimalCropSummary(): {
-  [levelRange: string]: {
-    crop: string;
-    name: string;
-    expPerPatch: number;
-    levelRequirement: number;
-  };
-} {
-  const summary: {
-    [levelRange: string]: {
-      crop: string;
-      name: string;
-      expPerPatch: number;
-      levelRequirement: number;
-    };
-  } = {};
-  const allCrops = getAllCrops();
-
-  // Group crops by level requirement
-  const cropsByLevel = allCrops.reduce(
-    (acc, crop) => {
-      const level = crop.farmingLevel;
-      if (!acc[level]) acc[level] = [];
-      acc[level].push(crop);
-      return acc;
-    },
-    {} as { [level: number]: CropInfo[] },
-  );
-
-  // For each level, find the best crop
-  Object.entries(cropsByLevel).forEach(([level, crops]) => {
-    const levelNum = parseInt(level);
-    let bestCrop: CropInfo | null = null;
-    let bestExp = 0;
-
-    (crops as CropInfo[]).forEach((crop: CropInfo) => {
-      const exp = crop.expPerHarvest || 0;
-      if (exp > bestExp) {
-        bestExp = exp;
-        bestCrop = crop;
-      }
-    });
-
-    if (bestCrop) {
-      const crop = bestCrop as CropInfo;
-      summary[`${levelNum}+`] = {
-        crop: crop.id,
-        name: crop.name,
-        expPerPatch: bestExp,
-        levelRequirement: levelNum,
-      };
-    }
-  });
-
-  return summary;
 }

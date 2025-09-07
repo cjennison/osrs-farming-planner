@@ -38,7 +38,7 @@ import {
       61,
       {},
       "average",
-      "none", 
+      "none",
       "none",
     );
 
@@ -1303,7 +1303,7 @@ describe("OSRS Farming Dependency Calculator - XP Calculations", () => {
     test("should handle jute_fibre protection (sweetcorn)", () => {
       // Sweetcorn requires jute_fibre, which comes from jute hops
       const result = calculateDependencies("sweetcorn", 1, 20, "none");
-      
+
       // Should include jute in the requirements (since jute_fibre maps to jute)
       expect(result.requirements).toHaveProperty("jute");
       expect(result.requirements.jute.reason).toContain("Payment for Sweetcorn");
@@ -1312,7 +1312,7 @@ describe("OSRS Farming Dependency Calculator - XP Calculations", () => {
     test("should handle jangerberry protection (snape_grass)", () => {
       // Snape grass requires jangerberries, which come from jangerberry bushes
       const result = calculateDependencies("snape_grass", 1, 61, "none");
-      
+
       // Should include jangerberry in the requirements
       expect(result.requirements).toHaveProperty("jangerberry");
       expect(result.requirements.jangerberry.reason).toContain("Payment for Snape grass");
