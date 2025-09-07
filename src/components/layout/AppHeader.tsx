@@ -15,6 +15,7 @@ import {
   IconMoon,
   IconPlant,
   IconSun,
+  IconTrendingUp,
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { CharacterSelector } from "@/components/ui/CharacterSelector";
@@ -79,6 +80,15 @@ export function AppHeader({ children }: AppHeaderProps) {
                   c="sage.7"
                 >
                   Calculator
+                </Button>
+                <Button
+                  component={Link}
+                  href="/optimization"
+                  variant="subtle"
+                  leftSection={<IconTrendingUp size={16} />}
+                  c="sage.7"
+                >
+                  Optimized Leveling
                 </Button>
                 <Button
                   component={Link}

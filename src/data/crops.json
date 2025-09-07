@@ -267,7 +267,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Marigold_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/4/43/Marigold.png"
+        "crop": "https://oldschool.runescape.wiki/images/Marigolds.png"
       },
       "baseYield": 1,
       "isFixedYield": true
@@ -291,7 +291,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Rosemary_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/1/19/Rosemary.png"
+        "crop": "https://oldschool.runescape.wiki/images/Rosemary.png"
       },
       "baseYield": 1,
       "isFixedYield": true
@@ -315,7 +315,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Nasturtium_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/3/34/Nasturtium.png"
+        "crop": "https://oldschool.runescape.wiki/images/Nasturtiums.png"
       },
       "baseYield": 1,
       "isFixedYield": true
@@ -339,7 +339,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Woad_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/8/84/Woad_leaf.png"
+        "crop": "https://oldschool.runescape.wiki/images/Woad_leaf_5.png"
       },
       "baseYield": 3,
       "isFixedYield": true
@@ -363,7 +363,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Limpwurt_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/1/1f/Limpwurt_root.png"
+        "crop": "https://oldschool.runescape.wiki/images/Limpwurt_root.png"
       },
       "baseYield": 1
     },
@@ -386,7 +386,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/White_lily_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/f/f2/White_lily.png"
+        "crop": "https://oldschool.runescape.wiki/images/White_lily.png"
       },
       "baseYield": 1,
       "isFixedYield": true
@@ -412,7 +412,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Barley_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/0/09/Barley.png"
+        "crop": "https://oldschool.runescape.wiki/images/Barley.png"
       },
       "baseYield": 3,
       "protection": {
@@ -441,7 +441,7 @@
       },
       "images": {
         "seed": "https://oldschool.runescape.wiki/images/Hammerstone_seed_5.png",
-        "crop": "https://oldschool.runescape.wiki/images/f/fc/Hammerstone_hops.png"
+        "crop": "https://oldschool.runescape.wiki/images/Hammerstone_hops.png"
       },
       "baseYield": 3,
       "protection": {
