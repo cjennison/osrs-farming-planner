@@ -795,7 +795,7 @@ export function calculateLevelDependencies(
     calculationMode: "level" as const,
     targetLevel,
     startingLevel,
-    totalXpGained: totalXp,
+    totalXpGained: totalXp, // Keep raw calculation value
     xpBreakdown,
   };
 }

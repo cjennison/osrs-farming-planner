@@ -77,6 +77,7 @@ export function ExpBreakdown({ result, yieldStrategy }: ExpBreakdownProps) {
     totalHarvestingExp += totalHarvestExpForCrop;
   }
 
+  // Calculate the totals (keep raw values for accuracy)
   const grandTotal = totalPlantingExp + totalHarvestingExp;
 
   // Sort by total exp descending
@@ -98,7 +99,11 @@ export function ExpBreakdown({ result, yieldStrategy }: ExpBreakdownProps) {
             Experience Breakdown
           </Title>
           <Badge color="green" variant="light">
-            <NumberFormatter value={grandTotal} thousandSeparator="," /> XP
+            <NumberFormatter
+              value={Math.floor(grandTotal)}
+              thousandSeparator=","
+            />{" "}
+            XP
           </Badge>
         </Group>
         <IconChevronDown
@@ -128,7 +133,7 @@ export function ExpBreakdown({ result, yieldStrategy }: ExpBreakdownProps) {
                 </Group>
                 <Text size="lg" fw={600} c="blue.7">
                   <NumberFormatter
-                    value={totalPlantingExp}
+                    value={Math.floor(totalPlantingExp)}
                     thousandSeparator=","
                   />
                 </Text>
@@ -147,7 +152,7 @@ export function ExpBreakdown({ result, yieldStrategy }: ExpBreakdownProps) {
                 </Group>
                 <Text size="lg" fw={600} c="green.7">
                   <NumberFormatter
-                    value={totalHarvestingExp}
+                    value={Math.floor(totalHarvestingExp)}
                     thousandSeparator=","
                   />
                 </Text>
@@ -165,7 +170,10 @@ export function ExpBreakdown({ result, yieldStrategy }: ExpBreakdownProps) {
                   </Text>
                 </Group>
                 <Text size="lg" fw={600} c="yellow.7">
-                  <NumberFormatter value={grandTotal} thousandSeparator="," />
+                  <NumberFormatter
+                    value={Math.floor(grandTotal)}
+                    thousandSeparator=","
+                  />
                 </Text>
               </Card>
             </Grid.Col>
@@ -196,7 +204,7 @@ export function ExpBreakdown({ result, yieldStrategy }: ExpBreakdownProps) {
                   </Group>
                   <Badge color="yellow" variant="light">
                     <NumberFormatter
-                      value={crop.totalExp}
+                      value={Math.floor(crop.totalExp)}
                       thousandSeparator=","
                     />{" "}
                     XP
@@ -211,7 +219,7 @@ export function ExpBreakdown({ result, yieldStrategy }: ExpBreakdownProps) {
                     <Text size="sm" fw={500} c="blue.6">
                       {crop.plantingExp} × {crop.quantity} ={" "}
                       <NumberFormatter
-                        value={crop.totalPlantingExp}
+                        value={Math.floor(crop.totalPlantingExp)}
                         thousandSeparator=","
                       />
                     </Text>
@@ -223,7 +231,7 @@ export function ExpBreakdown({ result, yieldStrategy }: ExpBreakdownProps) {
                     <Text size="sm" fw={500} c="green.6">
                       {crop.harvestExp} × {crop.totalHarvests} ={" "}
                       <NumberFormatter
-                        value={crop.totalHarvestExp}
+                        value={Math.floor(crop.totalHarvestExp)}
                         thousandSeparator=","
                       />
                     </Text>

@@ -76,7 +76,7 @@ export function CalculatorResults({
       totalExp += plantingExp + harvestExp;
     }
 
-    return totalExp;
+    return totalExp; // Return raw calculation value
   };
 
   if (!result) {
@@ -158,7 +158,7 @@ export function CalculatorResults({
                   </Text>
                   <Text size="xl" fw={700} c="blue.7">
                     <NumberFormatter
-                      value={calculateTotalExperience(result)}
+                      value={Math.floor(calculateTotalExperience(result))}
                       thousandSeparator=","
                     />
                   </Text>
