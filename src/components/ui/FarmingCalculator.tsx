@@ -6,6 +6,8 @@ import { useCallback, useEffect, useState } from "react";
 import {
   type CalculationResult,
   calculateDependencies,
+  type KandarinDiaryLevel,
+  type KourendDiaryLevel,
   type YieldStrategy,
 } from "@/lib/calculators/dependency-calculator";
 import { getCropOptions } from "@/lib/crop-options";
@@ -40,6 +42,9 @@ export function FarmingCalculator() {
   const [magicSecateurs, setMagicSecateurs] = useState<boolean>(false);
   const [farmingCape, setFarmingCape] = useState<boolean>(false);
   const [attasSeed, setAttasSeed] = useState<boolean>(false);
+  const [kandarinDiary, setKandarinDiary] =
+    useState<KandarinDiaryLevel>("none");
+  const [kourendDiary, setKourendDiary] = useState<KourendDiaryLevel>("none");
   const [startingResources, setStartingResources] = useState<
     Record<string, number>
   >({});
@@ -64,6 +69,25 @@ export function FarmingCalculator() {
     }));
   };
 
+  // Handlers for mutually exclusive diary bonuses
+  const handleKandarinDiaryChange = (value: KandarinDiaryLevel) => {
+    setKandarinDiary(value);
+    // If setting Kandarin diary to something other than "none",
+    // reset Kourend diary to "none"
+    if (value !== "none") {
+      setKourendDiary("none");
+    }
+  };
+
+  const handleKourendDiaryChange = (value: KourendDiaryLevel) => {
+    setKourendDiary(value);
+    // If setting Kourend diary to something other than "none",
+    // reset Kandarin diary to "none"
+    if (value !== "none") {
+      setKandarinDiary("none");
+    }
+  };
+
   const handleCalculate = useCallback(() => {
     if (!canCalculate) return;
 
@@ -78,6 +102,8 @@ export function FarmingCalculator() {
         magicSecateurs,
         farmingCape,
         attasSeed,
+        kandarinDiary,
+        kourendDiary,
       );
       setResult(calculationResult);
       setError("");
@@ -95,6 +121,8 @@ export function FarmingCalculator() {
     magicSecateurs,
     farmingCape,
     attasSeed,
+    kandarinDiary,
+    kourendDiary,
     canCalculate,
   ]);
 
@@ -196,6 +224,10 @@ export function FarmingCalculator() {
               setFarmingCape={setFarmingCape}
               attasSeed={attasSeed}
               setAttasSeed={setAttasSeed}
+              kandarinDiary={kandarinDiary}
+              setKandarinDiary={handleKandarinDiaryChange}
+              kourendDiary={kourendDiary}
+              setKourendDiary={handleKourendDiaryChange}
             />
           </Grid.Col>
 

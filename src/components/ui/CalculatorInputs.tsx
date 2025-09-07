@@ -18,9 +18,78 @@ import {
 } from "@mantine/core";
 import { IconInfoCircle, IconLeaf, IconSeedling } from "@tabler/icons-react";
 import { useEffect, useMemo, useState } from "react";
-import type { YieldStrategy } from "@/lib/calculators/dependency-calculator";
+import type {
+  KandarinDiaryLevel,
+  KourendDiaryLevel,
+  YieldStrategy,
+} from "@/lib/calculators/dependency-calculator";
 import type { CropOption } from "@/lib/crop-options";
 import { getCropCounts, getCropSelectData } from "@/lib/crop-options";
+
+const YIELD_STRATEGY_OPTIONS = [
+  {
+    value: "min" as YieldStrategy,
+    label: "Conservative (Min Yield)",
+    description: "Plan for worst-case yields",
+  },
+  {
+    value: "average" as YieldStrategy,
+    label: "Balanced (Average Yield)",
+    description: "Plan using expected yields",
+  },
+  {
+    value: "max" as YieldStrategy,
+    label: "Optimistic (Max Yield)",
+    description: "Plan for best-case yields",
+  },
+];
+
+const KANDARIN_DIARY_OPTIONS = [
+  {
+    value: "none" as KandarinDiaryLevel,
+    label: "No Diary",
+    description: "No Kandarin diary bonus",
+  },
+  {
+    value: "medium" as KandarinDiaryLevel,
+    label: "Medium Diary",
+    description: "5% herb yield increase (Catherby patch only)",
+  },
+  {
+    value: "hard" as KandarinDiaryLevel,
+    label: "Hard Diary",
+    description: "10% herb yield increase (Catherby patch only)",
+  },
+  {
+    value: "elite" as KandarinDiaryLevel,
+    label: "Elite Diary",
+    description: "15% herb yield increase (Catherby patch only)",
+  },
+];
+
+const KOUREND_DIARY_OPTIONS = [
+  {
+    value: "none" as KourendDiaryLevel,
+    label: "No Diary",
+    description: "No Kourend diary bonus",
+  },
+  {
+    value: "medium" as KourendDiaryLevel,
+    label: "Medium Diary",
+    description: "5% herb yield increase (Hosidius patch only)",
+  },
+  {
+    value: "hard" as KourendDiaryLevel,
+    label: "Hard Diary",
+    description: "10% herb yield increase (Hosidius patch only)",
+  },
+  {
+    value: "elite" as KourendDiaryLevel,
+    label: "Elite Diary",
+    description: "15% herb yield increase (Hosidius patch only)",
+  },
+];
+
 import { getCropsByType } from "@/lib/farming-data-simple";
 
 // Get crop options from data files instead of hardcoded array
@@ -48,24 +117,6 @@ const COMPOST_OPTIONS = [
   { value: "ultracompost", label: "Ultracompost", bonus: 3 },
 ];
 
-const YIELD_STRATEGY_OPTIONS = [
-  {
-    value: "min" as YieldStrategy,
-    label: "Conservative (Min Yield)",
-    description: "Plan for worst-case yields",
-  },
-  {
-    value: "average" as YieldStrategy,
-    label: "Realistic (Average Yield)",
-    description: "Plan using expected yields",
-  },
-  {
-    value: "max" as YieldStrategy,
-    label: "Optimistic (Max Yield)",
-    description: "Plan for best-case yields",
-  },
-];
-
 interface CalculatorInputsProps {
   targetCrop: string;
   setTargetCrop: (value: string) => void;
@@ -88,6 +139,10 @@ interface CalculatorInputsProps {
   setFarmingCape: (value: boolean) => void;
   attasSeed: boolean;
   setAttasSeed: (value: boolean) => void;
+  kandarinDiary: KandarinDiaryLevel;
+  setKandarinDiary: (value: KandarinDiaryLevel) => void;
+  kourendDiary: KourendDiaryLevel;
+  setKourendDiary: (value: KourendDiaryLevel) => void;
 }
 
 export function CalculatorInputs({
@@ -112,6 +167,10 @@ export function CalculatorInputs({
   setFarmingCape,
   attasSeed,
   setAttasSeed,
+  kandarinDiary,
+  setKandarinDiary,
+  kourendDiary,
+  setKourendDiary,
 }: CalculatorInputsProps) {
   // Local state for crop type filter
   const [selectedCropType, setSelectedCropType] = useState<string>("all");
@@ -251,6 +310,80 @@ export function CalculatorInputs({
             setYieldStrategy((value as YieldStrategy) || "average")
           }
         />
+
+        <Select
+          label="Kandarin Diary"
+          placeholder="Select diary completion level"
+          description="Kandarin diary provides herb yield bonus at Catherby patch only"
+          data={KANDARIN_DIARY_OPTIONS.map((diary) => ({
+            value: diary.value,
+            label: diary.label,
+          }))}
+          value={kandarinDiary}
+          onChange={(value) =>
+            setKandarinDiary((value as KandarinDiaryLevel) || "none")
+          }
+        />
+
+        {kandarinDiary !== "none" && (
+          <Alert
+            color="blue"
+            title="Kandarin Diary Bonus"
+            icon={<IconInfoCircle size={16} />}
+          >
+            <Text size="sm">
+              {kandarinDiary === "medium"
+                ? "5%"
+                : kandarinDiary === "hard"
+                  ? "10%"
+                  : "15%"}{" "}
+              chance-to-save bonus for <strong>Catherby herbs only</strong>
+            </Text>
+          </Alert>
+        )}
+
+        <Select
+          label="Kourend Diary"
+          placeholder="Select diary completion level"
+          description="Kourend diary provides herb yield bonus at Hosidius patch only"
+          data={KOUREND_DIARY_OPTIONS.map((diary) => ({
+            value: diary.value,
+            label: diary.label,
+          }))}
+          value={kourendDiary}
+          onChange={(value) =>
+            setKourendDiary((value as KourendDiaryLevel) || "none")
+          }
+        />
+
+        {kourendDiary !== "none" && (
+          <Alert
+            color="blue"
+            title="Kourend Diary Bonus"
+            icon={<IconInfoCircle size={16} />}
+          >
+            <Text size="sm">
+              {kourendDiary === "medium"
+                ? "5%"
+                : kourendDiary === "hard"
+                  ? "10%"
+                  : "15%"}{" "}
+              chance-to-save bonus for <strong>Hosidius herbs only</strong>
+            </Text>
+          </Alert>
+        )}
+
+        {(kandarinDiary !== "none" || kourendDiary !== "none") && (
+          <Alert
+            color="orange"
+            title="Location-Specific Bonuses"
+            icon={<IconInfoCircle size={16} />}
+          >
+            <Text size="sm">
+              Diary bonuses are mutually exclusive and location-specific
+            </Text>
+          </Alert>
+        )}
 
         <Checkbox
           label="Magic Secateurs"

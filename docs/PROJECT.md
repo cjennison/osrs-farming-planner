@@ -411,6 +411,20 @@ interface YieldCalculator {
 - **Simple yield calculations** based on farming level
 - **Unit tests** for calculation logic
 
+### Recent Feature Additions (Current Development)
+
+#### Yield Modifiers System ✅ COMPLETED
+- **Attas Seed Support**: 10% yield increase multiplier for all crop types
+- **Kandarin Diary Integration**: Herb-specific yield bonuses (5%/10%/15% for Medium/Hard/Elite)
+- **Location-Specific Bonuses**: Kandarin diary bonuses only apply to Catherby herb patch
+- **User Interface**: Dropdown selectors for both modifiers with descriptive tooltips
+- **Warning System**: Clear alerts indicating patch-specific restrictions
+
+#### Enhanced Calculation Engine
+- **CTS (Chance-to-Save) Integration**: Proper bonus application for herbs vs other crops
+- **Multi-modifier Support**: Attas Seed and Kandarin diary bonuses stack appropriately
+- **Type-Safe Implementation**: Full TypeScript support with proper type definitions
+
 #### Week 3: UI Foundation
 - **Mantine theme** with OSRS-inspired design
 - **Basic planner interface** with crop selection

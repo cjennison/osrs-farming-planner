@@ -79,6 +79,10 @@ export interface StartingResources {
 
 export type YieldStrategy = "min" | "average" | "max";
 
+export type KandarinDiaryLevel = "none" | "medium" | "hard" | "elite";
+
+export type KourendDiaryLevel = "none" | "medium" | "hard" | "elite";
+
 /**
  * Convert JSON crop data to CropData format for calculations
  */
@@ -151,6 +155,8 @@ export function calculateYield(
   magicSecateurs: boolean = false,
   farmingCape: boolean = false,
   attasSeed: boolean = false,
+  kandarinDiary: KandarinDiaryLevel = "none",
+  kourendDiary: KourendDiaryLevel = "none",
 ): { min: number; max: number; average: number } {
   const cropData = getCropData(crop);
   if (!cropData) throw new Error(`Unknown crop: ${crop}`);
@@ -258,6 +264,42 @@ export function calculateYield(
     };
   }
 
+  // Apply Kandarin diary bonus (herbs only, Catherby patch only)
+  // According to OSRS Wiki: "Kandarin diary increases the herb yield of the Catherby herb patch"
+  // Medium: 5% increase, Hard: 10% increase, Elite: 15% increase
+  // This affects the CTS constants only for herbs and only applies to Catherby patch
+  if (kandarinDiary !== "none" && cropData.type === "herb") {
+    const kandarinMultiplier = {
+      none: 1.0,
+      medium: 1.05, // 5% increase
+      hard: 1.1, // 10% increase
+      elite: 1.15, // 15% increase
+    }[kandarinDiary];
+
+    adjustedConstants = {
+      low: Math.floor(adjustedConstants.low * kandarinMultiplier),
+      high: Math.floor(adjustedConstants.high * kandarinMultiplier),
+    };
+  }
+
+  // Apply Kourend diary bonus (herbs only, Hosidius patch only)
+  // According to OSRS Wiki: "Kourend diary increases the herb yield of the Hosidius herb patch"
+  // Medium: 5% increase, Hard: 10% increase, Elite: 15% increase
+  // This affects the CTS constants only for herbs and only applies to Hosidius patch
+  if (kourendDiary !== "none" && cropData.type === "herb") {
+    const kourendMultiplier = {
+      none: 1.0,
+      medium: 1.05, // 5% increase
+      hard: 1.1, // 10% increase
+      elite: 1.15, // 15% increase
+    }[kourendDiary];
+
+    adjustedConstants = {
+      low: Math.floor(adjustedConstants.low * kourendMultiplier),
+      high: Math.floor(adjustedConstants.high * kourendMultiplier),
+    };
+  }
+
   // Calculate chance to save using OSRS formula
   // Chance = (1 + floor(CTSlow * (99-F)/98 + CTShigh * (F-1)/98 + 0.5)) / 256
   const farmingLevelClamped = Math.max(1, Math.min(99, farmingLevel));
@@ -309,6 +351,8 @@ export function calculateDependencies(
   magicSecateurs: boolean = false,
   farmingCape: boolean = false,
   attasSeed: boolean = false,
+  kandarinDiary: KandarinDiaryLevel = "none",
+  kourendDiary: KourendDiaryLevel = "none",
 ): CalculationResult {
   const cropData = getCropData(targetCrop);
   if (!cropData) {
@@ -362,6 +406,8 @@ export function calculateDependencies(
       magicSecateurs,
       farmingCape,
       attasSeed,
+      kandarinDiary,
+      kourendDiary,
     );
 
     // Calculate patches needed based on yield strategy
