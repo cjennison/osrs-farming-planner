@@ -156,28 +156,33 @@ export default function OptimizedLevelingPage() {
                 <Text fw={600} size="lg">
                   {progression.steps
                     .reduce((total, step) => {
-                      // Calculate total XP from all crops in each step
+                      // Use the same XP calculation as the dependency calculator
                       let stepXP = 0;
 
-                      // Add XP from target crop
-                      const targetCrop = getCropById(step.optimalCrop.id);
-                      if (targetCrop) {
-                        const targetPatches = Math.ceil(
-                          step.targetQuantity / (targetCrop.baseYield || 3),
-                        );
-                        stepXP +=
-                          targetPatches * (targetCrop.expPerHarvest || 0);
-                      }
-
-                      // Add XP from dependency crops
-                      Object.entries(
+                      // Calculate XP from all crops in the dependency result
+                      for (const [cropId, requirement] of Object.entries(
                         step.calculationResult.requirements,
-                      ).forEach(([depCropId, req]) => {
-                        const depCrop = getCropById(depCropId);
-                        if (depCrop) {
-                          stepXP += req.patches * (depCrop.expPerHarvest || 0);
-                        }
-                      });
+                      )) {
+                        const cropData = getCropById(cropId);
+                        if (!cropData || requirement.patches === 0) continue;
+
+                        const plantingExpPerPatch =
+                          cropData.expBreakdown?.planting || 0;
+                        const checkHealthExpPerPatch =
+                          cropData.expBreakdown?.checkHealth || 0;
+                        const harvestExpPerItem =
+                          cropData.expBreakdown?.harvest || 0;
+
+                        // Calculate total XP: planting XP + checking XP + (harvest XP per item × average yield per patch)
+                        const plantingExp =
+                          plantingExpPerPatch * requirement.patches;
+                        const checkHealthExp =
+                          checkHealthExpPerPatch * requirement.patches;
+                        const harvestExp =
+                          harvestExpPerItem * requirement.totalYield.average;
+
+                        stepXP += plantingExp + checkHealthExp + harvestExp;
+                      }
 
                       return total + stepXP;
                     }, 0)
@@ -461,30 +466,36 @@ export default function OptimizedLevelingPage() {
                       <Table.Td>
                         <Text size="sm" fw={500} c="green">
                           +{(() => {
-                            // Calculate total XP from all crops in the result
+                            // Use the same XP calculation as the dependency calculator
                             let totalXP = 0;
 
-                            // Add XP from target crop
-                            const targetCrop = getCropById(step.optimalCrop.id);
-                            if (targetCrop) {
-                              const targetPatches = Math.ceil(
-                                step.targetQuantity /
-                                  (targetCrop.baseYield || 3),
-                              );
-                              totalXP +=
-                                targetPatches * (targetCrop.expPerHarvest || 0);
-                            }
-
-                            // Add XP from dependency crops
-                            Object.entries(
+                            // Calculate XP from all crops in the dependency result
+                            for (const [cropId, requirement] of Object.entries(
                               step.calculationResult.requirements,
-                            ).forEach(([depCropId, req]) => {
-                              const depCrop = getCropById(depCropId);
-                              if (depCrop) {
-                                totalXP +=
-                                  req.patches * (depCrop.expPerHarvest || 0);
-                              }
-                            });
+                            )) {
+                              const cropData = getCropById(cropId);
+                              if (!cropData || requirement.patches === 0)
+                                continue;
+
+                              const plantingExpPerPatch =
+                                cropData.expBreakdown?.planting || 0;
+                              const checkHealthExpPerPatch =
+                                cropData.expBreakdown?.checkHealth || 0;
+                              const harvestExpPerItem =
+                                cropData.expBreakdown?.harvest || 0;
+
+                              // Calculate total XP: planting XP + checking XP + (harvest XP per item × average yield per patch)
+                              const plantingExp =
+                                plantingExpPerPatch * requirement.patches;
+                              const checkHealthExp =
+                                checkHealthExpPerPatch * requirement.patches;
+                              const harvestExp =
+                                harvestExpPerItem *
+                                requirement.totalYield.average;
+
+                              totalXP +=
+                                plantingExp + checkHealthExp + harvestExp;
+                            }
 
                             return totalXP.toLocaleString();
                           })()}

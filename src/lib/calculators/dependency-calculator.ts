@@ -146,16 +146,25 @@ function getCropData(cropId: string): CropData | undefined {
   // If not found, check if any crop has this as their harvestName
   if (!crop) {
     const allCrops = getAllCrops();
-    crop = allCrops.find(
-      (c) => c.harvestName?.toLowerCase() === cropId.toLowerCase(),
-    );
+    crop = allCrops.find((c) => {
+      if (!c.harvestName) return false;
+      const harvestName = c.harvestName.toLowerCase();
+      const searchId = cropId.toLowerCase();
+
+      // Try exact match first
+      if (harvestName === searchId) return true;
+
+      // Try with space/underscore normalization
+      const normalizedHarvest = harvestName.replace(/\s+/g, "_");
+      const normalizedSearch = searchId.replace(/\s+/g, "_");
+      return normalizedHarvest === normalizedSearch;
+    });
   }
 
   // If not found, check if it's a crop product that maps to a source crop
   if (!crop) {
     // Map crop products to their source crops
     const productToCropMap: Record<string, string> = {
-      jute_fibre: "jute", // Jute fibre comes from Jute hops
       // Add more mappings as needed
     };
 

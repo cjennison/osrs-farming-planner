@@ -70,7 +70,9 @@ export function getAllCrops(): any[] {
  * Get crop by ID
  */
 export function getCropById(id: string): any | undefined {
-  return getAllCrops().find((crop) => crop.id === id);
+  return getAllCrops().find(
+    (crop) => crop.id === id || crop.harvestName === id,
+  );
 }
 
 /**

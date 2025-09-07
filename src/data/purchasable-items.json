@@ -65,28 +65,6 @@
       },
       "uses": ["Premium allotment patch protection"]
     },
-    "jute_fibre": {
-      "id": "jute_fibre",
-      "name": "Jute fibre",
-      "itemId": 5931,
-      "wikiUrl": "https://oldschool.runescape.wiki/w/Jute_fibre",
-      "category": "farming_supplies",
-      "type": "purchasable",
-      "images": {
-        "item": "https://oldschool.runescape.wiki/images/c/c1/Jute_fibre.png"
-      },
-      "shopInfo": {
-        "available": true,
-        "locations": [
-          {
-            "shop": "Farming shops",
-            "price": 12,
-            "stock": "unlimited"
-          }
-        ]
-      },
-      "uses": ["Sweetcorn protection payment"]
-    },
     "barley_malt": {
       "id": "barley_malt",
       "name": "Barley malt",

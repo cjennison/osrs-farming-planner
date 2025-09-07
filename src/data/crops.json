@@ -153,7 +153,7 @@
       "protection": {
         "type": "crop",
         "quantity": 10,
-        "item": "jute_fibre",
+        "item": "jute fibre",
         "itemDescription": "jute fibres"
       }
     },
@@ -505,6 +505,7 @@
         "crop": "https://oldschool.runescape.wiki/images/Jute_fibre.png"
       },
       "baseYield": 3,
+      "harvestName": "jute fibre",
       "protection": {
         "type": "item",
         "quantity": 6,
