@@ -52,7 +52,6 @@ export function FarmingCalculator() {
   const [calculationMode, setCalculationMode] =
     useState<CalculationMode>("quantity");
   const [targetLevel, setTargetLevel] = useState<number>(30);
-  const [startingLevel, setStartingLevel] = useState<number>(1);
 
   const [startingResources, setStartingResources] = useState<
     Record<string, number>
@@ -108,7 +107,7 @@ export function FarmingCalculator() {
         calculationResult = calculateLevelDependencies(
           targetCrop,
           targetLevel,
-          startingLevel,
+          farmingLevel,
           compostType as "none" | "compost" | "supercompost" | "ultracompost",
           startingResources,
           yieldStrategy,
@@ -154,7 +153,6 @@ export function FarmingCalculator() {
     kandarinDiary,
     kourendDiary,
     calculationMode,
-    startingLevel,
     targetLevel,
     canCalculate,
   ]);
@@ -249,7 +247,6 @@ export function FarmingCalculator() {
               startingResources={startingResources}
               updateStartingResource={updateStartingResource}
               error={error}
-              selectedCrop={selectedCrop}
               getDependencyChain={getDependencyChain}
               magicSecateurs={magicSecateurs}
               setMagicSecateurs={setMagicSecateurs}
@@ -265,8 +262,6 @@ export function FarmingCalculator() {
               setCalculationMode={setCalculationMode}
               targetLevel={targetLevel}
               setTargetLevel={setTargetLevel}
-              startingLevel={startingLevel}
-              setStartingLevel={setStartingLevel}
             />
           </Grid.Col>
 
@@ -284,6 +279,12 @@ export function FarmingCalculator() {
               formatCompostText={formatCompostText}
               selectedCrop={selectedCrop}
               targetCrop={targetCrop}
+              setFarmingLevel={setFarmingLevel}
+              magicSecateurs={magicSecateurs}
+              farmingCape={farmingCape}
+              attasSeed={attasSeed}
+              kandarinDiary={kandarinDiary}
+              kourendDiary={kourendDiary}
             />
           </Grid.Col>
         </Grid>

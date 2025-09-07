@@ -4,7 +4,6 @@ import {
   ActionIcon,
   Alert,
   Badge,
-  Button,
   Card,
   Checkbox,
   Chip,
@@ -24,9 +23,8 @@ import type {
   KourendDiaryLevel,
   YieldStrategy,
 } from "@/lib/calculators/dependency-calculator";
-import { getXpNeeded } from "@/lib/calculators/dependency-calculator";
-import type { CropOption } from "@/lib/crop-options";
 import { getCropCounts, getCropSelectData } from "@/lib/crop-options";
+import { getXpNeeded } from "@/lib/farming-data-utils";
 
 const YIELD_STRATEGY_OPTIONS = [
   {
@@ -133,7 +131,6 @@ interface CalculatorInputsProps {
   startingResources: Record<string, number>;
   updateStartingResource: (crop: string, amount: number) => void;
   error: string;
-  selectedCrop: CropOption | undefined;
   getDependencyChain: (crop: string) => string[];
   magicSecateurs: boolean;
   setMagicSecateurs: (value: boolean) => void;
@@ -150,8 +147,6 @@ interface CalculatorInputsProps {
   setCalculationMode: (value: CalculationMode) => void;
   targetLevel: number;
   setTargetLevel: (value: number) => void;
-  startingLevel: number;
-  setStartingLevel: (value: number) => void;
 }
 
 export function CalculatorInputs({
@@ -168,7 +163,6 @@ export function CalculatorInputs({
   startingResources,
   updateStartingResource,
   error,
-  selectedCrop,
   getDependencyChain,
   magicSecateurs,
   setMagicSecateurs,
@@ -185,8 +179,6 @@ export function CalculatorInputs({
   setCalculationMode,
   targetLevel,
   setTargetLevel,
-  startingLevel,
-  setStartingLevel,
 }: CalculatorInputsProps) {
   // Local state for crop type filter
   const [selectedCropType, setSelectedCropType] = useState<string>("all");
@@ -328,8 +320,8 @@ export function CalculatorInputs({
             <NumberInput
               label="Starting Farming Level"
               placeholder="Your current farming level"
-              value={startingLevel}
-              onChange={(value) => setStartingLevel(Number(value) || 1)}
+              value={farmingLevel}
+              onChange={(value) => setFarmingLevel(Number(value) || 1)}
               min={1}
               max={98}
               description="Your current farming level (must be high enough to grow the target crop)"
@@ -344,7 +336,7 @@ export function CalculatorInputs({
               description="The farming level you want to achieve using this crop"
             />
             {/* XP Needed Display */}
-            {startingLevel < targetLevel && (
+            {farmingLevel < targetLevel && (
               <Alert
                 icon={<IconLeaf size={16} />}
                 color="blue"
@@ -358,12 +350,11 @@ export function CalculatorInputs({
                     Experience Required
                   </Text>
                   <Badge size="lg" variant="filled" color="blue">
-                    {getXpNeeded(startingLevel, targetLevel).toLocaleString()}{" "}
-                    XP
+                    {getXpNeeded(farmingLevel, targetLevel).toLocaleString()} XP
                   </Badge>
                 </Group>
                 <Text size="xs" c="dimmed" mt={4}>
-                  Level {startingLevel} → {targetLevel}
+                  Level {farmingLevel} → {targetLevel}
                 </Text>
               </Alert>
             )}
@@ -539,25 +530,6 @@ export function CalculatorInputs({
         {error && (
           <Alert color="red" title="Calculation Error">
             {error}
-          </Alert>
-        )}
-
-        {selectedCrop && farmingLevel < selectedCrop.level && (
-          <Alert color="orange" title="Level Requirement">
-            <Stack gap="sm">
-              <Text>
-                You need level {selectedCrop.level} farming to grow{" "}
-                {selectedCrop.label}.
-              </Text>
-              <Button
-                size="sm"
-                variant="outline"
-                color="orange"
-                onClick={() => setFarmingLevel(selectedCrop.level)}
-              >
-                Set farming level to {selectedCrop.level}
-              </Button>
-            </Stack>
           </Alert>
         )}
       </Stack>

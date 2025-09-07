@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  Alert,
+  Button,
   Card,
   Divider,
   Grid,
@@ -22,6 +24,7 @@ import { ExpBreakdown } from "./ExpBreakdown";
 import { ExpectedYields } from "./ExpectedYields";
 import { GrowthBreakdown } from "./GrowthBreakdown";
 import { InputsBreakdown } from "./InputsBreakdown";
+import { VariableCropYieldFormula } from "./VariableCropYieldFormula";
 
 interface CalculatorResultsProps {
   result: CalculationResult | null;
@@ -37,6 +40,12 @@ interface CalculatorResultsProps {
     | { value: string; label: string; level: number; growthTime: number }
     | undefined;
   targetCrop: string;
+  setFarmingLevel: (value: number) => void;
+  magicSecateurs: boolean;
+  farmingCape: boolean;
+  attasSeed: boolean;
+  kandarinDiary: "none" | "medium" | "hard" | "elite";
+  kourendDiary: "none" | "medium" | "hard" | "elite";
 }
 
 export function CalculatorResults({
@@ -51,6 +60,12 @@ export function CalculatorResults({
   formatCompostText,
   selectedCrop,
   targetCrop,
+  setFarmingLevel,
+  magicSecateurs,
+  farmingCape,
+  attasSeed,
+  kandarinDiary,
+  kourendDiary,
 }: CalculatorResultsProps) {
   // Helper function to calculate total experience
   const calculateTotalExperience = (result: CalculationResult): number => {
@@ -80,6 +95,8 @@ export function CalculatorResults({
   };
 
   if (!result) {
+    const needsLevelUp = selectedCrop && farmingLevel < selectedCrop.level;
+
     return (
       <Card
         p="xl"
@@ -97,10 +114,33 @@ export function CalculatorResults({
           <Text c="dimmed">
             {!targetCrop
               ? "Select a target crop to begin"
-              : selectedCrop && farmingLevel < selectedCrop.level
+              : needsLevelUp
                 ? `Requires level ${selectedCrop.level} farming`
                 : "Configure your inputs to see results"}
           </Text>
+
+          {needsLevelUp && (
+            <Alert
+              color="orange"
+              title="Level Requirement"
+              style={{ width: "100%" }}
+            >
+              <Stack gap="sm">
+                <Text>
+                  You need level {selectedCrop.level} farming to grow{" "}
+                  {selectedCrop.label}.
+                </Text>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  color="orange"
+                  onClick={() => setFarmingLevel(selectedCrop.level)}
+                >
+                  Set farming level to {selectedCrop.level}
+                </Button>
+              </Stack>
+            </Alert>
+          )}
         </Stack>
       </Card>
     );
@@ -209,6 +249,20 @@ export function CalculatorResults({
             expandedSections={expandedSections}
             toggleSection={toggleSection}
             formatCompostText={formatCompostText}
+          />
+
+          {/* Variable Crop Yield Formula */}
+          <Divider />
+
+          <VariableCropYieldFormula
+            farmingLevel={farmingLevel}
+            targetCrop={targetCrop}
+            magicSecateurs={magicSecateurs}
+            farmingCape={farmingCape}
+            attasSeed={attasSeed}
+            kandarinDiary={kandarinDiary}
+            kourendDiary={kourendDiary}
+            compostType={compostType}
           />
         </Stack>
       </Card>
