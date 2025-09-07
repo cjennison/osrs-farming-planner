@@ -14,6 +14,10 @@ interface OptimizationInputsProps {
   onSecateursChange: (value: boolean) => void;
   kandarinDiary: KandarinDiaryLevel;
   onKandarinDiaryChange: (value: KandarinDiaryLevel) => void;
+  excludeFlowers: boolean;
+  onExcludeFlowersChange: (value: boolean) => void;
+  excludeHerbs: boolean;
+  onExcludeHerbsChange: (value: boolean) => void;
 }
 
 const COMPOST_OPTIONS = [
@@ -39,6 +43,10 @@ export function OptimizationInputs({
   onSecateursChange,
   kandarinDiary,
   onKandarinDiaryChange,
+  excludeFlowers,
+  onExcludeFlowersChange,
+  excludeHerbs,
+  onExcludeHerbsChange,
 }: OptimizationInputsProps) {
   return (
     <Stack gap="md">
@@ -79,6 +87,30 @@ export function OptimizationInputs({
           description="Chance-to-Save bonus when harvesting"
           checked={hasSecateurs}
           onChange={(event) => onSecateursChange(event.currentTarget.checked)}
+        />
+      </Group>
+
+      <Title order={4} c="sage.7" mt="md">
+        Crop Type Exclusions
+      </Title>
+
+      <Group>
+        <Checkbox
+          label="Exclude Flowers"
+          description="Skip all flower crops in optimization"
+          checked={excludeFlowers}
+          onChange={(event) =>
+            onExcludeFlowersChange(event.currentTarget.checked)
+          }
+        />
+
+        <Checkbox
+          label="Exclude Herbs"
+          description="Skip all herb crops in optimization"
+          checked={excludeHerbs}
+          onChange={(event) =>
+            onExcludeHerbsChange(event.currentTarget.checked)
+          }
         />
       </Group>
 

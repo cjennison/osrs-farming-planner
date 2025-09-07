@@ -35,4 +35,30 @@ describe("Optimization Calculator", () => {
       expect(step.optimalCrop.farmingLevel).toBeLessThanOrEqual(step.fromLevel);
     }
   });
+
+  it("should exclude flowers when excludeFlowers is true", () => {
+    const result = calculateOptimalProgression({
+      excludeFlowers: true,
+    });
+
+    for (const step of result.steps) {
+      // Check that no flower crops are selected
+      expect(step.optimalCrop.id).not.toMatch(
+        /^(marigold|rosemary|nasturtium|woad|limpwurt|white_lily)$/,
+      );
+    }
+  });
+
+  it("should exclude herbs when excludeHerbs is true", () => {
+    const result = calculateOptimalProgression({
+      excludeHerbs: true,
+    });
+
+    for (const step of result.steps) {
+      // Check that no herb crops are selected
+      expect(step.optimalCrop.id).not.toMatch(
+        /^(guam|marrentill|tarromin|harralander|ranarr|toadflax|irit|avantoe|kwuarm|snapdragon|cadantine|lantadyme|dwarf_weed|torstol)$/,
+      );
+    }
+  });
 });

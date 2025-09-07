@@ -23,6 +23,8 @@ export interface CalculationOptions {
   hasSecateurs?: boolean;
   kandarinDiary?: KandarinDiaryLevel;
   yieldStrategy?: YieldStrategy;
+  excludeFlowers?: boolean;
+  excludeHerbs?: boolean;
 }
 
 export interface CropInfo {
@@ -150,9 +152,18 @@ function findOptimalCropForLevel(
   options: CalculationOptions,
 ): OptimizationStep["optimalCrop"] | null {
   const allCrops = getAllCrops();
-  const availableCrops = allCrops.filter(
+  let availableCrops = allCrops.filter(
     (crop) => crop.farmingLevel <= farmingLevel,
   );
+
+  // Apply exclusion filters
+  if (options.excludeFlowers) {
+    availableCrops = availableCrops.filter((crop) => crop.type !== "flower");
+  }
+
+  if (options.excludeHerbs) {
+    availableCrops = availableCrops.filter((crop) => crop.type !== "herb");
+  }
 
   if (availableCrops.length === 0) {
     return null;

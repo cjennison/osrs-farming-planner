@@ -22,7 +22,7 @@ import {
   type CalculationOptions,
   calculateOptimalProgression,
 } from "@/lib/calculators/optimization-calculator";
-import { getCropById, getAllCrops } from "@/lib/farming-data-simple";
+import { getAllCrops, getCropById } from "@/lib/farming-data-simple";
 import { getPurchasableItemById } from "@/lib/purchasable-items";
 
 export default function OptimizedLevelingPage() {
@@ -32,6 +32,8 @@ export default function OptimizedLevelingPage() {
     hasSecateurs: false,
     kandarinDiary: "none",
     yieldStrategy: "average",
+    excludeFlowers: true, // Default to true as requested
+    excludeHerbs: false, // Default to false as requested
   });
 
   const [showInputs, setShowInputs] = useState(true);
@@ -96,6 +98,14 @@ export default function OptimizedLevelingPage() {
               kandarinDiary={options.kandarinDiary || "none"}
               onKandarinDiaryChange={(value) =>
                 handleOptionsChange({ kandarinDiary: value })
+              }
+              excludeFlowers={options.excludeFlowers || true}
+              onExcludeFlowersChange={(value) =>
+                handleOptionsChange({ excludeFlowers: value })
+              }
+              excludeHerbs={options.excludeHerbs || false}
+              onExcludeHerbsChange={(value) =>
+                handleOptionsChange({ excludeHerbs: value })
               }
             />
           </Collapse>
@@ -195,19 +205,27 @@ export default function OptimizedLevelingPage() {
                               // First try to find by crop ID (for cases where seedId is the crop name)
                               const cropByName = getCropById(seedId);
                               if (cropByName) return cropByName;
-                              
+
                               // If seedId is numeric, find the crop that has this seedId
                               const numericSeedId = parseInt(seedId);
                               if (!Number.isNaN(numericSeedId)) {
                                 const allCrops = getAllCrops();
-                                return allCrops.find((c) => (c as { seedId?: number }).seedId === numericSeedId);
+                                return allCrops.find(
+                                  (c) =>
+                                    (c as { seedId?: number }).seedId ===
+                                    numericSeedId,
+                                );
                               }
-                              
+
                               return null;
                             })();
-                            
-                            const seedName = crop?.seedName || (crop?.name ? `${crop.name} seed` : `Seed ${seedId}`);
-                            
+
+                            const seedName =
+                              crop?.seedName ||
+                              (crop?.name
+                                ? `${crop.name} seed`
+                                : `Seed ${seedId}`);
+
                             return (
                               <Tooltip
                                 key={seedId}
